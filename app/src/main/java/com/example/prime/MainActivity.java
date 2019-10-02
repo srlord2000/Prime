@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
 //        });
         Rellay();
 
-
-
     }
 
     public void Rellay(){

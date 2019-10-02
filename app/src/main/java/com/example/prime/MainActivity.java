@@ -37,7 +37,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btn,btn22;
+    private Button btn,btn2;
     public static WebView wb;
     private String URLline = "http://192.168.0.100/auth/check";
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");

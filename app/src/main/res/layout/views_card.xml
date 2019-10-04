@@ -17,12 +17,12 @@
             android:layout_height="wrap_content"
             app:backgroundTint="#02aff3"
             app:icon="@drawable/scan"
-            android:paddingLeft="28dp"
+            android:paddingStart="28dp"
+            android:paddingEnd="0dp"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
             android:layout_marginEnd="10dp"
-            android:contentDescription="@string/scan"
-            android:layout_marginRight="10dp" />
+            android:contentDescription="@string/scan" />
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
@@ -31,8 +31,7 @@
             style="?attr/buttonBarStyle"
             android:textColor="@color/white"
             app:backgroundTint="#FF0000"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginEnd="10dp" />
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
@@ -40,11 +39,11 @@
             app:backgroundTint="#02aff3"
             app:icon="@drawable/transfer"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-            android:paddingLeft="30dp"
+            android:paddingStart="30dp"
+            android:paddingEnd="0dp"
             android:textColor="@color/white"
             android:layout_marginEnd="10dp"
-            android:contentDescription="@string/transfer"
-            android:layout_marginRight="10dp" />
+            android:contentDescription="@string/transfer" />
 
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView

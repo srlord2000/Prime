@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
     android:orientation="vertical">
 
@@ -13,12 +14,11 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#02aff3"
+            app:backgroundTint="#02aff3"
             android:text="@string/add"
             style="?attr/buttonBarStyle"
             android:textColor="@color/white"
-            android:layout_marginEnd="11dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginEnd="11dp" />
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
@@ -26,9 +26,8 @@
             android:text="@string/edit"
             style="?attr/buttonBarStyle"
             android:textColor="@color/white"
-            android:backgroundTint="#02aff3"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp" />
+            app:backgroundTint="#02aff3"
+            android:layout_marginEnd="10dp" />
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
@@ -36,7 +35,7 @@
             android:text="@string/delete"
             style="?attr/buttonBarStyle"
             android:textColor="@color/white"
-            android:backgroundTint="#FF0000"/>
+            app:backgroundTint="#FF0000"/>
 
     </LinearLayout>
     <ListView

@@ -18,12 +18,11 @@
         <ImageView
             android:id="@+id/imgView_logo"
             android:layout_width="320dp"
-            android:layout_centerHorizontal="true"
             android:layout_height="73dp"
             android:adjustViewBounds="true"
+            android:layout_centerHorizontal="true"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_logore" />
-
 
         <RelativeLayout
             android:id="@+id/rellay1"
@@ -49,7 +48,6 @@
                 android:layout_below="@+id/tv_login"
                 android:layout_marginTop="20dp"
                 android:orientation="vertical">
-
 
                 <LinearLayout
                     android:layout_width="match_parent"

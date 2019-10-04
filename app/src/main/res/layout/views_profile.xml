@@ -18,6 +18,7 @@
             android:padding="10dp">
 
             <TextView
+                android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -117,11 +118,6 @@
             android:layout_marginBottom="15dp"
             android:orientation="horizontal">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignTop="@id/editLogo"
-                android:background="#808080" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -163,17 +159,12 @@
             android:layout_marginBottom="15dp"
             android:padding="10dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignTop="@id/editDateTime"
-                android:background="#808080" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-
+                android:layout_marginTop="7dp"
                 android:layout_marginEnd="13dp"
                 android:layout_toStartOf="@id/editDateTime"
                 android:paddingTop="10dp"
@@ -299,11 +290,6 @@
             android:layout_marginBottom="15dp"
             android:padding="10dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignTop="@id/editAdditional"
-                android:background="#808080" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -311,6 +297,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_toStartOf="@id/editAdditional"
                 android:textStyle="bold"
+                android:layout_marginTop="7dp"
                 android:textColor="@color/colorPrimaryDark"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:paddingTop="10dp"

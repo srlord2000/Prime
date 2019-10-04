@@ -152,7 +152,7 @@ public class HomeActivity extends AppCompatActivity
                     finish();
                 }
             }
-        }, 10);
+        }, 1);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

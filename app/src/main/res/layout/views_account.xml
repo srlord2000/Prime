@@ -22,7 +22,9 @@
             android:textColor="@color/colorPrimaryDark"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:paddingTop="10dp"
-            android:text="@string/admin_settings"/>
+            android:text="@string/admin_settings"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/editAdmin" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/editAdmin"
@@ -35,7 +37,8 @@
             android:text="@string/edit"
             android:contentDescription="@string/scan"
             app:iconSize="20dp"
-            app:icon="@drawable/ic_edit"/>
+            app:icon="@drawable/ic_edit"
+            android:layout_alignParentRight="true" />
 
         <View
             android:id="@+id/view1"
@@ -130,7 +133,9 @@
             android:textColor="@color/colorPrimaryDark"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:paddingTop="10dp"
-            android:text="@string/staff_settings"/>
+            android:text="@string/staff_settings"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/editStaff" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/editStaff"
@@ -143,7 +148,8 @@
             android:text="@string/edit"
             android:contentDescription="@string/scan"
             app:iconSize="20dp"
-            app:icon="@drawable/ic_edit"/>
+            app:icon="@drawable/ic_edit"
+            android:layout_alignParentRight="true" />
 
         <View
             android:id="@+id/view2"

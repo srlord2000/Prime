@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
     android:orientation="vertical">
 
@@ -10,33 +11,37 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:orientation="horizontal">
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_blue"
+            android:backgroundTint="#02aff3"
             android:text="@string/add"
             style="?attr/buttonBarStyle"
             android:textColor="@color/white"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp" />
 
-        <ImageButton
+        <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_blue"
-            android:src="@drawable/hostscan"
+            android:layout_height="48dp"
+            android:backgroundTint="#02aff3"
+            app:icon="@drawable/hostscan"
             style="?attr/buttonStyle"
             android:textColor="@color/white"
+            android:paddingLeft="27dp"
             android:layout_marginEnd="10dp"
-            android:contentDescription="@string/scan" />
+            android:contentDescription="@string/scan"
+            android:layout_marginRight="10dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/delete"
             style="?attr/buttonBarStyle"
             android:textColor="@color/white"
-            android:background="@drawable/btn_red"
-            android:layout_marginEnd="10dp"/>
+            android:backgroundTint="#FF0000"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp" />
 
 
 

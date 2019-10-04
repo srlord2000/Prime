@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private Button btn;
+    private Button btn,o;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private String TAG;
     ApiClient apiInterface;

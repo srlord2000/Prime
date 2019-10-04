@@ -15,10 +15,10 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#02aff3"
+            app:backgroundTint="#02aff3"
             app:icon="@drawable/scan"
             android:paddingLeft="28dp"
-            style="?attr/buttonStyle"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
             android:layout_marginEnd="10dp"
             android:contentDescription="@string/scan"
@@ -30,16 +30,16 @@
             android:text="@string/delete"
             style="?attr/buttonBarStyle"
             android:textColor="@color/white"
-            android:backgroundTint="#FF0000"
+            app:backgroundTint="#FF0000"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp" />
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="52dp"
-            android:backgroundTint="#02aff3"
+            app:backgroundTint="#02aff3"
             app:icon="@drawable/transfer"
-            style="?attr/buttonStyle"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:paddingLeft="30dp"
             android:textColor="@color/white"
             android:layout_marginEnd="10dp"

@@ -53,26 +53,29 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/opensansemibold"
-                        android:text="Username"
-                        android:textAllCaps="true"
-                        android:textColor="#000000"
-                        android:textSize="15sp" />
-
-                    <EditText
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/et_bg"
-                        android:fontFamily="@font/opensansregular"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
-                        android:textColor="#000000"
-                        android:id="@+id/userName"
-                        android:textSize="15sp" />
+                        android:layout_height="wrap_content"
+                        app:errorEnabled="true"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+
+                            android:theme="@style/EditTextTheme"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:hint="Username"
+                            android:id="@+id/userName"
+                            android:inputType="text"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/opensansregular"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:textSize="15sp"/>
+                        />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -82,47 +85,53 @@
                     android:layout_marginTop="20dp"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/opensansemibold"
-                        android:text="Password"
-                        android:textAllCaps="true"
-                        android:textColor="#000000"
-                        android:textSize="15sp" />
-
-                    <EditText
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/et_bg"
-                        android:fontFamily="@font/opensansregular"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
-                        android:textColor="#000000"
-                        android:inputType="textPassword"
-                        android:id="@+id/password"
-                        android:textSize="15sp" />
+                        android:layout_height="wrap_content"
+                        app:passwordToggleEnabled="true"
+                        app:errorEnabled="true"
+                        app:passwordToggleTint="@color/black"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/password"
+                            android:theme="@style/EditTextTheme"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:hint="Password"
+                            android:textColor="@color/black"
+                            android:inputType="textPassword"
+                            android:textColorHint="@color/black"
+                            android:layout_marginTop="1dp"
+                            android:fontFamily="@font/opensansregular"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:textSize="15sp"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:id="@+id/btnLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_below="@+id/linlay1"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
-                android:background="@drawable/btn_bg"
+                android:backgroundTint="#02aff3"
                 android:fontFamily="@font/opensansbold"
                 android:paddingLeft="70dp"
                 android:paddingRight="70dp"
                 android:text="Login"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                />
+
 
         </RelativeLayout>
 
@@ -137,7 +146,8 @@
         android:layout_marginRight="20dp"
         android:visibility="gone">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style1="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:id="@+id/btnforgot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -146,8 +156,9 @@
             android:fontFamily="@font/opensansemibold"
             android:text="Forgot Password?"
             android:textAllCaps="true"
-            android:textColor="#000000" />
-
+            android:textColor="#000000"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            />
     </RelativeLayout>
 
 </RelativeLayout>

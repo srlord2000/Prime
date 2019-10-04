@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">Prime</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_monitoring">Monitoring</string>
+    <string name="menu_report">Reports</string>
+    <string name="menu_stations">Stations</string>
+    <string name="menu_inventory">Inventory</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_logout">Logout</string>
+
+    <string name="add">ADD</string>
+    <string name="edit">EDIT</string>
+    <string name="delete">DELETE</string>
+    <string name="scan">SCAN</string>
+    <string name="transfer">TRANSFER</string>
+    <string name="general">General Settings</string>
+    <string name="shop_name">Shop Name:</string>
+    <string name="branch_name">Branch Name:</string>
+    <string name="change_logo">Change Logo</string>
+    <string name="date_and_time">Date and Time</string>
+    <string name="server_date">Server Date:</string>
+    <string name="server_time">Server Time:</string>
+    <string name="timezone">Timezone:</string>
 </resources>

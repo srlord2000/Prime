@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_blue"
+            android:text="@string/add"
+            style="?attr/buttonBarStyle"
+            android:textColor="@color/white"
+            android:layout_marginEnd="10dp"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_blue"
+            android:src="@drawable/hostscan"
+            style="?attr/buttonStyle"
+            android:textColor="@color/white"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@string/scan" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete"
+            style="?attr/buttonBarStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_red"
+            android:layout_marginEnd="10dp"/>
+
+
+
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice"
+        android:background="@android:color/white"
+        android:listSelector="@android:color/darker_gray" />
+
+</LinearLayout>

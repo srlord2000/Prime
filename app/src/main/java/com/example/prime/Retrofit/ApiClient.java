@@ -22,7 +22,7 @@ public interface ApiClient {
         @POST("auth/check")
         Call<ResponseBody> getData(@Body Object body);
 
-//        @GET("info/show/shop")
-//        Call<>
+        @GET("info/show/shop")
+        Call<ResponseBody> getInfo(@Header("Cookie") String token);
 
 }

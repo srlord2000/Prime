@@ -10,12 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.prime.Adapter.ReportPageAdapter;
 import com.example.prime.Adapter.SettingsPageAdapter;
+import com.example.prime.Adapter.StaffSettingsPageAdapter;
 import com.example.prime.R;
 import com.google.android.material.tabs.TabLayout;
 
-public class SettingsFragment extends Fragment {
+public class StaffSettingsFragment extends Fragment {
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
@@ -29,11 +29,10 @@ public class SettingsFragment extends Fragment {
         getActivity().setTitle("Settings");
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Profile"));
-        tabLayout.addTab(tabLayout.newTab().setText("Account"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.pager);
-        final SettingsPageAdapter adapter = new SettingsPageAdapter
+        final StaffSettingsPageAdapter adapter = new StaffSettingsPageAdapter
                 (getActivity().getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

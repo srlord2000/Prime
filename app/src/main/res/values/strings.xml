@@ -20,12 +20,19 @@
     <string name="delete">DELETE</string>
     <string name="scan">SCAN</string>
     <string name="transfer">TRANSFER</string>
-    <string name="general">General Settings</string>
+    <string name="general">GENERAL SETTINGS</string>
     <string name="shop_name">Shop Name:</string>
     <string name="branch_name">Branch Name:</string>
-    <string name="change_logo">Change Logo</string>
-    <string name="date_and_time">Date and Time</string>
+    <string name="change_logo">CHANGE LOGO</string>
+    <string name="date_and_time">DATE AND TIME</string>
     <string name="server_date">Server Date:</string>
     <string name="server_time">Server Time:</string>
     <string name="timezone">Timezone:</string>
+    <string name="additional_settings">ADDITIONAL SETTINGS</string>
+    <string name="auto_shutdown">Auto Shutdown</string>
+    <string name="refresh_server">REFRESH SERVER</string>
+    <string name="password">Password:</string>
+    <string name="username">Username:</string>
+    <string name="admin_settings">ADMIN SETTINGS</string>
+    <string name="staff_settings">STAFF SETTINGS</string>
 </resources>

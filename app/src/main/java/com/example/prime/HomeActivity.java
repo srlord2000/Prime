@@ -8,6 +8,7 @@ import com.example.prime.Fragment.HomeFragment;
 import com.example.prime.Fragment.InventoryFragment;
 import com.example.prime.Fragment.ReportFragment;
 import com.example.prime.Fragment.SettingsFragment;
+import com.example.prime.Fragment.StaffSettingsFragment;
 import com.example.prime.Fragment.StationsFragment;
 import com.example.prime.Persistent.SharedPrefsCookiePersistor;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -66,6 +67,18 @@ public class HomeActivity extends AppCompatActivity
         navigationView.setCheckedItem(R.id.nav_monitoring);
         Fragment fragment = new HomeFragment();
         displaySelectedFragment(fragment);
+
+        Menu nav_Menu = navigationView.getMenu();
+        if(prefs.getString("level","").equals("1")){
+            nav_Menu.findItem(R.id.nav_inventory).setVisible(true);
+            nav_Menu.findItem(R.id.nav_reports).setVisible(true);
+            nav_Menu.findItem(R.id.nav_stations).setVisible(true);
+        }else {
+            nav_Menu.findItem(R.id.nav_inventory).setVisible(false);
+            nav_Menu.findItem(R.id.nav_reports).setVisible(false);
+            nav_Menu.findItem(R.id.nav_stations).setVisible(false);
+        }
+
     }
 
     @Override
@@ -127,9 +140,13 @@ public class HomeActivity extends AppCompatActivity
             displaySelectedFragment(fragment);
 
         } else if (id == R.id.nav_settings) {
-
-            fragment = new SettingsFragment();
-            displaySelectedFragment(fragment);
+            if(prefs.getString("level","").equals("1")) {
+                fragment = new SettingsFragment();
+                displaySelectedFragment(fragment);
+            }else{
+                fragment = new StaffSettingsFragment();
+                displaySelectedFragment(fragment);
+            }
 
         } else if (id == R.id.nav_logout) {
 

@@ -5,17 +5,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.example.prime.Views.Accounts;
-import com.example.prime.Views.Card;
-import com.example.prime.Views.Email;
-import com.example.prime.Views.Preset;
 import com.example.prime.Views.Profile;
-import com.example.prime.Views.Report;
-import com.example.prime.Views.Station;
+import com.example.prime.Views.StaffSetting;
 
-public class SettingsPageAdapter extends FragmentStatePagerAdapter {
+public class StaffSettingsPageAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
 
-    public SettingsPageAdapter(FragmentManager fm, int NumOfTabs) {
+    public StaffSettingsPageAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
         this.mNumOfTabs = NumOfTabs;
     }
@@ -23,11 +19,8 @@ public class SettingsPageAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                Profile tab1 = new Profile();
+                StaffSetting tab1 = new StaffSetting();
                 return tab1;
-            case 1:
-                Accounts tab2 = new Accounts();
-                return tab2;
             default:
                 return null;
         }

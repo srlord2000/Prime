@@ -12,11 +12,17 @@ public interface ApiClient {
 
         @GET("cards/show")
         Call<MyModel> getJSONData();
+
         @GET("cards/show")
         Call<ResponseBody> getJSONData1(@Header("Cookie") String token);
+
         @GET("services/show")
         Call<ResponseBody> getJSONData2(@Header("Cookie") String token);
+
         @POST("auth/check")
         Call<ResponseBody> getData(@Body Object body);
+
+//        @GET("info/show/shop")
+//        Call<>
 
 }

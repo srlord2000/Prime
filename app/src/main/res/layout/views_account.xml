@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/colorPrimary">
 
@@ -18,22 +19,23 @@
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@id/editAdmin"
             android:textStyle="bold"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:paddingTop="10dp"
             android:text="@string/admin_settings"/>
 
-        <ImageButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/editAdmin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_edit"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_alignParentEnd="true"
-            style="?attr/actionBarDivider"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
+            android:text="@string/edit"
             android:contentDescription="@string/scan"
-            android:paddingBottom="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"/>
+            app:iconSize="20dp"
+            app:icon="@drawable/ic_edit"/>
 
         <View
             android:id="@+id/view1"
@@ -54,7 +56,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/colorPrimaryDark"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textStyle="bold"
                 android:layout_weight="1"
                 android:text="@string/username"/>
@@ -64,7 +67,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/colorPrimaryDark"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:text="@string/shop_name"/>
 
         </LinearLayout>
@@ -81,7 +85,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/colorPrimaryDark"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textStyle="bold"
                 android:layout_weight="1"
                 android:text="@string/password"/>
@@ -91,9 +96,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:background="@color/transparent"
                 android:textColor="@color/colorPrimaryDark"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:background="@color/transparent"
                 android:inputType="textPassword"
                 android:clickable="false"
                 android:enabled="false"
@@ -122,24 +127,23 @@
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@id/editStaff"
             android:textStyle="bold"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:paddingTop="10dp"
             android:text="@string/staff_settings"/>
 
-        <ImageButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/editStaff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_edit"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_alignParentEnd="true"
-            style="?attr/actionBarDivider"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
+            android:text="@string/edit"
             android:contentDescription="@string/scan"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"/>
+            app:iconSize="20dp"
+            app:icon="@drawable/ic_edit"/>
 
         <View
             android:id="@+id/view2"
@@ -160,7 +164,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/colorPrimaryDark"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textStyle="bold"
                 android:layout_weight="1"
                 android:text="@string/username"/>
@@ -170,7 +175,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/colorPrimaryDark"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:text="@string/shop_name"/>
 
         </LinearLayout>
@@ -187,7 +193,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/colorPrimaryDark"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textStyle="bold"
                 android:layout_weight="1"
                 android:text="@string/password"/>
@@ -197,9 +204,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:background="@color/transparent"
                 android:textColor="@color/colorPrimaryDark"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:background="@color/transparent"
                 android:inputType="textPassword"
                 android:clickable="false"
                 android:enabled="false"

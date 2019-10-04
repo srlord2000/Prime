@@ -35,4 +35,5 @@
     <string name="username">Username:</string>
     <string name="admin_settings">ADMIN SETTINGS</string>
     <string name="staff_settings">STAFF SETTINGS</string>
+    <string name="reboot">Reboot</string>
 </resources>

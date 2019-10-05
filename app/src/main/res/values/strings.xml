@@ -31,8 +31,8 @@
     <string name="additional_settings">ADDITIONAL SETTINGS</string>
     <string name="auto_shutdown">Auto Shutdown</string>
     <string name="refresh_server">REFRESH SERVER</string>
-    <string name="password">Password:</string>
-    <string name="username">Username:</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
     <string name="admin_settings">ADMIN SETTINGS</string>
     <string name="staff_settings">STAFF SETTINGS</string>
     <string name="reboot">Reboot</string>

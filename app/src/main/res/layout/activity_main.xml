@@ -58,11 +58,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        app:boxStrokeWidth="10dp"
+                        android:theme="@style/EditTextTheme"
                         >
 
                         <com.google.android.material.textfield.TextInputEditText
-
-                            android:theme="@style/EditTextTheme"
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
                             android:hint="@string/username"
@@ -92,11 +93,14 @@
                         app:passwordToggleEnabled="true"
                         app:errorEnabled="true"
                         app:passwordToggleTint="@color/black"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        app:boxStrokeWidth="10dp"
+                        android:theme="@style/EditTextTheme"
                         >
 
                         <com.google.android.material.textfield.TextInputEditText
+
                             android:id="@+id/password"
-                            android:theme="@style/EditTextTheme"
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
                             android:hint="@string/password"
@@ -131,6 +135,7 @@
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
+                app:rippleColor="@color/black"
                 />
 
 

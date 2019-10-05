@@ -23,6 +23,16 @@ public interface ApiClient {
         Call<ResponseBody> getData(@Body Object body);
 
         @GET("info/show/shop")
-        Call<ResponseBody> getInfo1(@Header("Cookie") String token);
+        Call<ResponseBody> getInfo(@Header("Cookie") String token);
+
+        @GET("users/show/shop")
+        Call<ResponseBody> getUsers(@Header("Cookie") String token);
+
+        @GET("timectl/show")
+        Call<ResponseBody> getServerTime(@Header("Cookie") String token);
+
+        @GET("cards/show")
+        Call<ResponseBody> getCards(@Header("Cookie") String token);
+
 
 }

@@ -22,7 +22,7 @@
             android:adjustViewBounds="true"
             android:layout_centerHorizontal="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_logore" />
+            android:src="@drawable/primuslaundry" />
 
         <RelativeLayout
             android:id="@+id/rellay1"

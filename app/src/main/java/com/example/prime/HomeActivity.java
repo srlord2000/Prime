@@ -18,6 +18,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.os.Handler;
 import android.view.MenuItem;
 
+import com.example.prime.Views.Profile;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -114,22 +115,34 @@ public class HomeActivity extends AppCompatActivity
 
                 Fragment fragment = null;
                 if (id == R.id.nav_monitoring) {
-
+                    if(Profile.MyThread != null) {
+                        Profile.MyThread.interrupt();
+                        Profile.running = false;
+                    }
                     fragment = new HomeFragment();
                     displaySelectedFragment(fragment);
 
                 } else if (id == R.id.nav_reports) {
-
+                    if(Profile.MyThread != null) {
+                        Profile.MyThread.interrupt();
+                        Profile.running = false;
+                    }
                     fragment = new ReportFragment();
                     displaySelectedFragment(fragment);
 
                 } else if (id == R.id.nav_stations) {
-
+                    if(Profile.MyThread != null) {
+                        Profile.MyThread.interrupt();
+                        Profile.running = false;
+                    }
                     fragment = new StationsFragment();
                     displaySelectedFragment(fragment);
 
                 } else if (id == R.id.nav_inventory) {
-
+                    if(Profile.MyThread != null) {
+                        Profile.MyThread.interrupt();
+                        Profile.running = false;
+                    }
                     fragment = new InventoryFragment();
                     displaySelectedFragment(fragment);
 
@@ -143,6 +156,10 @@ public class HomeActivity extends AppCompatActivity
                     }
 
                 } else if (id == R.id.nav_logout) {
+                    if(Profile.MyThread != null) {
+                        Profile.MyThread.interrupt();
+                        Profile.running = false;
+                    }
                     editor = prefs.edit();
                     Intent intent = new Intent(HomeActivity.this, MainActivity.class);
                     sharedPrefsCookiePersistor.clear();
@@ -152,7 +169,7 @@ public class HomeActivity extends AppCompatActivity
                     finish();
                 }
             }
-        }, 1);
+        }, 0);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

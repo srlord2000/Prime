@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             app:backgroundTint="#02aff3"
             android:text="@string/add"
+            app:rippleColor="@color/black"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
             android:layout_marginEnd="11dp" />
@@ -24,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/delete"
+            app:rippleColor="@color/black"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
             app:backgroundTint="#FF0000"

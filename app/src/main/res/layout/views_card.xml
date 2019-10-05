@@ -19,6 +19,7 @@
             app:icon="@drawable/scan"
             android:paddingStart="28dp"
             android:paddingEnd="0dp"
+            app:rippleColor="@color/black"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
             android:layout_marginEnd="10dp"
@@ -30,6 +31,7 @@
             android:text="@string/delete"
             style="?attr/buttonBarStyle"
             android:textColor="@color/white"
+            app:rippleColor="@color/black"
             app:backgroundTint="#FF0000"
             android:layout_marginEnd="10dp" />
 
@@ -37,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="52dp"
             app:backgroundTint="#02aff3"
+            app:rippleColor="@color/black"
             app:icon="@drawable/transfer"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:paddingStart="30dp"

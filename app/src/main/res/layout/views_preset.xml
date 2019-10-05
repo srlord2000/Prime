@@ -15,6 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:backgroundTint="#02aff3"
+            app:rippleColor="@color/black"
             android:text="@string/add"
             style="?attr/buttonBarStyle"
             android:textColor="@color/white"
@@ -24,12 +25,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/edit"
+            app:rippleColor="@color/black"
             style="?attr/buttonBarStyle"
             android:textColor="@color/white"
             app:backgroundTint="#02aff3"
             android:layout_marginEnd="10dp" />
 
         <com.google.android.material.button.MaterialButton
+            app:rippleColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/delete"

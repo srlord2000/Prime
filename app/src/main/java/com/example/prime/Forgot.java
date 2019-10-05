@@ -28,7 +28,7 @@ import com.google.android.material.navigation.NavigationView;
 
 public class Forgot extends AppCompatActivity {
 
-Button btn;
+    Button btn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

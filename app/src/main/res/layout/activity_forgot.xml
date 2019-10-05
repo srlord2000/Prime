@@ -10,7 +10,7 @@
     >
 
     <ImageView
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="75dp"
         android:layout_alignStart="@+id/rl"
         android:layout_above="@id/rl"
         android:id="@+id/imgView_logo"

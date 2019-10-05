@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private Button btn,o;
+    private Button btn,o,forgot;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private String TAG;
     ApiClient apiInterface;
@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         editor = prefs.edit();
         btn = findViewById(R.id.btnLogin);
+        forgot = findViewById(R.id.btnforgot);
         username = findViewById(R.id.userName);
         password = findViewById(R.id.password);
         List<Cookie> list=sharedPrefsCookiePersistor.loadAll();
@@ -101,6 +102,15 @@ public class MainActivity extends AppCompatActivity {
         if(date <= dat2){
             sharedPrefsCookiePersistor.clear();
         }
+
+        forgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,Forgot.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

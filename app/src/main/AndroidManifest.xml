@@ -14,6 +14,7 @@
         android:largeHeap="true"
         android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true">
+        <activity android:name=".Forgot"></activity>
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"

@@ -39,4 +39,6 @@
     <string name="view">View</string>
     <string name="download">DOWNLOAD</string>
     <string name="email">Email Address</string>
+    <string name="shopnamehint">Shop Name</string>
+    <string name="branchnamehint">Branch Name</string>
 </resources>

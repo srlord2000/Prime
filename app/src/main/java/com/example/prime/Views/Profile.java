@@ -3,6 +3,8 @@ package com.example.prime.Views;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 
@@ -11,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -51,6 +55,7 @@ import static com.android.volley.VolleyLog.TAG;
 public class Profile extends Fragment {
 
     public static Boolean running;
+    private Button btnEdit;
     public static Thread MyThread;
     ApiClient apiInterface;
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
@@ -82,6 +87,7 @@ public class Profile extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         shopname = view.findViewById(R.id.shopName);
+        btnEdit = view.findViewById(R.id.editAccount);
         branchname = view.findViewById(R.id.branchName);
         time = view.findViewById(R.id.serverTime);
         date = view.findViewById(R.id.serverDate);
@@ -109,6 +115,19 @@ public class Profile extends Fragment {
             }
         };
         MyThread.start();
+
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
+                View mView = getLayoutInflater().inflate(R.layout.changegeneralsettingsdialog, null);
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+
+            }
+        });
 
     }
 
@@ -143,6 +162,7 @@ public class Profile extends Fragment {
 
             }
         });
+
     }
 
     private void time(){

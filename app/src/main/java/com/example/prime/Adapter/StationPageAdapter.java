@@ -22,9 +22,17 @@ public class StationPageAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
+                if(Card.MyThread != null) {
+                    Card.MyThread.interrupt();
+                    Card.running = false;
+                }
                 Station tab1 = new Station();
                 return tab1;
             case 1:
+                if(Card.MyThread != null) {
+                    Card.MyThread.interrupt();
+                    Card.running = false;
+                }
                 Preset tab2 = new Preset();
                 return tab2;
             case 2:

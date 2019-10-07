@@ -18,6 +18,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.os.Handler;
 import android.view.MenuItem;
 
+import com.example.prime.Views.Card;
 import com.example.prime.Views.Profile;
 import com.google.android.material.navigation.NavigationView;
 
@@ -119,6 +120,10 @@ public class HomeActivity extends AppCompatActivity
                         Profile.MyThread.interrupt();
                         Profile.running = false;
                     }
+                    if(Card.MyThread != null) {
+                        Card.MyThread.interrupt();
+                        Card.running = false;
+                    }
                     fragment = new HomeFragment();
                     displaySelectedFragment(fragment);
 
@@ -126,6 +131,10 @@ public class HomeActivity extends AppCompatActivity
                     if(Profile.MyThread != null) {
                         Profile.MyThread.interrupt();
                         Profile.running = false;
+                    }
+                    if(Card.MyThread != null) {
+                        Card.MyThread.interrupt();
+                        Card.running = false;
                     }
                     fragment = new ReportFragment();
                     displaySelectedFragment(fragment);
@@ -135,6 +144,10 @@ public class HomeActivity extends AppCompatActivity
                         Profile.MyThread.interrupt();
                         Profile.running = false;
                     }
+                    if(Card.MyThread != null) {
+                        Card.MyThread.interrupt();
+                        Card.running = false;
+                    }
                     fragment = new StationsFragment();
                     displaySelectedFragment(fragment);
 
@@ -142,6 +155,10 @@ public class HomeActivity extends AppCompatActivity
                     if(Profile.MyThread != null) {
                         Profile.MyThread.interrupt();
                         Profile.running = false;
+                    }
+                    if(Card.MyThread != null) {
+                        Card.MyThread.interrupt();
+                        Card.running = false;
                     }
                     fragment = new InventoryFragment();
                     displaySelectedFragment(fragment);
@@ -159,6 +176,10 @@ public class HomeActivity extends AppCompatActivity
                     if(Profile.MyThread != null) {
                         Profile.MyThread.interrupt();
                         Profile.running = false;
+                    }
+                    if(Card.MyThread != null) {
+                        Card.MyThread.interrupt();
+                        Card.running = false;
                     }
                     editor = prefs.edit();
                     Intent intent = new Intent(HomeActivity.this, MainActivity.class);

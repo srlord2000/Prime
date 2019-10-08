@@ -23,7 +23,8 @@
             android:layout_marginTop="5dp"
             android:text="Card Profile"
             android:textSize="25sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/robotobold"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/details"
@@ -33,7 +34,8 @@
             android:layout_marginTop="5dp"
             android:text="Details"
             android:textSize="25sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/robotobold"
+            android:textColor="@color/black"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,25 +94,50 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="2">
-
-            <TextView
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@android:color/black"
-                android:text="Service Level:" />
+                android:layout_height="match_parent"
+                android:theme="@style/EditTextTheme"
+                app:boxStrokeWidth="10dp"
+                app:errorEnabled="true">
 
-            <TextView
-                android:id="@+id/serviceLevel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:theme="@style/EditTextTheme"
+                    android:enabled="false"
+                    android:id="@+id/serviceLevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/opensansregular"
+                    android:hint="Service Level"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textSize="15sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:ems="10"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="start"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+<!--                android:textColor="@android:color/black"-->
+<!--                android:text="Service Level:" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/serviceLevel"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:ems="10"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="start"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />-->
 
         </LinearLayout>
 
@@ -120,47 +147,85 @@
             android:orientation="horizontal"
             android:weightSum="2">
 
-            <TextView
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@android:color/black"
-                android:text="Time Added:" />
+                android:layout_height="match_parent"
+                android:theme="@style/EditTextTheme"
+                app:boxStrokeWidth="10dp"
+                app:errorEnabled="true">
 
-            <TextView
-                android:id="@+id/timeAdded"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:theme="@style/EditTextTheme"
+                    android:enabled="false"
+                    android:id="@+id/timeAdded"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/opensansregular"
+                    android:hint="Time Added"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textSize="15sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:ems="10"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="start"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+<!--                android:textColor="@android:color/black"-->
+<!--                android:text="Time Added:" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/timeAdded"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:ems="10"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="start"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+<!--                />-->
 
         </LinearLayout>
 
-        <Button
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp">
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRemove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@android:color/holo_red_light"
+            android:backgroundTint="#FF0000"
             android:text="Remove"
             android:layout_gravity="center"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:layout_marginRight="20dp"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@android:color/transparent"
+            app:strokeColor="#FF0000"
             android:text="Close"
             android:layout_gravity="center"
             android:textColor="@android:color/black" />
+        </LinearLayout>
 
     </LinearLayout>
 

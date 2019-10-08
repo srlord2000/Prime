@@ -281,6 +281,11 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSubmit"
             android:layout_width="wrap_content"
@@ -289,7 +294,9 @@
             android:backgroundTint="#02aff3"
             android:text="Submit"
             android:layout_gravity="center"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:layout_marginRight="20dp"/>
+
 
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -301,6 +308,8 @@
             android:text="Close"
             android:layout_gravity="center"
             android:textColor="@android:color/black" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -146,7 +146,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/circleddialog"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:textColor="@color/black"
@@ -321,7 +321,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/scanround"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"

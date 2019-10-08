@@ -29,6 +29,10 @@ public class StationPageAdapter extends FragmentStatePagerAdapter {
                 Station tab1 = new Station();
                 return tab1;
             case 1:
+                if(Station.MyThread != null) {
+                    Station.MyThread.interrupt();
+                    Station.running = false;
+                }
                 if(Card.MyThread != null) {
                     Card.MyThread.interrupt();
                     Card.running = false;
@@ -36,6 +40,10 @@ public class StationPageAdapter extends FragmentStatePagerAdapter {
                 Preset tab2 = new Preset();
                 return tab2;
             case 2:
+                if(Station.MyThread != null) {
+                    Station.MyThread.interrupt();
+                    Station.running = false;
+                }
                 Card tab3 = new Card();
                 return tab3;
             default:

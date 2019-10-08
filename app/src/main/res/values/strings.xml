@@ -41,4 +41,14 @@
     <string name="email">Email Address</string>
     <string name="shopnamehint">Shop Name</string>
     <string name="branchnamehint">Branch Name</string>
+    <string name="success_msg">Success!</string>
+    <string name="error_msg">Failed!</string>
+
+
+    <string-array name="spinnerItems">
+        <item>Wash</item>
+        <item>Dry</item>
+        <item>Abort</item>
+        <item>Other</item>
+    </string-array>
 </resources>

@@ -20,6 +20,7 @@ import android.view.MenuItem;
 
 import com.example.prime.Views.Card;
 import com.example.prime.Views.Profile;
+import com.example.prime.Views.Station;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -124,6 +125,10 @@ public class HomeActivity extends AppCompatActivity
                         Card.MyThread.interrupt();
                         Card.running = false;
                     }
+                    if(Station.MyThread != null) {
+                        Station.MyThread.interrupt();
+                        Station.running = false;
+                    }
                     fragment = new HomeFragment();
                     displaySelectedFragment(fragment);
 
@@ -135,6 +140,10 @@ public class HomeActivity extends AppCompatActivity
                     if(Card.MyThread != null) {
                         Card.MyThread.interrupt();
                         Card.running = false;
+                    }
+                    if(Station.MyThread != null) {
+                        Station.MyThread.interrupt();
+                        Station.running = false;
                     }
                     fragment = new ReportFragment();
                     displaySelectedFragment(fragment);
@@ -148,6 +157,10 @@ public class HomeActivity extends AppCompatActivity
                         Card.MyThread.interrupt();
                         Card.running = false;
                     }
+                    if(Station.MyThread != null) {
+                        Station.MyThread.interrupt();
+                        Station.running = false;
+                    }
                     fragment = new StationsFragment();
                     displaySelectedFragment(fragment);
 
@@ -160,13 +173,26 @@ public class HomeActivity extends AppCompatActivity
                         Card.MyThread.interrupt();
                         Card.running = false;
                     }
+                    if(Station.MyThread != null) {
+                        Station.MyThread.interrupt();
+                        Station.running = false;
+                    }
                     fragment = new InventoryFragment();
                     displaySelectedFragment(fragment);
 
                 } else if (id == R.id.nav_settings) {
                     if (prefs.getString("level", "").equals("1")) {
+                        if(Station.MyThread != null) {
+                            Station.MyThread.interrupt();
+                            Station.running = false;
+                        }
+                        if(Card.MyThread != null) {
+                            Card.MyThread.interrupt();
+                            Card.running = false;
+                        }
                         fragment = new SettingsFragment();
                         displaySelectedFragment(fragment);
+
                     } else {
                         fragment = new StaffSettingsFragment();
                         displaySelectedFragment(fragment);
@@ -180,6 +206,10 @@ public class HomeActivity extends AppCompatActivity
                     if(Card.MyThread != null) {
                         Card.MyThread.interrupt();
                         Card.running = false;
+                    }
+                    if(Station.MyThread != null) {
+                        Station.MyThread.interrupt();
+                        Station.running = false;
                     }
                     editor = prefs.edit();
                     Intent intent = new Intent(HomeActivity.this, MainActivity.class);

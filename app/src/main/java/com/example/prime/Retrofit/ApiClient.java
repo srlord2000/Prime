@@ -34,5 +34,11 @@ public interface ApiClient {
         @GET("cards/show")
         Call<ResponseBody> getCards(@Header("Cookie") String token);
 
+        @GET("stations/show/all")
+        Call<ResponseBody> getStation(@Header("Cookie") String token);
+
+        @GET("cards/scan")
+        Call<ResponseBody> cardScan(@Header("Cookie") String token);
+
 
 }

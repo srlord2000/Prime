@@ -41,25 +41,50 @@
             android:orientation="horizontal"
             android:layout_marginTop="20dp"
             android:weightSum="2">
-
-            <TextView
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@android:color/black"
-                android:text="Card ID:" />
+                android:layout_height="match_parent"
+                android:theme="@style/EditTextTheme"
+                app:boxStrokeWidth="10dp"
+                app:errorEnabled="true">
 
-            <TextView
-                android:id="@+id/cardId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:theme="@style/EditTextTheme"
+                    android:enabled="false"
+                    android:id="@+id/cardId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/opensansregular"
+                    android:hint="Card Id"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textSize="15sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:ems="10"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="start"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+<!--                android:textColor="@android:color/black"-->
+<!--                android:text="Card ID:" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/cardId"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:ems="10"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="start"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />-->
 
         </LinearLayout>
         <LinearLayout
@@ -276,7 +301,7 @@
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"
                     android:textSize="15sp" />
-                />
+
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>

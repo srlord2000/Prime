@@ -146,7 +146,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/circleddialog"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:textColor="@color/black"
@@ -178,7 +178,7 @@
 
             <TextView
                 android:id="@+id/cardIdView1"
-                android:layout_width="274dp"
+                android:layout_width="287dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
@@ -284,7 +284,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:paddingBottom="10dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSubmit"
@@ -320,7 +321,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/scanround"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"

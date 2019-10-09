@@ -132,16 +132,16 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/editStaff"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_alignParentEnd="true"
-            android:textColor="@color/black"
-            android:text="@string/edit"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/scan"
-            app:iconSize="20dp"
-            app:icon="@drawable/ic_edit"/>
+            android:text="@string/edit"
+            android:textColor="@color/black"
+            app:icon="@drawable/ic_edit"
+            app:iconSize="20dp" />
 
         <View
             android:id="@+id/view2"

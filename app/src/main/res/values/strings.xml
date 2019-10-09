@@ -43,6 +43,7 @@
     <string name="branchnamehint">Branch Name</string>
     <string name="success_msg">Success!</string>
     <string name="error_msg">Failed!</string>
+    <string name="cancel">Cancel</string>
 
 
     <string-array name="spinnerItems">

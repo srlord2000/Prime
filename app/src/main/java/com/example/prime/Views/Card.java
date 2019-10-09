@@ -1,5 +1,6 @@
 package com.example.prime.Views;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -7,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +28,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -39,6 +43,7 @@ import com.example.prime.R;
 import com.example.prime.RecyclerAdapter.CardAdapter;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +51,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -53,7 +60,6 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 import static com.android.volley.VolleyLog.TAG;
 
@@ -77,7 +83,7 @@ public class Card extends Fragment {
     ApiClient apiInterface;
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
     private String id;
-    private String TAG="Card.java";
+    private String TAG = "Card.java";
 
     private Context mContext;
 
@@ -101,6 +107,7 @@ public class Card extends Fragment {
         cardList = new ArrayList<>();
         recyclerView = view.findViewById(R.id.listView);
         scan = view.findViewById(R.id.scan);
+        delete = view.findViewById(R.id.btnRemove);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
         cardAdapter = new CardAdapter(mContext, cardList);
@@ -113,9 +120,9 @@ public class Card extends Fragment {
         MyThread = new Thread() {//create thread
             @Override
             public void run() {
-                int i=0;
-                while(running){
-                    System.out.println("counter: "+i);
+                int i = 0;
+                while (running) {
+                    System.out.println("counter: " + i);
                     i++;
                     try {
                         Thread.sleep(1000);
@@ -135,34 +142,86 @@ public class Card extends Fragment {
             public void onClick(View view) {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
                 View mView = getLayoutInflater().inflate(R.layout.cardscandialog, null);
-                final LinearLayout registered, unregistered, scan;
+                final LinearLayout registered, unregistered, scan, retry;
                 registered = mView.findViewById(R.id.registeredLayout);
                 unregistered = mView.findViewById(R.id.unregisteredLayout);
                 scan = mView.findViewById(R.id.scan);
+                retry = mView.findViewById(R.id.retry);
                 final TextView card = mView.findViewById(R.id.cardId);
                 final TextView card1 = mView.findViewById(R.id.cardId1);
                 final TextView level = mView.findViewById(R.id.serviceLevel);
                 final TextView time = mView.findViewById(R.id.timeAdded);
-                final Spinner type = (Spinner)mView.findViewById(R.id.serviceType);
+                final Spinner type = mView.findViewById(R.id.serviceType);
                 final EditText level1 = mView.findViewById(R.id.serviceLevel1);
+                final TextInputLayout box = mView.findViewById(R.id.serviceLevelBox);
                 Button submit = mView.findViewById(R.id.btnSubmit);
                 Button remove = mView.findViewById(R.id.btnRemove);
+                Button closeReg = mView.findViewById(R.id.btnCancel);
+                Button closeUnReg = mView.findViewById(R.id.btnCancel1);
+                Button cancel = mView.findViewById(R.id.btnClose1);
+                Button btnRetry = mView.findViewById(R.id.buttonRetry);
+                Button btnClose = mView.findViewById(R.id.btnClose3);
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
+
+                dialog.setOnKeyListener(new Dialog.OnKeyListener() {
+
+                    @Override
+                    public boolean onKey(DialogInterface arg0, int keyCode,
+                                         KeyEvent event) {
+                        // TODO Auto-generated method stub
+                        if (keyCode == KeyEvent.KEYCODE_BACK) {
+                            running1 = false;
+                            MyThread1.interrupt();
+                            dialog.dismiss();
+                        }
+                        return true;
+                    }
+                });
+
+                closeReg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        running1 = false;
+//                        MyThread1.interrupt();
+                        dialog.dismiss();
+                    }
+                });
+
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        running1 = false;
+//                        MyThread1.interrupt();
+                        dialog.dismiss();
+                    }
+                });
+
+                closeUnReg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        running1 = false;
+//                        MyThread1.interrupt();
+                        dialog.dismiss();
+                    }
+                });
 
                 type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         String text = (String) adapterView.getItemAtPosition(i);
                         text1 = text;
-                        if(text.equals("Abort")){
+                        if (text.equals("Abort")) {
                             level1.setText("0");
                             level1.setVisibility(View.GONE);
-                        }else {
+                            box.setVisibility(View.GONE);
+                        } else {
                             level1.setText("");
                             level1.setVisibility(View.VISIBLE);
+                            box.setVisibility(View.VISIBLE);
                         }
                         Toast.makeText
                                 (mContext, "Selected : " + text, Toast.LENGTH_SHORT)
@@ -179,15 +238,15 @@ public class Card extends Fragment {
                 dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialogInterface) {
-                        running1 = false;
-                        MyThread1.interrupt();
+//                        running1 = false;
+//                        MyThread1.interrupt();
                     }
                 });
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
-                        running1 = false;
-                        MyThread1.interrupt();
+//                        running1 = false;
+//                        MyThread1.interrupt();
                     }
                 });
 
@@ -197,13 +256,13 @@ public class Card extends Fragment {
                         if (!level1.getText().toString().isEmpty()) {
                             type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                 @Override
-                                public void onItemSelected( AdapterView<?> adapterView, View view,  int i, long l) {
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                     final String text = (String) adapterView.getItemAtPosition(i);
                                     text1 = text;
-                                    if(text.equals("Abort")){
+                                    if (text.equals("Abort")) {
                                         level1.setText("0");
                                         level1.setVisibility(View.GONE);
-                                    }else {
+                                    } else {
                                         level1.setText("");
                                         level1.setVisibility(View.VISIBLE);
                                     }
@@ -216,14 +275,14 @@ public class Card extends Fragment {
                                 }
                             });
                             text1 = type.getSelectedItem().toString();
-                            String card11,level11;
+                            String card11, level11;
                             card11 = card1.getText().toString();
-                            level11 =  level1.getText().toString();
+                            level11 = level1.getText().toString();
                             JSONObject obj = new JSONObject();
                             try {
                                 obj.put("id", card11);
                                 obj.put("type", text1);
-                                obj.put("level",level11);
+                                obj.put("level", level11);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -238,6 +297,7 @@ public class Card extends Fragment {
                             okhttp3.Request request = new okhttp3.Request.Builder()
                                     .url("http://192.168.0.100/cards/add")
                                     .post(body)
+                                    .addHeader("Cookie", "ci_session=" + id)
                                     .build();
 
                             client.newCall(request).enqueue(new Callback() {
@@ -248,7 +308,8 @@ public class Card extends Fragment {
 
                                 @Override
                                 public void onResponse(Call call, okhttp3.Response response) throws IOException {
-
+                                    MyThread.start();
+                                    running = true;
                                     Log.d("TAG", response.body().string());
                                 }
                             });
@@ -271,33 +332,30 @@ public class Card extends Fragment {
                     @Override
                     public void onClick(View view) {
                         if (!card.getText().toString().isEmpty()) {
-                            JSONObject obj = new JSONObject();
+                            JSONArray obj = new JSONArray();
+                            JSONObject jsonObject = new JSONObject();
                             try {
-                                obj.put("id", card.getText().toString());
+                                jsonObject.put("id", card.getText().toString());
+                                obj.put(jsonObject);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
-                            OkHttpClient client = new OkHttpClient();
+                            Log.e(TAG, "onClick: "+obj );
 
-
-                            RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
-
-                            okhttp3.Request request = new okhttp3.Request.Builder()
-                                    .url("http://192.168.0.100/cards/remove")
-                                    .post(body)
-                                    .build();
-
-                            client.newCall(request).enqueue(new Callback() {
+                            retrofit2.Call<ResponseBody> call = apiInterface.deleteCard("ci_session="+id, obj);
+                            call.enqueue(new  retrofit2.Callback<ResponseBody>() {
                                 @Override
-                                public void onFailure(Call call, IOException e) {
-                                    call.cancel();
+                                public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                                    try {
+                                        Log.e(TAG, "remove: "+response.body().string() );
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-
                                 @Override
-                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
-
-                                    Log.d("TAG", response.body().string());
+                                public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                    Log.d(TAG, "onFailure: ");
                                 }
                             });
 
@@ -312,69 +370,124 @@ public class Card extends Fragment {
                                     R.string.error_msg,
                                     Toast.LENGTH_SHORT).show();
                         }
+                    }
+                });
+
+                    final retrofit2.Call<ResponseBody> call = apiInterface.cardScan("ci_session=" + id);
+                    call.enqueue(new retrofit2.Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                            try {
+                                String res = response.body().string();
+                                Log.e(TAG, "onResponse: "+res );
+
+                                try {
+                                    if (!res.contains("Could not read server response")){
+                                        JSONObject jsonObject = new JSONObject(res);
+                                        if (!jsonObject.getString("service_type").equals("")) {
+
+                                            if (jsonObject.getString("service_type").equals("Unregistered")) {
+                                                scan.setVisibility(View.GONE);
+                                                unregistered.setVisibility(View.VISIBLE);
+                                                card1.setText(jsonObject.getString("id"));
+                                                Toast.makeText(mContext, text1, Toast.LENGTH_SHORT).show();
+
+                                            } else {
+                                                scan.setVisibility(View.GONE);
+                                                registered.setVisibility(View.VISIBLE);
+                                                card.setText(jsonObject.getString("id"));
+                                                level.setText(jsonObject.getString("service_level"));
+                                                time.setText(jsonObject.getString("time_added"));
+
+                                            }
+                                        }
+                                    }else if (res.contains("Could not read server response")){
+                                        scan.setVisibility(View.GONE);
+                                        retry.setVisibility(View.VISIBLE);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
+                            Log.d(TAG, "onFailure: ");
+
+                        }
+                    });
+
+
+                btnRetry.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        scan.setVisibility(View.VISIBLE);
+                        retry.setVisibility(View.GONE);
+
+                        call.clone().enqueue(new retrofit2.Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                                try {
+                                    String res = response.body().string();
+                                    Log.e(TAG, "onResponse: "+res );
+
+                                    try {
+                                        if (!res.contains("Could not read server response")){
+                                            JSONObject jsonObject = new JSONObject(res);
+                                            if (!jsonObject.getString("service_type").equals("")) {
+                                                if (jsonObject.getString("service_type").equals("Unregistered")) {
+                                                    scan.setVisibility(View.GONE);
+                                                    unregistered.setVisibility(View.VISIBLE);
+                                                    card1.setText(jsonObject.getString("id"));
+                                                    Toast.makeText(mContext, text1, Toast.LENGTH_SHORT).show();
+
+                                                } else {
+                                                    scan.setVisibility(View.GONE);
+                                                    registered.setVisibility(View.VISIBLE);
+                                                    card.setText(jsonObject.getString("id"));
+                                                    level.setText(jsonObject.getString("service_level"));
+                                                    time.setText(jsonObject.getString("time_added"));
+
+                                                }
+                                            }
+                                        }else if (res.contains("Could not read server response")){
+                                            scan.setVisibility(View.GONE);
+                                            retry.setVisibility(View.VISIBLE);
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
+                                Log.d(TAG, "onFailure: ");
+
+                            }
+                        });
+
 
                     }
                 });
 
-                running1 = true;
-                MyThread1 = new Thread(){//create thread
+                btnClose.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void run() {
-                        int i=0;
-                        while(running1){
-                            System.out.println("counter: "+i);
-                            i++;
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                System.out.println("Sleep interrupted");
-                            }
-                            retrofit2.Call<ResponseBody> call = apiInterface.cardScan("ci_session="+id);
-                            call.enqueue(new  retrofit2.Callback<ResponseBody>() {
-                                @Override
-                                public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    Log.e(TAG, "onResponse: "+response );
-                                            try {
-                                                String result = response.body().string();
-                                                JSONObject jsonObject = new JSONObject(result);
-                                                if (!jsonObject.getString("service_type").equals("")) {
-                                                    running1 = false;
-                                                    MyThread1.interrupt();
-                                                    if (jsonObject.getString("service_type").equals("Unregistered")) {
-                                                        scan.setVisibility(View.GONE);
-                                                        unregistered.setVisibility(View.VISIBLE);
-                                                        card1.setText(jsonObject.getString("id"));
-                                                        Toast.makeText(mContext, text1, Toast.LENGTH_SHORT).show();
-
-                                                    } else {
-                                                        scan.setVisibility(View.GONE);
-                                                        registered.setVisibility(View.VISIBLE);
-                                                        card.setText(jsonObject.getString("id"));
-                                                        level.setText(jsonObject.getString("service_level"));
-                                                        time.setText(jsonObject.getString("time_added"));
-
-                                                    }
-
-                                                }
-                                            } catch (JSONException | IOException e) {
-                                                e.printStackTrace();
-                                            }
-
-                                }
-
-                                @Override
-                                public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
-                                    Log.d(TAG, "onFailure: ");
-
-                                }
-                            });
-                        }
-                        System.out.println("onEnd Thread");
+                    public void onClick(View view) {
+                        running1 = false;
+                        MyThread1.interrupt();
+                        dialog.dismiss();
                     }
-                };
-                MyThread1.start();
-
-
+                });
             }
         });
     }
@@ -383,7 +496,7 @@ public class Card extends Fragment {
         retrofit2.Call<ResponseBody> call = apiInterface.getCards("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
-            public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
                 String result = prefs.getString("Card",null);
                     try {
@@ -445,7 +558,7 @@ public class Card extends Fragment {
         retrofit2.Call<ResponseBody> call = apiInterface.getCards("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
-            public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
                 String result = prefs.getString("Card",null);
                 try {

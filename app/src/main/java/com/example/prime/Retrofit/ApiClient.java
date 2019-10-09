@@ -1,6 +1,11 @@
 package com.example.prime.Retrofit;
 
 import com.example.prime.Model.MyModel;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -39,6 +44,9 @@ public interface ApiClient {
 
         @GET("cards/scan")
         Call<ResponseBody> cardScan(@Header("Cookie") String token);
+
+        @POST("cards/remove")
+        Call<ResponseBody> deleteCard(@Header("Cookie") String token,@Body JSONArray body);
 
 
 }

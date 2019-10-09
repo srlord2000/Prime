@@ -21,7 +21,8 @@
             android:layout_marginTop="5dp"
             android:text="Edit Admin Account"
             android:textSize="25sp"
-            android:textStyle="bold" />
+            android:textColor="@color/black"
+            android:fontFamily="@font/robotobold" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -29,8 +30,7 @@
             app:errorEnabled="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:boxStrokeWidth="10dp"
-            android:theme="@style/EditTextTheme"
-            >
+            android:theme="@style/EditTextTheme">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -176,7 +176,6 @@
                 android:fontFamily="@font/opensansbold"
                 android:text="Cancel"
                 android:textAllCaps="false"
-                android:textColor="#02aff3"
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>

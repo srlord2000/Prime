@@ -332,18 +332,18 @@ public class Card extends Fragment {
                     @Override
                     public void onClick(View view) {
                         if (!card.getText().toString().isEmpty()) {
-                            JSONArray obj = new JSONArray();
-                            JSONObject jsonObject = new JSONObject();
+                            JSONObject obj = new JSONObject();
+                            JSONArray jsonObject = new JSONArray();
                             try {
-                                jsonObject.put("id", card.getText().toString());
-                                obj.put(jsonObject);
+                                jsonObject.put(card.getText().toString());
+                                obj.put("id",jsonObject);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
-                            Log.e(TAG, "onClick: "+obj );
+                            Log.e(TAG, "onClick: "+jsonObject );
 
-                            retrofit2.Call<ResponseBody> call = apiInterface.deleteCard("ci_session="+id, obj);
+                            retrofit2.Call<ResponseBody> call = apiInterface.deleteCard("ci_session="+id, jsonObject);
                             call.enqueue(new  retrofit2.Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {

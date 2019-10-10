@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="11dp"
+        android:weightSum="3"
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
@@ -18,9 +19,11 @@
             android:layout_height="wrap_content"
             app:backgroundTint="#02aff3"
             app:icon="@drawable/scan"
-            android:paddingStart="28dp"
+            android:text="Scan"
+            android:paddingStart="10dp"
             android:paddingEnd="0dp"
             app:rippleColor="@color/black"
+            android:layout_weight="1"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
             android:layout_marginEnd="10dp"
@@ -33,6 +36,7 @@
             style="?attr/buttonBarStyle"
             android:textColor="@color/white"
             app:rippleColor="@color/black"
+            android:layout_weight="1"
             app:backgroundTint="#FF0000"
             android:layout_marginEnd="10dp" />
 
@@ -41,15 +45,67 @@
             android:layout_height="52dp"
             app:backgroundTint="#02aff3"
             app:rippleColor="@color/black"
+            android:text="Push"
             app:icon="@drawable/transfer"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-            android:paddingStart="30dp"
+            android:paddingStart="10dp"
             android:paddingEnd="0dp"
             android:textColor="@color/white"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="0dp"
+            android:layout_weight="1"
             android:contentDescription="@string/transfer" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:weightSum="4"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:text="Card ID"/>
+
+        <TextView
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/white"
+            android:text="Type"/>
+
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/white"
+            android:text="Level"/>
+
+        <TextView
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/white"
+            android:text="Time Added"/>
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listView"
         android:layout_width="match_parent"

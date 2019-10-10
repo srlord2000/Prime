@@ -10,16 +10,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
+        android:weightSum="3"
         android:orientation="horizontal">
+
         <com.google.android.material.button.MaterialButton
-            android:paddingStart="30dp"
+            android:paddingStart="10dp"
             android:paddingEnd="0dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:backgroundTint="#8f8f8f"
             app:icon="@drawable/ic_date"
+            android:layout_weight="1"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
+            android:text="Date"
             android:layout_marginEnd="11dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -29,6 +33,7 @@
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
             app:backgroundTint="#8f8f8f"
+            android:layout_weight="1"
             android:layout_marginEnd="11dp" />
 
 
@@ -38,13 +43,38 @@
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             app:backgroundTint="#8f8f8f"
+            android:layout_weight="1"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="0dp"
             android:contentDescription="@string/scan" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:weightSum="4"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:gravity="center_horizontal"
+            android:text="File Name"/>
 
     </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listView"
         android:layout_width="match_parent"

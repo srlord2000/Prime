@@ -1,13 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Summary"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
-</RelativeLayout>
+        android:padding="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            app:rippleColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="#02aff3"
+            app:icon="@drawable/ic_send"
+            android:text="Send Report"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:textColor="@color/white"
+            android:layout_marginEnd="11dp" />
+
+        <com.google.android.material.button.MaterialButton
+            app:rippleColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="#02aff3"
+            android:text="Notification"
+            app:icon="@drawable/ic_notifications_black_24dp"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:textColor="@color/white"
+            android:layout_marginEnd="11dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:weightSum="3"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:text="Item Name"/>
+
+        <TextView
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/white"
+            android:text="Stock"/>
+
+        <TextView
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/white"
+            android:text="Price"/>
+
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice"
+        android:background="@android:color/white"
+        android:listSelector="@android:color/darker_gray" />
+
+</LinearLayout>

@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
+        android:weightSum="3"
         android:orientation="horizontal">
         <com.google.android.material.button.MaterialButton
 
@@ -20,6 +21,7 @@
             app:rippleColor="@color/black"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
+            android:layout_weight="1"
             android:layout_marginEnd="11dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -31,6 +33,7 @@
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
             android:layout_marginEnd="10dp"
+            android:layout_weight="1"
             android:contentDescription="@string/scan" />
 
         <com.google.android.material.button.MaterialButton
@@ -40,12 +43,52 @@
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
             app:backgroundTint="#FF0000"
+            android:layout_weight="1"
             app:rippleColor="@color/black"
-            android:layout_marginEnd="10dp" />
-
-
+            android:layout_marginEnd="0dp" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:weightSum="3"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:text="Item"/>
+
+        <TextView
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/white"
+            android:text="Price"/>
+
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/white"
+            android:text="Time Added"/>
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listView"
         android:layout_width="match_parent"

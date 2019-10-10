@@ -74,7 +74,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/colorPrimaryDark"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:text="@string/shop_name"/>
+                    />
 
             </LinearLayout>
 
@@ -103,7 +103,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/colorPrimaryDark"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:text="@string/branch_name"/>
+                   />
 
             </LinearLayout>
 
@@ -217,8 +217,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:text="@string/shop_name"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             </LinearLayout>
 
@@ -247,7 +246,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/colorPrimaryDark"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:text="@string/branch_name"/>
+                    />
 
             </LinearLayout>
 
@@ -277,7 +276,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/colorPrimaryDark"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:text="@string/branch_name"/>
+                    />
 
             </LinearLayout>
 
@@ -349,7 +348,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/colorPrimaryDark"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:text="@string/shop_name"/>
+                    />
 
             </LinearLayout>
         </RelativeLayout>

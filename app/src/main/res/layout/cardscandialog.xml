@@ -229,7 +229,6 @@
 
     </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/unregisteredLayout"
         android:layout_width="match_parent"
@@ -387,7 +386,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/scan"

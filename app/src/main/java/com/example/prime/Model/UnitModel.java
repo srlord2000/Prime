@@ -3,6 +3,8 @@ package com.example.prime.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class UnitModel {
     @SerializedName("id")
     @Expose
@@ -17,11 +19,14 @@ public class UnitModel {
     @Expose
     private String timeAdded;
 
-    public UnitModel(String id, String unitName, String groupId, String timeAdded) {
+    private ArrayList<ServiceModel> serviceModels;
+
+    public UnitModel(String id, String unitName, String groupId, String timeAdded, ArrayList<ServiceModel> serviceModels) {
         this.id = id;
         this.unitName = unitName;
         this.groupId = groupId;
         this.timeAdded = timeAdded;
+        this.serviceModels = serviceModels;
     }
 
     public UnitModel() {
@@ -57,6 +62,14 @@ public class UnitModel {
 
     public void setTimeAdded(String timeAdded) {
         this.timeAdded = timeAdded;
+    }
+
+    public ArrayList<ServiceModel> getServiceModels() {
+        return serviceModels;
+    }
+
+    public void setServiceModels(ArrayList<ServiceModel> serviceModels) {
+        this.serviceModels = serviceModels;
     }
 
 }

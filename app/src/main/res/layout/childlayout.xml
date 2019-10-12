@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:weightSum="4"
     android:background="@color/colorPrimary"
     android:id="@+id/presetLayout">
 
@@ -16,6 +15,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:weightSum="3"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal">
 
         <TextView
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="1"
-            android:text="1"
+            tools:text="Wash"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textColor="#000" />
 
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="1"
-            android:text="1"
+            tools:text="50"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textColor="#000" />
 
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="1"
-            android:text="1"
+            tools:text="15"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textColor="#000" />
 

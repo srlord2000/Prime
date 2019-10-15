@@ -17,8 +17,15 @@ public class SpinnerModel {
     @Expose
     private String timeAdded;
 
+    public SpinnerModel() {
+    }
 
-
+    public SpinnerModel(String id, String unitName, String groupId, String timeAdded) {
+        this.id = id;
+        this.unitName = unitName;
+        this.groupId = groupId;
+        this.timeAdded = timeAdded;
+    }
 
     public String getId() {
         return id;

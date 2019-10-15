@@ -48,6 +48,9 @@ public interface ApiClient {
         @GET("cards/scan")
         Call<ResponseBody> cardScan(@Header("Cookie") String token);
 
+        @GET("units/show")
+        Call<ResponseBody> getUnits(@Header("Cookie") String token);
+
         @Headers({"Accept:application/json", "Content-Type:application/json;"})
         @FormUrlEncoded
         @POST("cards/remove")

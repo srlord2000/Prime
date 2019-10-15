@@ -25,11 +25,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.prime.Adapter.SpinnerAdapters;
 import com.example.prime.Model.SpinnerModel;
 import com.example.prime.Model.StationModel;
 import com.example.prime.Persistent.SharedPrefsCookiePersistor;
 import com.example.prime.R;
-import com.example.prime.RecyclerAdapter.CardAdapter;
 import com.example.prime.RecyclerAdapter.StationAdapter;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
@@ -181,29 +181,24 @@ public class Station extends Fragment {
             }
         });
 
-        scan.setOnClickListener(new View.OnClickListener() {
+
+
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
-                View mView = getLayoutInflater().inflate(R.layout.stationhostscandialog, null);
+                View mView = getLayoutInflater().inflate(R.layout.stationadddialog, null);
                 final TextView host12;
                 final EditText ip11 = mView.findViewById(R.id.ipAddress1);
-                //final EditText station11 = mView.findViewById(R.id.stationName1);
+                final EditText station11 = mView.findViewById(R.id.station_name);
                 final Spinner unit1 = (Spinner)mView.findViewById(R.id.unitType1);
                 host12 = mView.findViewById(R.id.hostType1);
-                Button submit1 = mView.findViewById(R.id.btnSubmit1);
-                //Button close12 = mView.findViewById(R.id.btnCancel12);
+                Button submit1 = mView.findViewById(R.id.dialog_submit);
+                Button close12 = mView.findViewById(R.id.dialog_close);
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
-
-//                close12.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        dialog.dismiss();
-//                    }
-//                });
 
                 unit1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -218,70 +213,125 @@ public class Station extends Fragment {
                     }
                 });
 
-//                submit1.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        if (!station11.getText().toString().isEmpty()) {
-//
-//                            Toast.makeText(mContext, text1, Toast.LENGTH_SHORT).show();
-//
-//                            String ip,station, host1,type;
-//                            type = text1;
-//                            host1 = host12.getText().toString();
-//                            ip = ip11.getText().toString();
-//                            station =  station11.getText().toString();
-//                            JSONObject obj = new JSONObject();
-//                            try {
-//                                obj.put("ipaddress", ip);
-//                                obj.put("unit_id", type);
-//                                obj.put("station_name",station);
-//                                obj.put("hostname",host1);
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                            Toast.makeText(mContext, text1, Toast.LENGTH_SHORT).show();
-//
-//                            OkHttpClient client = new OkHttpClient();
-//
-//
-//
-//                            RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
-//
-//                            Log.e(TAG, "onClick: "+obj );
-//                            okhttp3.Request request = new okhttp3.Request.Builder()
-//                                    .url("http://192.168.0.100/stations/add/cc")
-//                                    .post(body)
-//                                    .build();
-//
-//                            client.newCall(request).enqueue(new Callback() {
-//                                @Override
-//                                public void onFailure(Call call, IOException e) {
-//                                    call.cancel();
-//                                    Log.e(TAG, "onFailure: error");
-//                                }
-//
-//                                @Override
-//                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
-//                                    Log.e("TAG", response.body().string());
-//                                }
-//                            });
-//
-//                            Toast.makeText(mContext,
-//                                    text1,
-//                                    Toast.LENGTH_SHORT).show();
-//                            dialog.dismiss();
-//
-//
-//                        } else {
-//                            Toast.makeText(mContext,
-//                                    R.string.error_msg,
-//                                    Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
+
+                close12.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                submit1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!station11.getText().toString().isEmpty()) {
+                            Toast.makeText(mContext, text1, Toast.LENGTH_SHORT).show();
+                            String ip,station, host1,type;
+                            type = text1;
+                            host1 = host12.getText().toString();
+                            ip = ip11.getText().toString();
+                            station =  station11.getText().toString();
+                            JSONObject obj = new JSONObject();
+                            try {
+                                obj.put("ipaddress", ip);
+                                obj.put("unit_id", type);
+                                obj.put("station_name",station);
+                                obj.put("hostname",host1);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Toast.makeText(mContext, text1, Toast.LENGTH_SHORT).show();
+                            OkHttpClient client = new OkHttpClient();
+                            RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
+                            Log.e(TAG, "onClick: "+obj );
+                            okhttp3.Request request = new okhttp3.Request.Builder()
+                                    .url("http://192.168.0.100/stations/add/cc")
+                                    .addHeader("Cookie","ci_session="+id)
+                                    .post(body)
+                                    .build();
+
+                            client.newCall(request).enqueue(new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+                                    call.cancel();
+                                    Log.e(TAG, "onFailure: error");
+                                }
+
+                                @Override
+                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                    Log.e("TAG", response.body().string());
+                                }
+                            });
+
+                            Toast.makeText(mContext,
+                                    text1,
+                                    Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+
+
+                        } else {
+                            Toast.makeText(mContext,
+                                    R.string.error_msg,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
                 //retro
+
+                retrofit2.Call<ResponseBody> call = apiInterface.getUnits("ci_session="+id);
+                call.enqueue(new  retrofit2.Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Log.e(TAG, "onResponse: "+response );
+                        try {
+                            if(response.body()!= null) {
+                                String res = response.body().string();
+                                spinnerData = new ArrayList<>();
+                                JSONArray array = new JSONArray(res);
+                                for(int i = 0; i<array.length(); i++) {
+
+                                    SpinnerModel spinnerModel = new SpinnerModel();
+                                    JSONObject json = null;
+                                    try {
+                                        json = array.getJSONObject(i);
+                                        spinnerModel.setUnitName(json.getString("unit_name"));
+                                        spinnerModel.setId(json.getString("id"));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    spinnerData.add(spinnerModel);
+                                }
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        if(null != spinnerData){
+
+                            SpinnerAdapters spinnerAdapter = new SpinnerAdapters(mContext,
+                                    R.layout.spinnerdata,spinnerData);
+                            unit1.setAdapter(spinnerAdapter);
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                        Log.d(TAG, "onFailure: ");
+
+                    }
+                });
+            }
+        });
+
+
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
             }
         });
@@ -412,5 +462,8 @@ public class Station extends Fragment {
         });
     }
 
+    private void spinner(){
+
+    }
 }
 

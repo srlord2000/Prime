@@ -1,12 +1,15 @@
 package com.example.prime;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,14 +29,31 @@ import com.example.prime.Fragment.StationsFragment;
 import com.example.prime.Persistent.SharedPrefsCookiePersistor;
 import com.google.android.material.navigation.NavigationView;
 
-public class Forgot extends AppCompatActivity {
+import java.util.Calendar;
 
+public class Forgot extends AppCompatActivity {
+    final Calendar newCalendar = Calendar.getInstance();
     Button btn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot);
+        btn = findViewById(R.id.btnReset);
+        final DatePickerDialog  StartTime = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+            }
 
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StartTime.show();
+            }
+        });
 
 
     }

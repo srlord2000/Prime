@@ -65,7 +65,7 @@ import static com.android.volley.VolleyLog.TAG;
 
 public class Card extends Fragment {
 
-    public static Boolean running;
+    public static Boolean running,l;
     public static Thread MyThread;
     public static Boolean running1;
     public static Thread MyThread1;

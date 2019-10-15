@@ -215,21 +215,6 @@ public class Card extends Fragment {
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
 
-//                dialog.setOnKeyListener(new Dialog.OnKeyListener() {
-//
-//                    @Override
-//                    public boolean onKey(DialogInterface arg0, int keyCode,
-//                                         KeyEvent event) {
-//                        // TODO Auto-generated method stub
-//                        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//                            running1 = false;
-//                            MyThread1.interrupt();
-//                            dialog.dismiss();
-//                        }
-//                        return true;
-//                    }
-//                });
-
                 closeReg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -379,29 +364,27 @@ public class Card extends Fragment {
                     public void onClick(View view) {
                         if (!card.getText().toString().isEmpty()) {
                             JSONObject obj = new JSONObject();
-                            JSONArray jsonObject = new JSONArray();
                             try {
-                                jsonObject.put(card.getText().toString());
-                                obj.put("id",jsonObject);
+                                obj.put("id", card.getText().toString());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
-                            Log.e(TAG, "onClick: "+jsonObject );
-
-                            retrofit2.Call<ResponseBody> call = apiInterface.deleteCard("ci_session="+id, jsonObject);
-                            call.enqueue(new  retrofit2.Callback<ResponseBody>() {
+                            OkHttpClient client = new OkHttpClient();
+                            RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
+                            okhttp3.Request request = new okhttp3.Request.Builder()
+                                    .url("http://192.168.0.100/cards/remove")
+                                    .post(body)
+                                    .addHeader("Cookie","ci_session="+id)
+                                    .build();
+                            client.newCall(request).enqueue(new Callback() {
                                 @Override
-                                public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                                    try {
-                                        Log.e(TAG, "remove: "+response.body().string() );
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                                public void onFailure(Call call, IOException e) {
+                                    call.cancel();
                                 }
+
                                 @Override
-                                public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
-                                    Log.d(TAG, "onFailure: ");
+                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                    Log.d("TAG", response.body().string());
                                 }
                             });
 
@@ -409,7 +392,6 @@ public class Card extends Fragment {
                                     R.string.success_msg,
                                     Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
-
 
                         } else {
                             Toast.makeText(mContext,

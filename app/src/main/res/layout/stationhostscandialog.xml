@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout android:padding="5dp"
+<LinearLayout
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
@@ -129,14 +129,14 @@
         android:layout_marginTop="15dp">
 
         <TextView
-            android:layout_marginLeft="3dp"
             android:id="@+id/serviceTypeView1"
-            android:layout_width="86dp"
+            android:layout_width="131dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
             android:ems="10"
+            android:fontFamily="@font/robotoregular"
             android:gravity="start"
             android:text="Unit Type:"
-            android:fontFamily="@font/robotoregular"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@android:color/black" />
 

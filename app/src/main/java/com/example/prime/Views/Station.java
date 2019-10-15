@@ -199,7 +199,6 @@ public class Station extends Fragment {
                 final AlertDialog dialog = mBuilder.create();
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
-
                 unit1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected( AdapterView<?> adapterView, View view,  int i, long l) {
@@ -212,7 +211,6 @@ public class Station extends Fragment {
                         text1 = spinnerData.get(id).getId();
                     }
                 });
-
 
                 close12.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -278,7 +276,6 @@ public class Station extends Fragment {
                 });
 
                 //retro
-
                 retrofit2.Call<ResponseBody> call = apiInterface.getUnits("ci_session="+id);
                 call.enqueue(new  retrofit2.Callback<ResponseBody>() {
                     @Override

@@ -271,9 +271,11 @@
                 android:layout_height="match_parent"
                 android:theme="@style/EditTextTheme"
                 app:boxStrokeWidth="10dp"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:enabled="false"
                     android:id="@+id/cardId1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

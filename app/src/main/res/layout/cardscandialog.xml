@@ -305,7 +305,8 @@
                 android:layout_height="match_parent"
                 android:theme="@style/EditTextTheme"
                 app:boxStrokeWidth="10dp"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/serviceLevel1"
@@ -319,8 +320,8 @@
                     android:paddingRight="15dp"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"
-                    android:textSize="15sp" />
-
+                    android:textSize="15sp"/>
+                />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>

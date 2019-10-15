@@ -52,8 +52,6 @@ public class Report extends Fragment {
                 StartTime.show();
             }
         });
-
-
     }
     }
 

@@ -2,15 +2,22 @@ package com.example.prime.Views;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -18,7 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.example.prime.Model.CardsModel;
+import com.example.prime.Model.SpinnerModel;
 import com.example.prime.Model.StationModel;
 import com.example.prime.Persistent.SharedPrefsCookiePersistor;
 import com.example.prime.R;
@@ -33,6 +40,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -65,6 +73,7 @@ public class Station extends Fragment {
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
     private String id;
     private String TAG="Station.java";
+    protected List<SpinnerModel> spinnerData;
 
     private Context mContext;
 
@@ -97,6 +106,27 @@ public class Station extends Fragment {
         sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(mContext);
         apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
         id = sharedPrefsCookiePersistor.loadAll().get(0).value();
+
+        data1();
+        running = true;
+        MyThread = new Thread() {//create thread
+            @Override
+            public void run() {
+                int i=0;
+                while(running){
+                    System.out.println("counter: "+i);
+                    i++;
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        System.out.println("Sleep interrupted");
+                    }
+                    data();
+                }
+                System.out.println("onEnd Thread");
+            }
+        };
+        MyThread.start();
 
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,28 +181,110 @@ public class Station extends Fragment {
             }
         });
 
-        data1();
-        running = true;
-        MyThread = new Thread() {//create thread
+        scan.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                int i=0;
-                while(running){
-                    System.out.println("counter: "+i);
-                    i++;
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        System.out.println("Sleep interrupted");
+            public void onClick(View view) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
+                View mView = getLayoutInflater().inflate(R.layout.stationhostscandialog, null);
+                final TextView host12;
+                final EditText ip11 = mView.findViewById(R.id.ipAddress1);
+                //final EditText station11 = mView.findViewById(R.id.stationName1);
+                final Spinner unit1 = (Spinner)mView.findViewById(R.id.unitType1);
+                host12 = mView.findViewById(R.id.hostType1);
+                Button submit1 = mView.findViewById(R.id.btnSubmit1);
+                //Button close12 = mView.findViewById(R.id.btnCancel12);
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+
+//                close12.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        dialog.dismiss();
+//                    }
+//                });
+
+                unit1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected( AdapterView<?> adapterView, View view,  int i, long l) {
+                        int id = adapterView.getSelectedItemPosition();
+                        text1 = spinnerData.get(id).getId();
                     }
-                    data();
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        int id = adapterView.getFirstVisiblePosition();
+                        text1 = spinnerData.get(id).getId();
+                    }
+                });
 
-                }
-                System.out.println("onEnd Thread");
+//                submit1.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        if (!station11.getText().toString().isEmpty()) {
+//
+//                            Toast.makeText(mContext, text1, Toast.LENGTH_SHORT).show();
+//
+//                            String ip,station, host1,type;
+//                            type = text1;
+//                            host1 = host12.getText().toString();
+//                            ip = ip11.getText().toString();
+//                            station =  station11.getText().toString();
+//                            JSONObject obj = new JSONObject();
+//                            try {
+//                                obj.put("ipaddress", ip);
+//                                obj.put("unit_id", type);
+//                                obj.put("station_name",station);
+//                                obj.put("hostname",host1);
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                            Toast.makeText(mContext, text1, Toast.LENGTH_SHORT).show();
+//
+//                            OkHttpClient client = new OkHttpClient();
+//
+//
+//
+//                            RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
+//
+//                            Log.e(TAG, "onClick: "+obj );
+//                            okhttp3.Request request = new okhttp3.Request.Builder()
+//                                    .url("http://192.168.0.100/stations/add/cc")
+//                                    .post(body)
+//                                    .build();
+//
+//                            client.newCall(request).enqueue(new Callback() {
+//                                @Override
+//                                public void onFailure(Call call, IOException e) {
+//                                    call.cancel();
+//                                    Log.e(TAG, "onFailure: error");
+//                                }
+//
+//                                @Override
+//                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+//                                    Log.e("TAG", response.body().string());
+//                                }
+//                            });
+//
+//                            Toast.makeText(mContext,
+//                                    text1,
+//                                    Toast.LENGTH_SHORT).show();
+//                            dialog.dismiss();
+//
+//
+//                        } else {
+//                            Toast.makeText(mContext,
+//                                    R.string.error_msg,
+//                                    Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+
+                //retro
+
             }
-        };
-        MyThread.start();
-
+        });
 
     }
 

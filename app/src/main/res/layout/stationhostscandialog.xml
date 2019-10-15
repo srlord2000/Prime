@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ScrollView
+    android:padding="5dp"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:id="@+id/unregisteredLayout">
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/textView1"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:text="Host Scanner"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:text="Details"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="start"/>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:visibility="visible"
+        android:id="@+id/hostType1"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:text="manual"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="start"/>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:weightSum="2">
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/cardIdView1"
+        android:text="IP Address:"
+        android:textColor="@android:color/black"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:gravity="start"
+        android:layout_weight="1"
+        android:ems="10"/>
+
+    <EditText
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/ipAddress1"
+        android:layout_marginTop="15dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:gravity="start"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="IP Address"/>
+
+</LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp">
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/serviceTypeView1"
+        android:text="Unit Type:"
+        android:textColor="@android:color/black"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:gravity="start"
+        android:ems="10"/>
+
+    <Spinner
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/unitType1"
+        android:layout_marginTop="15dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:gravity="start"
+        android:ems="10"
+        android:tag="Sad"/>
+
+</LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" android:layout_marginTop="15dp">
+
+    <TextView android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/serviceLevelView1" android:text="Station Name:" android:textColor="@android:color/black" android:textAppearance="@style/TextAppearance.AppCompat.Medium" android:gravity="start" android:ems="10"/>
+
+    <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/stationName1" android:layout_marginTop="15dp" android:textAppearance="@style/TextAppearance.AppCompat.Medium" android:gravity="start" android:ems="10" android:hint="Station Name" android:inputType="text"/>
+
+</LinearLayout>
+
+    <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/btnSubmit1" android:text="Submit" android:layout_marginTop="10dp" android:layout_gravity="center" android:textColor="@android:color/white" android:background="@color/colorAccent"/>
+
+    <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/btnCancel12" android:text="Close" android:layout_marginTop="10dp" android:layout_gravity="center" android:textColor="@android:color/black" android:background="@android:color/transparent"/>
+
+</LinearLayout>
+
+</ScrollView>

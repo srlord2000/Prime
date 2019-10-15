@@ -95,6 +95,7 @@
         android:layout_height="match_parent"
         android:choiceMode="singleChoice"
         android:background="@android:color/white"
-        android:listSelector="@android:color/darker_gray" />
+        android:listSelector="@android:color/darker_gray"
+        android:visibility="gone"/>
 
 </LinearLayout>

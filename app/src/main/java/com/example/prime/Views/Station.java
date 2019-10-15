@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -33,7 +34,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
@@ -44,7 +49,7 @@ public class Station extends Fragment {
     private ArrayList<StationModel> stationModels;
     private String text1;
     private RecyclerView recyclerView;
-    private Button add, delete;
+    private Button add, delete, scan;
     private StationAdapter stationAdapter;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     String GET_JSON_FROM_SERVER_NAME1 = "id";
@@ -82,6 +87,9 @@ public class Station extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         stationModels = new ArrayList<>();
         recyclerView = view.findViewById(R.id.listView);
+        delete = view.findViewById(R.id.btnStationRemove);
+        add = view.findViewById(R.id.btnStationAdd);
+        scan = view.findViewById(R.id.btnStationScan);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
         stationAdapter = new StationAdapter(mContext, stationModels);
@@ -89,6 +97,59 @@ public class Station extends Fragment {
         sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(mContext);
         apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
         id = sharedPrefsCookiePersistor.loadAll().get(0).value();
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> sad = new ArrayList<>();
+                if (stationAdapter.getSelected().size() > 0) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int i = 0; i < stationAdapter.getSelected().size(); i++) {
+                        JSONObject obj = new JSONObject();
+                        JSONArray jsonArray = new JSONArray();
+                        jsonArray.put(stationAdapter.getSelected().get(i).getIpaddress());
+                        try {
+
+                            obj.put("ipaddress", jsonArray);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        stringBuilder.append(stationAdapter.getSelected().get(i).getId());
+                        stringBuilder.append("\n");
+                        sad.add(obj.toString());
+                        Log.i(TAG, "onClick: "+obj);
+
+                        OkHttpClient client = new OkHttpClient();
+
+                        RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
+
+                        okhttp3.Request request = new okhttp3.Request.Builder()
+                                .url("http://192.168.0.100/stations/remove/ip")
+                                .addHeader("Cookie","ci_session="+id)
+                                .post(body)
+                                .build();
+
+                        client.newCall(request).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                call.cancel();
+                            }
+
+                            @Override
+                            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                Log.e("TAG", response.message());
+                                Log.e(TAG, "onResponse: "+response.body().string() );
+                            }
+                        });
+                        Log.e("", "onClick: " + sad);
+                    }
+                } else {
+                    Toast.makeText(mContext, "No Selection", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         data1();
         running = true;

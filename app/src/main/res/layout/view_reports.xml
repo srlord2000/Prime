@@ -75,12 +75,65 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:weightSum="4"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtStationName"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_weight="1"
+            android:text="1"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/txtServiceType"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:text="wash"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="#000" />
+
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:text="3"
+            android:gravity="start"
+            android:layout_weight="1.5"
+            android:id="@+id/txtIp"/>
+
+        <TextView
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:text="3"
+            android:gravity="end"
+            android:layout_weight=".5"
+            android:id="@+id/txtStatus"/>
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:choiceMode="singleChoice"
         android:background="@android:color/white"
-        android:listSelector="@android:color/darker_gray" />
+        android:listSelector="@android:color/darker_gray"
+        android:visibility="gone"/>
 
 </LinearLayout>

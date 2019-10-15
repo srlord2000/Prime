@@ -107,7 +107,7 @@ public class Card extends Fragment {
         cardList = new ArrayList<>();
         recyclerView = view.findViewById(R.id.listView);
         scan = view.findViewById(R.id.scan);
-        delete = view.findViewById(R.id.btnRemove);
+        delete = view.findViewById(R.id.btnCardRemove);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
         cardAdapter = new CardAdapter(mContext, cardList);
@@ -116,6 +116,54 @@ public class Card extends Fragment {
         apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
         id = sharedPrefsCookiePersistor.loadAll().get(0).value();
         data1();
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> sad = new ArrayList<>();
+                if (cardAdapter.getSelected().size() > 0) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int i = 0; i < cardAdapter.getSelected().size(); i++) {
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("id", cardAdapter.getSelected().get(i).getId());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        stringBuilder.append(cardAdapter.getSelected().get(i).getId());
+                        stringBuilder.append("\n");
+                        sad.add(obj.toString());
+
+                        OkHttpClient client = new OkHttpClient();
+
+                        RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
+
+                        okhttp3.Request request = new okhttp3.Request.Builder()
+                                .url("http://192.168.0.100/cards/remove")
+                                .addHeader("Cookie","ci_session="+id)
+                                .post(body)
+                                .build();
+
+                        client.newCall(request).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                call.cancel();
+                            }
+
+                            @Override
+                            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                Log.d("TAG", response.body().string());
+                            }
+                        });
+                        Log.e("", "onClick: " + sad);
+                    }
+                } else {
+                    Toast.makeText(mContext, "No Selection", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         running = true;
         MyThread = new Thread() {//create thread
             @Override
@@ -167,20 +215,20 @@ public class Card extends Fragment {
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
 
-                dialog.setOnKeyListener(new Dialog.OnKeyListener() {
-
-                    @Override
-                    public boolean onKey(DialogInterface arg0, int keyCode,
-                                         KeyEvent event) {
-                        // TODO Auto-generated method stub
-                        if (keyCode == KeyEvent.KEYCODE_BACK) {
-                            running1 = false;
-                            MyThread1.interrupt();
-                            dialog.dismiss();
-                        }
-                        return true;
-                    }
-                });
+//                dialog.setOnKeyListener(new Dialog.OnKeyListener() {
+//
+//                    @Override
+//                    public boolean onKey(DialogInterface arg0, int keyCode,
+//                                         KeyEvent event) {
+//                        // TODO Auto-generated method stub
+//                        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//                            running1 = false;
+//                            MyThread1.interrupt();
+//                            dialog.dismiss();
+//                        }
+//                        return true;
+//                    }
+//                });
 
                 closeReg.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -308,8 +356,6 @@ public class Card extends Fragment {
 
                                 @Override
                                 public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                    MyThread.start();
-                                    running = true;
                                     Log.d("TAG", response.body().string());
                                 }
                             });

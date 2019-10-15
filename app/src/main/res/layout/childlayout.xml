@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/colorPrimary"
-    android:id="@+id/presetLayout">
+    android:id="@+id/childLayout">
 
     <LinearLayout
         android:layout_width="match_parent"

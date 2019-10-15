@@ -19,7 +19,7 @@
 
         <TextView
             android:id="@+id/txtStationName"
-            android:layout_width="25dp"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="1"
@@ -32,7 +32,7 @@
             android:layout_width="25dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="start"
             android:text="wash"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textColor="#000" />
@@ -43,7 +43,7 @@
             android:textColor="#000"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:text="3"
-            android:gravity="center"
+            android:gravity="start"
             android:layout_weight="1.5"
             android:id="@+id/txtIp"/>
 

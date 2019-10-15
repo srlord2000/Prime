@@ -10,12 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
+        android:weightSum="4"
         android:orientation="horizontal">
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:backgroundTint="#02aff3"
             android:text="@string/add"
+            android:layout_weight="1"
             app:rippleColor="@color/black"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
@@ -25,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/delete"
+            android:layout_weight="1"
             app:rippleColor="@color/black"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
@@ -39,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             app:backgroundTint="#8f8f8f"
+            android:layout_weight="1"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
             android:paddingStart="30dp"
@@ -55,15 +59,38 @@
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
             android:paddingStart="30dp"
+            android:layout_weight="1"
             android:paddingEnd="0dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="0dp"
             android:contentDescription="@string/scan" />
 
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:weightSum="4"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="center_horizontal"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:text="Email"/>
 
 
 
     </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listView"
         android:layout_width="match_parent"

@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:layout_gravity="center"
         android:background="@drawable/circleddialog"
-        android:visibility="gone"
+        android:visibility="visible"
         >
 
         <TextView
@@ -84,7 +84,7 @@
                 android:fontFamily="@font/opensansbold"
                 android:text="Close"
                 android:textAllCaps="false"
-                android:textColor="#02aff3"
+                android:textColor="#000"
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
@@ -96,7 +96,7 @@
         android:orientation="vertical"
         android:layout_gravity="center"
         android:background="@drawable/circleddialog"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/textView3"
@@ -238,4 +238,5 @@
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>

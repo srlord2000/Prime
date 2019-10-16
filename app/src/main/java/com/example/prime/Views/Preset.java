@@ -315,7 +315,7 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
             }
 
             public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
-                Log.d(TAG, "onFailuretagtrt: ");
+                Log.d(TAG, "onFailuretagtry: ");
 
             }
         });

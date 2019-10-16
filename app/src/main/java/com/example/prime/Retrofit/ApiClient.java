@@ -15,6 +15,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface ApiClient {
 
@@ -25,7 +26,7 @@ public interface ApiClient {
         Call<ResponseBody> getJSONData1(@Header("Cookie") String token);
 
         @GET("services/show")
-        Call<ResponseBody> getJSONData2(@Header("Cookie") String token);
+        Call<ResponseBody> getServices(@Header("Cookie") String token);
 
         @POST("auth/check")
         Call<ResponseBody> getData(@Body Object body);
@@ -50,6 +51,9 @@ public interface ApiClient {
 
         @GET("units/show")
         Call<ResponseBody> getUnits(@Header("Cookie") String token);
+
+        @GET("services/show")
+        Call<ResponseBody> getServiceId(@Header("Cookie") String token, @Query("unitid") String query);
 
         @Headers({"Accept:application/json", "Content-Type:application/json;"})
         @FormUrlEncoded

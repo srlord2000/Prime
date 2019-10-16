@@ -6,18 +6,23 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -33,6 +38,7 @@ import com.example.prime.R;
 import com.example.prime.RecyclerAdapter.StationAdapter;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -106,7 +112,6 @@ public class Station extends Fragment {
         sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(mContext);
         apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
         id = sharedPrefsCookiePersistor.loadAll().get(0).value();
-
         data1();
         running = true;
         MyThread = new Thread() {//create thread
@@ -330,6 +335,19 @@ public class Station extends Fragment {
             @Override
             public void onClick(View view) {
 
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
+                View mView = getLayoutInflater().inflate(R.layout.stationhostscandialog, null);
+//                final TextView host12;
+//                final EditText ip11 = mView.findViewById(R.id.ipAddress1);
+//                final EditText station11 = mView.findViewById(R.id.station_name);
+//                final Spinner unit1 = (Spinner)mView.findViewById(R.id.unitType1);
+//                host12 = mView.findViewById(R.id.hostType1);
+//                Button submit1 = mView.findViewById(R.id.dialog_submit);
+//                Button close12 = mView.findViewById(R.id.dialog_close);
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
             }
         });
 

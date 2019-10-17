@@ -27,6 +27,7 @@ import com.example.prime.Persistent.SharedPrefsCookiePersistor;
 import com.example.prime.RecyclerAdapter.AddDataAdapter;
 import com.example.prime.RecyclerAdapter.GroupAdapter;
 import com.example.prime.Retrofit.ApiClient;
+import com.example.prime.Retrofit.ApiClientBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,7 +69,7 @@ public class AddPreset extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_preset);
         recyclerView = findViewById(R.id.recycler);
-        add = findViewById(R.id.btnAddPreset);
+        add = findViewById(R.id.btnAdd);
         bypass= findViewById(R.id.btnBypass);
         submit = findViewById(R.id.btnSubmit);
         spinner = findViewById(R.id.spinner);
@@ -79,6 +80,9 @@ public class AddPreset extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(addAdapter);
+        sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(this);
+        apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
+        id = sharedPrefsCookiePersistor.loadAll().get(0).value();
 
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -162,14 +166,14 @@ public class AddPreset extends AppCompatActivity {
             }
         });
 
-        remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                adds.clear();
-                addAdapter.notifyDataSetChanged();
-
-            }
-        });
+//        remove.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                adds.clear();
+//                addAdapter.notifyDataSetChanged();
+//
+//            }
+//        });
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,11 +228,12 @@ public class AddPreset extends AppCompatActivity {
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.e(TAG, "onResponse: "+response );
+
                 JSONArray array = null;
                 try {
+                    String responseData = response.body().string();
                     spinnerData = new ArrayList<>();
-                    array = new JSONArray(response);
+                    array = new JSONArray(responseData);
                     for(int i = 0; i<array.length(); i++) {
                         GroupModel dataObject = new GroupModel();
                         JSONObject json = null;
@@ -245,6 +250,8 @@ public class AddPreset extends AppCompatActivity {
                     }
 
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
 

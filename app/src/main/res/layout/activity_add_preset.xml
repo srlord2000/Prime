@@ -38,7 +38,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:enabled="false"
                 android:fontFamily="@font/opensansregular"
                 android:hint="Unit Name"
                 android:inputType="text"

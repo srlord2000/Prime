@@ -7,9 +7,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,10 +20,8 @@ import android.widget.Spinner;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.prime.Adapter.SpinnerAdapters;
 import com.example.prime.Model.AddDataModel;
 import com.example.prime.Model.GroupModel;
-import com.example.prime.Model.SpinnerModel;
 import com.example.prime.Persistent.SharedPrefsCookiePersistor;
 import com.example.prime.RecyclerAdapter.AddDataAdapter;
 import com.example.prime.RecyclerAdapter.GroupAdapter;
@@ -47,17 +44,16 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class AddPreset extends AppCompatActivity {
-
-    private String name;
-    private Button add, bypass, submit, remove;
+public class AdvancedOption extends AppCompatActivity {
+    private String name,name2;
+    private Button add,bypass,submit;
     private RecyclerView recyclerView;
     private ArrayList<AddDataModel> adds;
     private ArrayList<String> set;
     private AddDataAdapter addAdapter;
     private String TAG;
     private Spinner spinner;
-    private String name1, id1;
+    private String name1,id1,groupid;
     private EditText text;
     protected List<GroupModel> spinnerData;
     SharedPreferences prefs ;
@@ -69,40 +65,51 @@ public class AddPreset extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_preset);
+        setContentView(R.layout.activity_advanced_option);
+        Intent intent = getIntent();
         recyclerView = findViewById(R.id.recycler);
         add = findViewById(R.id.btnAdd);
-        bypass= findViewById(R.id.btnBypass);
+        bypass = findViewById(R.id.btnBypass);
         submit = findViewById(R.id.btnSubmit);
         spinner = findViewById(R.id.spinner);
         text = findViewById(R.id.txtName);
         adds = new ArrayList<>();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        addAdapter = new AddDataAdapter(this, adds);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        addAdapter = new AddDataAdapter(AdvancedOption.this,adds);
+        recyclerView.setLayoutManager(new LinearLayoutManager(AdvancedOption.this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(addAdapter);
+        name1 = intent.getStringExtra("Key");
+        id1 = intent.getStringExtra("Id");
         sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(this);
         apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
         id = sharedPrefsCookiePersistor.loadAll().get(0).value();
+        groupid = intent.getStringExtra("GroupId");
 
+        if(!name1.equals("")){
+            data();
+            text.setText(name1);
+
+
+        }
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int id = adapterView.getSelectedItemPosition();
                 name = spinnerData.get(id).getId();
-                Log.e(TAG, "onNothingSelected: " + name);
+                Log.e(TAG, "onNothingSelected: "+name );
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 int id = adapterView.getFirstVisiblePosition();
                 name = spinnerData.get(id).getId();
-                Log.e(TAG, "onNothingSelected: " + name);
+                Log.e(TAG, "onNothingSelected: "+name );
 
             }
         });
+
 
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -112,20 +119,20 @@ public class AddPreset extends AppCompatActivity {
                 set = new ArrayList<>();
                 JSONArray array = new JSONArray();
 
-
+                Log.e(TAG, "onClick: "+id1 );
                 try {
-                    for (int i = 0; i < e.size(); i++) {
+                    for(int i = 0; i < e.size(); i++) {
                         String name = adds.get(i).getName();
                         String type = adds.get(i).getType();
                         String level = adds.get(i).getLevel();
                         String price = adds.get(i).getPrice();
                         String pulse = adds.get(i).getPulse();
-                        JSONObject cust = new JSONObject();
-                        cust.put("service_name", name);
-                        cust.put("service_type", type);
-                        cust.put("service_level", level);
-                        cust.put("price", price);
-                        cust.put("tap_pulse", pulse);
+                        JSONObject cust= new JSONObject();
+                        cust.put("service_name",name);
+                        cust.put("service_type",type);
+                        cust.put("service_level",level);
+                        cust.put("price",price);
+                        cust.put("tap_pulse",pulse);
                         array.put(cust);
                     }
                 } catch (JSONException e1) {
@@ -134,21 +141,22 @@ public class AddPreset extends AppCompatActivity {
 
                 JSONObject userJson = new JSONObject();
                 try {
-                    userJson.put("unit_name", text.getText().toString());
-                    userJson.put("group_id", name);
-                    userJson.put("services", array);
+                    userJson.put("unit_name",text.getText().toString());
+                    userJson.put("group_id",name);
+                    userJson.put("unit_id",id1);
+                    userJson.put("services",array);
                 } catch (JSONException e2) {
                     e2.printStackTrace();
                 }
-                Log.e(TAG, "onClick: " + userJson);
-                Log.e(TAG, "onClick: " + name);
+                Log.e(TAG, "onClick: "+userJson);
+                Log.e(TAG, "onClick: "+name );
                 OkHttpClient client = new OkHttpClient();
 
 
                 RequestBody body = RequestBody.create(String.valueOf(userJson), JSON);
 
                 okhttp3.Request request = new okhttp3.Request.Builder()
-                        .url("http://192.168.0.100/units/add")
+                        .url("http://192.168.0.100/units/edit")
                         .addHeader("Cookie","ci_session="+id)
                         .post(body)
                         .build();
@@ -181,10 +189,10 @@ public class AddPreset extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(AddPreset.this);
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(AdvancedOption.this);
                 View mView = getLayoutInflater().inflate(R.layout.addnewpresetdialog, null);
                 final EditText name = mView.findViewById(R.id.etServiceName);
-                final android.widget.Spinner type = mView.findViewById(R.id.etServiceType);
+                final Spinner type = mView.findViewById(R.id.etServiceType);
                 final EditText level = mView.findViewById(R.id.etLevel);
                 final EditText price = mView.findViewById(R.id.etPrice);
                 final EditText pulse = mView.findViewById(R.id.etPulse);
@@ -194,29 +202,28 @@ public class AddPreset extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         int id = adapterView.getSelectedItemPosition();
-                        name1 = adapterView.getSelectedItem().toString();
-                        Log.e(TAG, "onNothingSelected: " + name1);
+                        name2 = adapterView.getSelectedItem().toString();
+                        Log.e(TAG, "onNothingSelected: "+name2 );
                     }
 
                     @Override
                     public void onNothingSelected(AdapterView<?> adapterView) {
                         int id = adapterView.getFirstVisiblePosition();
-                        name1 = adapterView.getSelectedItem().toString();
-                        Log.e(TAG, "onNothingSelected: " + name1);
+                        name2 = adapterView.getSelectedItem().toString();
+                        Log.e(TAG, "onNothingSelected: "+name2 );
 
                     }
                 });
 
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
                 submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         AddDataModel add = new AddDataModel();
                         add.setName(name.getText().toString());
-                        add.setType(name1);
+                        add.setType(name2);
                         add.setLevel(level.getText().toString());
                         add.setPrice(price.getText().toString());
                         add.setPulse(pulse.getText().toString());
@@ -262,6 +269,14 @@ public class AddPreset extends AppCompatActivity {
                 if(null != spinnerData){
                     GroupAdapter spinnerAdapter = new GroupAdapter(getApplicationContext(), R.layout.groupspinnerlayout,spinnerData);
                     spinner.setAdapter(spinnerAdapter);
+                    int index;
+                    for (int i = 0; i < spinnerData.size(); i++) {
+                        if (spinnerData.get(i).getId().equalsIgnoreCase(groupid)) {
+                            index = i;
+                            spinner.setSelection(index);
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -271,5 +286,41 @@ public class AddPreset extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    private void data(){
+        Intent in = getIntent();
+        String key = in.getStringExtra("Key");
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String json = prefs.getString(key, "");
+        Log.e("TAG", String.valueOf(json));
+        adds = new ArrayList<>();
+        try {
+
+            JSONArray array = new JSONArray(json);
+            for (int i = 0; i < array.length(); i++) {
+
+                AddDataModel editPrice = new AddDataModel();
+                JSONObject json1 = null;
+                try {
+                    json1 = array.getJSONObject(i);
+                    editPrice.setName(json1.getString("service_name"));
+                    editPrice.setType(json1.getString("service_type"));
+                    editPrice.setLevel(json1.getString("service_level"));
+                    editPrice.setPrice(json1.getString("price"));
+                    editPrice.setPulse(json1.getString("tap_pulse"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                adds.add(editPrice);
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        addAdapter.setPreset(adds);
+        addAdapter.notifyDataSetChanged();
     }
 }

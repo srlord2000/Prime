@@ -14,10 +14,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AddPreset"></activity>
-        <activity android:name=".Forgot" />
+        <activity android:name=".AdvancedOption"></activity>
+        <activity
+            android:name=".AddPreset"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".Forgot"
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name=".HomeActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity">

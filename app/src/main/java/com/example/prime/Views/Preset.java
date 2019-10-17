@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.prime.AddPreset;
+import com.example.prime.AdvancedOption;
 import com.example.prime.Model.CardsModel;
 import com.example.prime.Model.EditPriceModel;
 import com.example.prime.Model.ServiceModel;
@@ -61,7 +62,7 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
     private RecyclerView recyclerView;
     public static ArrayList<EditPriceModel> editPrices;
     private Button add, edit, delete;
-    private String nameselect;
+    private String nameselect,nameid,groupid;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     ApiClient apiInterface;
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
@@ -95,6 +96,8 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         nameselect = "";
+        nameid = "";
+        groupid = "";
         childDataItems = new ArrayList<>();
         recyclerView = view.findViewById(R.id.listView);
         presetAdapter = new PresetAdapter(mContext,arrDummyData);
@@ -133,6 +136,19 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
                     dialog.show();
                     dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
                     dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+                    advanced.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(getActivity().getBaseContext(),
+                                    AdvancedOption.class);
+                            intent.putExtra("Key", nameselect);
+                            intent.putExtra("Id", nameid);
+                            intent.putExtra("GroupId", groupid);
+                            getActivity().startActivity(intent);
+                        }
+                    });
+
                     String json = prefs.getString(nameselect, "");
                     Log.i("TAGedit", String.valueOf(json));
                     editPrices = new ArrayList<>();
@@ -174,7 +190,6 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity().getBaseContext(),
                         AddPreset.class);
-                intent.putExtra("message", "message");
                 getActivity().startActivity(intent);
             }
         });
@@ -454,10 +469,14 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
         Drawable background = Objects.requireNonNull(recyclerView.findViewHolderForLayoutPosition(position)).itemView.getBackground();
         if (((ColorDrawable) background).getColor() == Color.parseColor("#707070")) {
             nameselect = arrDummyData.get(position).getUnitName();
+            nameid = arrDummyData.get(position).getId();
+            groupid = arrDummyData.get(position).getGroupId();
             Log.e("", "onItemClick: " + arrDummyData.get(position).getUnitName());
 
         } else {
             nameselect = "";
+            nameid = "";
+            groupid = "";
             Log.e("", "onItemClick: sad");
         }
     }

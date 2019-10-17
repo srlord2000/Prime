@@ -173,7 +173,7 @@ public class Card extends Fragment {
                     System.out.println("counter: " + i);
                     i++;
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         System.out.println("Sleep interrupted");
                     }
@@ -307,7 +307,7 @@ public class Card extends Fragment {
 
                                 }
                             });
-                            text1 = type.getSelectedItem().toString();
+                            text1 = type.getSelectedItem().toString().toLowerCase();
                             String card11, level11;
                             card11 = card1.getText().toString();
                             level11 = level1.getText().toString();
@@ -511,8 +511,8 @@ public class Card extends Fragment {
                 btnClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        running1 = false;
-                        MyThread1.interrupt();
+//                        running1 = false;
+//                        MyThread1.interrupt();
                         dialog.dismiss();
                     }
                 });

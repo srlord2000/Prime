@@ -39,13 +39,13 @@
         <com.google.android.material.button.MaterialButton
             app:icon="@drawable/ic_email"
             app:iconTint="@color/white"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="48dp"
             app:backgroundTint="#8f8f8f"
             android:layout_weight="1"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
-            android:paddingStart="30dp"
+            android:paddingStart="23dp"
             android:paddingEnd="0dp"
             android:layout_marginEnd="10dp"
             android:contentDescription="@string/scan" />
@@ -53,12 +53,12 @@
         <com.google.android.material.button.MaterialButton
             app:icon="@drawable/ic_timer"
             app:iconTint="@color/white"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="48dp"
             app:backgroundTint="#8f8f8f"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
-            android:paddingStart="30dp"
+            android:paddingStart="23dp"
             android:layout_weight="1"
             android:paddingEnd="0dp"
             android:layout_marginEnd="0dp"
@@ -87,9 +87,9 @@
             android:textColor="@color/white"
             android:text="Email"/>
 
-
-
     </LinearLayout>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listView"

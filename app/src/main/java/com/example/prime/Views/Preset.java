@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -92,6 +93,7 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
         recyclerView.setAdapter(presetAdapter);
         recyclerView.setHasFixedSize(true);
         add = view.findViewById(R.id.btnAddPreset);
+        edit = view.findViewById(R.id.btnEditPrice);
         prefs = PreferenceManager.getDefaultSharedPreferences( mContext);
         editor = prefs.edit();
         sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(mContext);
@@ -100,6 +102,19 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
         load();
         load1();
         services();
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
+                View mView = getLayoutInflater().inflate(R.layout.changegeneralsettingsdialog, null);
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

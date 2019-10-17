@@ -54,4 +54,11 @@
         <item>Abort</item>
         <item>Other</item>
     </string-array>
+
+    <string name="array">Presets</string>
+        <string-array name="array">
+        <item>Wash</item>
+        <item>Dry</item>
+        <item>Other</item>
+        </string-array>
 </resources>

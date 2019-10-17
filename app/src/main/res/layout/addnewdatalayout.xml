@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:weightSum="4"
     android:id="@+id/presetLayout">
@@ -79,18 +79,25 @@
         android:layout_gravity="right"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/delete"
             android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:id="@+id/delete"/>
+            android:backgroundTint="#FF0000"
+            android:paddingLeft="13dp"
 
-        <Button
+            app:icon="@drawable/ic_delete" />
+
+        <com.google.android.material.button.MaterialButton
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
+            app:icon="@drawable/ic_edit"
+            android:paddingLeft="10dp"
+            android:backgroundTint="#02aff3"
             android:id="@+id/edit"/>
 
 

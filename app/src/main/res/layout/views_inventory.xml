@@ -102,7 +102,7 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:text="10"
             android:gravity="start"
-            android:layout_weight="1.5"
+            android:layout_weight="1"
             android:id="@+id/txtIp1"/>
 
 
@@ -145,7 +145,7 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:text="15"
             android:gravity="start"
-            android:layout_weight="1.5"
+            android:layout_weight="1"
             android:id="@+id/txtIp2"/>
 
 
@@ -188,7 +188,7 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:text="12"
             android:gravity="start"
-            android:layout_weight="1.5"
+            android:layout_weight="1"
             android:id="@+id/txtIp3"/>
 
 

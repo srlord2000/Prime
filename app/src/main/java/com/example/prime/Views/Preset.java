@@ -11,24 +11,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.prime.AddPreset;
 import com.example.prime.Model.CardsModel;
+import com.example.prime.Model.EditPriceModel;
 import com.example.prime.Model.ServiceModel;
 import com.example.prime.Model.UnitModel;
 import com.example.prime.Persistent.SharedPrefsCookiePersistor;
 import com.example.prime.R;
 import com.example.prime.RecyclerAdapter.CardAdapter;
 import com.example.prime.RecyclerAdapter.ChildAdapter;
+import com.example.prime.RecyclerAdapter.EditPriceAdapter;
 import com.example.prime.RecyclerAdapter.PresetAdapter;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
@@ -54,7 +59,9 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
     public static Boolean running;
     public static Thread MyThread;
     private RecyclerView recyclerView;
+    public static ArrayList<EditPriceModel> editPrices;
     private Button add, edit, delete;
+    private String nameselect;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     ApiClient apiInterface;
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
@@ -63,6 +70,7 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
     private ArrayList<ServiceModel> childDataItems;
     private ArrayList<UnitModel> arrDummyData = new ArrayList<>();
     private ArrayList<String> data = new ArrayList<>();
+    EditPriceAdapter editPriceAdapter;
     PresetAdapter presetAdapter;
     SharedPreferences prefs ;
     SharedPreferences.Editor editor;
@@ -86,6 +94,7 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        nameselect = "";
         childDataItems = new ArrayList<>();
         recyclerView = view.findViewById(R.id.listView);
         presetAdapter = new PresetAdapter(mContext,arrDummyData);
@@ -106,12 +115,57 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                editPrices = new ArrayList<>();
+                editPriceAdapter = new EditPriceAdapter(mContext ,editPrices);
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
-                View mView = getLayoutInflater().inflate(R.layout.changegeneralsettingsdialog, null);
+                View mView = getLayoutInflater().inflate(R.layout.editprice, null);
+                RecyclerView recyclerView = mView.findViewById(R.id.recycler);
+                Button submit = mView.findViewById(R.id.btnSubmit);
+                Button advanced = mView.findViewById(R.id.btnAdvanced);
+                recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+                recyclerView.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
+                recyclerView.setAdapter(editPriceAdapter);
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
+
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
+                if(!nameselect.equals("")){
+                    dialog.show();
+                    dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+                    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                    String json = prefs.getString(nameselect, "");
+                    Log.i("TAGedit", String.valueOf(json));
+                    editPrices = new ArrayList<>();
+                    try {
+                        editPrices.clear();
+                        JSONArray array = new JSONArray(json);
+                        for (int i = 0; i < array.length(); i++) {
+                            EditPriceModel editPrice = new EditPriceModel();
+                            JSONObject json1 = null;
+                            try {
+                                json1 = array.getJSONObject(i);
+                                editPrice.setPrice(json1.getString("price"));
+                                editPrice.setName(json1.getString("service_name"));
+                                editPrice.setId(json1.getString("id"));
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            editPrices.add(editPrice);
+                        }
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    editPriceAdapter.setPrice(editPrices);
+                    editPriceAdapter.notifyDataSetChanged();
+
+                }else {
+                    Toast.makeText(mContext, "No Selection!", Toast.LENGTH_SHORT).show();
+                }
+
+
             }
         });
 
@@ -399,8 +453,11 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
         presetAdapter.selected(position);
         Drawable background = Objects.requireNonNull(recyclerView.findViewHolderForLayoutPosition(position)).itemView.getBackground();
         if (((ColorDrawable) background).getColor() == Color.parseColor("#707070")) {
+            nameselect = arrDummyData.get(position).getUnitName();
             Log.e("", "onItemClick: " + arrDummyData.get(position).getUnitName());
+
         } else {
+            nameselect = "";
             Log.e("", "onItemClick: sad");
         }
     }

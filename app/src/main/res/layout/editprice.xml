@@ -6,8 +6,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@drawable/circleddialog"
         android:layout_alignParentTop="true"
         >
 
@@ -15,29 +16,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:weightSum="2"
             >
 
-            <Button
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAdvanced"
+                android:text="Advanced Option"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/add"
-                android:text="Advanced Options"
-                android:textColor="@android:color/white"
-                android:background="@android:color/holo_blue_bright"
-                />
-            <Button
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#02aff3"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:textColor="@android:color/white" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSubmit"
+                android:text="Submit"
+                android:layout_width="35dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/transfer"
-                android:text="Valuee Edit"
-                />
+                android:layout_weight="1"
+                android:backgroundTint="#02aff3"
+                android:layout_gravity="center"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/recycler"
-            android:background="@android:color/white">
+            android:focusable="true"
+            android:id="@+id/recycler">
 
         </androidx.recyclerview.widget.RecyclerView>
 

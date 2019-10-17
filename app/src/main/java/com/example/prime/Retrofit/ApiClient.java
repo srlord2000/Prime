@@ -52,6 +52,9 @@ public interface ApiClient {
         @GET("units/show")
         Call<ResponseBody> getUnits(@Header("Cookie") String token);
 
+        @GET("groups/show")
+        Call<ResponseBody> getGroup(@Header("Cookie") String token);
+
         @GET("services/show")
         Call<ResponseBody> getServiceId(@Header("Cookie") String token, @Query("unitid") String query);
 

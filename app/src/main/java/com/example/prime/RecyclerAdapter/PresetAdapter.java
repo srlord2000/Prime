@@ -81,7 +81,6 @@ public class PresetAdapter extends RecyclerView.Adapter<PresetAdapter.MultiViewH
 //            linearLayout.setBackgroundColor(station.isChecked() ? Color.GRAY : Color.TRANSPARENT);
 //            recyclerView.setBackgroundColor(station.isChecked() ? Color.GRAY : Color.TRANSPARENT);
 
-
             name.setText(unitModel.getUnitName());
             childAdapter = new ChildAdapter(context,arrayList);
             arrayList = unitModel.getServiceModels();

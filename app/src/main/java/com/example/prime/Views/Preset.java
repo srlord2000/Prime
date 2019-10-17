@@ -1,6 +1,7 @@
 package com.example.prime.Views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.prime.AddPreset;
 import com.example.prime.Model.CardsModel;
 import com.example.prime.Model.ServiceModel;
 import com.example.prime.Model.UnitModel;
@@ -48,8 +50,10 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
 
     public static Boolean running1;
     public static Thread MyThread1;
+    public static Boolean running;
+    public static Thread MyThread;
     private RecyclerView recyclerView;
-    private Button scan, delete, push;
+    private Button add, edit, delete;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     ApiClient apiInterface;
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
@@ -87,6 +91,7 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(presetAdapter);
         recyclerView.setHasFixedSize(true);
+        add = view.findViewById(R.id.btnAddPreset);
         prefs = PreferenceManager.getDefaultSharedPreferences( mContext);
         editor = prefs.edit();
         sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(mContext);
@@ -95,6 +100,15 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
         load();
         load1();
         services();
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity().getBaseContext(),
+                        AddPreset.class);
+                intent.putExtra("message", "message");
+                getActivity().startActivity(intent);
+            }
+        });
         presetAdapter.setOnItemClickListener(this);
         running1 = true;
         MyThread1 = new Thread() {//create thread
@@ -105,7 +119,7 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
                     System.out.println("counter: "+i);
                     i++;
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         System.out.println("Sleep interrupted");
                     }
@@ -190,7 +204,6 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
                     arrDummyData.clear();
                     JSONArray object = new JSONArray(responseData);
                     for(int i = 0; i<object.length();i++){
-                        arrDummyData = new ArrayList<>();
                         childDataItems = new ArrayList<>();
                         JSONObject jsonObject = object.getJSONObject(i);
                         final String id = jsonObject.getString("id");
@@ -247,8 +260,28 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
                         final SharedPreferences.Editor editor = sharedPrefs.edit();
                         editor.putString("Services",responseData);
                         editor.apply();
-                        load();
-                        load1();
+                        running = true;
+                        MyThread = new Thread() {//create thread
+                            @Override
+                            public void run() {
+                                int i=0;
+                                while(running && i <= 3){
+                                    System.out.println("counter231: "+i);
+                                    i++;
+                                    try {
+                                        Thread.sleep(500);
+                                    } catch (InterruptedException e) {
+                                        System.out.println("Sleep interrupted");
+                                    }
+                                    load();
+                                    load1();
+
+                                }
+                                System.out.println("onEnd Thread");
+                            }
+                        };
+                        MyThread.start();
+
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -279,6 +312,31 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
                         services();
                         load();
                         load1();
+//                        running = true;
+//                        MyThread = new Thread() {//create thread
+//                            @Override
+//                            public void run() {
+//                                int i=0;
+//                                while(running){
+//                                    System.out.println("counter231: "+i);
+//                                    i++;
+//                                    try {
+//                                        Thread.sleep(1000);
+//                                    } catch (InterruptedException e) {
+//                                        System.out.println("Sleep interrupted");
+//                                    }
+//                                    load();
+//                                    load1();
+//                                    if(i == 3){
+//                                        MyThread.interrupt();
+//                                    }
+//
+//                                }
+//                                System.out.println("onEnd Thread");
+//                            }
+//                        };
+//                        MyThread.start();
+
                     }
 
                 } catch (IOException e) {

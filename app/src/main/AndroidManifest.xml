@@ -6,19 +6,20 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/primuslaundry"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@drawable/primuslaundry"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:largeHeap="true"
-        android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Forgot"></activity>
+        <activity android:name=".AddPreset"></activity>
+        <activity android:name=".Forgot" />
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

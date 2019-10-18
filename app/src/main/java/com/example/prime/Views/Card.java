@@ -65,7 +65,7 @@ import static com.android.volley.VolleyLog.TAG;
 
 public class Card extends Fragment {
 
-    public static Boolean running,l;
+    public static Boolean running;
     public static Thread MyThread;
     public static Boolean running1;
     public static Thread MyThread1;
@@ -211,9 +211,11 @@ public class Card extends Fragment {
                 Button btnClose = mView.findViewById(R.id.btnClose3);
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.show();
+                if (dialog.getWindow() != null){
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+                }
 
                 closeReg.setOnClickListener(new View.OnClickListener() {
                     @Override

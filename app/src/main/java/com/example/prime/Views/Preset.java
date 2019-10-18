@@ -131,7 +131,9 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
 
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                if (dialog.getWindow() != null){
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                }
                 if(!nameselect.equals("")){
                     dialog.show();
                     dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);

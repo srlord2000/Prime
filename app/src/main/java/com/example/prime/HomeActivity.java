@@ -19,6 +19,8 @@ import android.os.Handler;
 import android.view.MenuItem;
 
 import com.example.prime.Views.Card;
+import com.example.prime.Views.Email;
+import com.example.prime.Views.Preset;
 import com.example.prime.Views.Profile;
 import com.example.prime.Views.Station;
 import com.google.android.material.navigation.NavigationView;
@@ -66,7 +68,7 @@ public class HomeActivity extends AppCompatActivity
             nav_Menu.findItem(R.id.nav_inventory).setVisible(true);
             nav_Menu.findItem(R.id.nav_reports).setVisible(true);
             nav_Menu.findItem(R.id.nav_stations).setVisible(true);
-        }else {
+        }else if (prefs.getString("level","").equals("2")) {
             nav_Menu.findItem(R.id.nav_inventory).setVisible(false);
             nav_Menu.findItem(R.id.nav_reports).setVisible(false);
             nav_Menu.findItem(R.id.nav_stations).setVisible(false);
@@ -121,6 +123,10 @@ public class HomeActivity extends AppCompatActivity
                         Profile.MyThread.interrupt();
                         Profile.running = false;
                     }
+                    if(Email.MyThread != null) {
+                        Email.MyThread.interrupt();
+                        Email.running = false;
+                    }
                     if(Card.MyThread != null) {
                         Card.MyThread.interrupt();
                         Card.running = false;
@@ -128,11 +134,21 @@ public class HomeActivity extends AppCompatActivity
                     if(Station.MyThread != null) {
                         Station.MyThread.interrupt();
                         Station.running = false;
+                    }
+                    if(Preset.MyThread != null && Preset.MyThread1 != null) {
+                        Preset.MyThread.interrupt();
+                        Preset.running = false;
+                        Preset.MyThread1.interrupt();
+                        Preset.running1 = false;
                     }
                     fragment = new HomeFragment();
                     displaySelectedFragment(fragment);
 
                 } else if (id == R.id.nav_reports) {
+                    if(Email.MyThread != null) {
+                        Email.MyThread.interrupt();
+                        Email.running = false;
+                    }
                     if(Profile.MyThread != null) {
                         Profile.MyThread.interrupt();
                         Profile.running = false;
@@ -144,11 +160,21 @@ public class HomeActivity extends AppCompatActivity
                     if(Station.MyThread != null) {
                         Station.MyThread.interrupt();
                         Station.running = false;
+                    }
+                    if(Preset.MyThread != null && Preset.MyThread1 != null) {
+                        Preset.MyThread.interrupt();
+                        Preset.running = false;
+                        Preset.MyThread1.interrupt();
+                        Preset.running1 = false;
                     }
                     fragment = new ReportFragment();
                     displaySelectedFragment(fragment);
 
                 } else if (id == R.id.nav_stations) {
+                    if(Email.MyThread != null) {
+                        Email.MyThread.interrupt();
+                        Email.running = false;
+                    }
                     if(Profile.MyThread != null) {
                         Profile.MyThread.interrupt();
                         Profile.running = false;
@@ -160,11 +186,21 @@ public class HomeActivity extends AppCompatActivity
                     if(Station.MyThread != null) {
                         Station.MyThread.interrupt();
                         Station.running = false;
+                    }
+                    if(Preset.MyThread != null && Preset.MyThread1 != null) {
+                        Preset.MyThread.interrupt();
+                        Preset.running = false;
+                        Preset.MyThread1.interrupt();
+                        Preset.running1 = false;
                     }
                     fragment = new StationsFragment();
                     displaySelectedFragment(fragment);
 
                 } else if (id == R.id.nav_inventory) {
+                    if(Email.MyThread != null) {
+                        Email.MyThread.interrupt();
+                        Email.running = false;
+                    }
                     if(Profile.MyThread != null) {
                         Profile.MyThread.interrupt();
                         Profile.running = false;
@@ -176,12 +212,22 @@ public class HomeActivity extends AppCompatActivity
                     if(Station.MyThread != null) {
                         Station.MyThread.interrupt();
                         Station.running = false;
+                    }
+                    if(Preset.MyThread != null && Preset.MyThread1 != null) {
+                        Preset.MyThread.interrupt();
+                        Preset.running = false;
+                        Preset.MyThread1.interrupt();
+                        Preset.running1 = false;
                     }
                     fragment = new InventoryFragment();
                     displaySelectedFragment(fragment);
 
                 } else if (id == R.id.nav_settings) {
                     if (prefs.getString("level", "").equals("1")) {
+                        if(Email.MyThread != null) {
+                            Email.MyThread.interrupt();
+                            Email.running = false;
+                        }
                         if(Station.MyThread != null) {
                             Station.MyThread.interrupt();
                             Station.running = false;
@@ -190,15 +236,34 @@ public class HomeActivity extends AppCompatActivity
                             Card.MyThread.interrupt();
                             Card.running = false;
                         }
+                        if(Preset.MyThread != null && Preset.MyThread1 != null) {
+                            Preset.MyThread.interrupt();
+                            Preset.running = false;
+                            Preset.MyThread1.interrupt();
+                            Preset.running1 = false;
+                        }
+                        if(Profile.MyThread != null) {
+                            Profile.MyThread.interrupt();
+                            Profile.running = false;
+                        }
                         fragment = new SettingsFragment();
                         displaySelectedFragment(fragment);
 
                     } else {
+                        if(Profile.MyThread != null) {
+                            Profile.MyThread.interrupt();
+                            Profile.running = false;
+                        }
                         fragment = new StaffSettingsFragment();
                         displaySelectedFragment(fragment);
+
                     }
 
                 } else if (id == R.id.nav_logout) {
+                    if(Email.MyThread != null) {
+                        Email.MyThread.interrupt();
+                        Email.running = false;
+                    }
                     if(Profile.MyThread != null) {
                         Profile.MyThread.interrupt();
                         Profile.running = false;
@@ -211,13 +276,20 @@ public class HomeActivity extends AppCompatActivity
                         Station.MyThread.interrupt();
                         Station.running = false;
                     }
-                    editor = prefs.edit();
+                    if(Preset.MyThread != null && Preset.MyThread1 != null) {
+                        Preset.MyThread.interrupt();
+                        Preset.running = false;
+                        Preset.MyThread1.interrupt();
+                        Preset.running1 = false;
+
+                    }
                     Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-                    sharedPrefsCookiePersistor.clear();
-                    editor.clear();
-                    editor.apply();
                     startActivity(intent);
                     finish();
+                    sharedPrefsCookiePersistor.clear();
+                    editor = prefs.edit();
+                    editor.clear();
+                    editor.apply();
                 }
             }
         }, 0);

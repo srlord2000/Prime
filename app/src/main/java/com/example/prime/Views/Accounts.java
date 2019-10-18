@@ -72,8 +72,10 @@ public class Accounts extends Fragment {
                 View mView = getLayoutInflater().inflate(R.layout.changeadminsettingsdialog, null);
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
+                if (dialog.getWindow() != null){
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.show();
+                }
             }
         });
         editStaff.setOnClickListener(new View.OnClickListener() {
@@ -83,8 +85,10 @@ public class Accounts extends Fragment {
                 View mView = getLayoutInflater().inflate(R.layout.changestaffsettingsdialog, null);
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
+                if (dialog.getWindow() != null){
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.show();
+                }
             }
         });
 

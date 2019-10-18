@@ -27,6 +27,7 @@ import com.example.prime.Persistent.SetCookieCache;
 import com.example.prime.Persistent.SharedPrefsCookiePersistor;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
@@ -133,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
                         .url("http://192.168.0.100/auth/check")
                         .post(body)
                         .build();
-
                 okHttpClient.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(okhttp3.Call call, IOException e) {
@@ -163,8 +163,12 @@ public class MainActivity extends AppCompatActivity {
                                 Intent intent = new Intent(MainActivity.this,HomeActivity.class);
                                 startActivity(intent);
                                 finish();
-                            }else {
-                                Toast.makeText(MainActivity.this, "Wrong Username or Password", Toast.LENGTH_SHORT).show();
+                            }else if (object.getString("status").equals("1")) {
+                                Log.e(TAG, "onResponse: "+object.getString("status") );
+                                sharedPrefsCookiePersistor.clear();
+                                View contextView = findViewById(android.R.id.content);
+                                Snackbar.make(contextView, "Wrong Password or Username", Snackbar.LENGTH_SHORT)
+                                        .show();
                             }
 
                         } catch (JSONException e) {

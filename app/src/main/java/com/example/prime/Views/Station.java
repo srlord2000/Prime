@@ -202,8 +202,10 @@ public class Station extends Fragment {
                 Button close12 = mView.findViewById(R.id.dialog_close);
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
+                if (dialog.getWindow() != null){
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.show();
+                }
                 unit1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected( AdapterView<?> adapterView, View view,  int i, long l) {
@@ -346,8 +348,10 @@ public class Station extends Fragment {
 //                Button close12 = mView.findViewById(R.id.dialog_close);
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
+                if (dialog.getWindow() != null){
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.show();
+                }
             }
         });
 

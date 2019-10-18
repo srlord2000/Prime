@@ -93,8 +93,8 @@ public class Profile extends Fragment {
         date = view.findViewById(R.id.serverDate);
         timezone = view.findViewById(R.id.serverTimeZone);
         auto = view.findViewById(R.id.autoShutdown);
-        data();
         auto.setText("DISABLED");
+        data();
         running = true;
         MyThread = new Thread() {//create thread
             @Override
@@ -123,8 +123,10 @@ public class Profile extends Fragment {
                 View mView = getLayoutInflater().inflate(R.layout.changegeneralsettingsdialog, null);
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
+                if (dialog.getWindow() != null){
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.show();
+                }
 
             }
         });
@@ -174,39 +176,41 @@ public class Profile extends Fragment {
 //        MyThread = new Thread(){//create thread
 //            @Override
 //            public void run() {
-                retrofit2.Call<ResponseBody> call = apiInterface.getServerTime("ci_session="+id);
-                call.enqueue(new  retrofit2.Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Log.e(TAG, "onResponse: "+response );
-                        try {
-                            if(response.body()!= null) {
-                                String res = response.body().string();
-                                JSONObject jsonObject = new JSONObject(res);
-                                long result = jsonObject.getLong("timestamp") * 1000L;
-                                SimpleDateFormat formatTime = new SimpleDateFormat("h:mm:ss a", Locale.US);
-                                SimpleDateFormat formatDate = new SimpleDateFormat("EEE MMMM dd, yyyy  ", Locale.US);
-                                String time1 = formatTime.format(new Date(result));
-                                String date1 = formatDate.format(new Date(result));
-                                time.setText(time1);
-                                date.setText(date1);
-                                timezone.setText("GMT +08:00");
-                                Log.e(TAG, "onResponse: "+date1 );
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+        if(!id.isEmpty()) {
+            retrofit2.Call<ResponseBody> call = apiInterface.getServerTime("ci_session=" + id);
+            call.enqueue(new retrofit2.Callback<ResponseBody>() {
+                @Override
+                public void onResponse(retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Log.e(TAG, "onResponse: " + response);
+                    try {
+                        if (response.body() != null) {
+                            String res = response.body().string();
+                            JSONObject jsonObject = new JSONObject(res);
+                            long result = jsonObject.getLong("timestamp") * 1000L;
+                            SimpleDateFormat formatTime = new SimpleDateFormat("h:mm:ss a", Locale.US);
+                            SimpleDateFormat formatDate = new SimpleDateFormat("EEE MMMM dd, yyyy  ", Locale.US);
+                            String time1 = formatTime.format(new Date(result));
+                            String date1 = formatDate.format(new Date(result));
+                            time.setText(time1);
+                            date.setText(date1);
+                            timezone.setText("GMT +08:00");
+                            Log.e(TAG, "onResponse: " + date1);
                         }
-
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
 
-                    @Override
-                    public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
-                        Log.d(TAG, "onFailure: ");
+                }
 
-                    }
-                });
+                @Override
+                public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
+                    Log.d(TAG, "onFailure: ");
+
+                }
+            });
+        }
 //                int i=0;
 //                while(running){
 //                    System.out.println("counter: "+i);

@@ -12,12 +12,14 @@
         android:padding="10dp"
         android:weightSum="4"
         android:orientation="horizontal">
+
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:backgroundTint="#02aff3"
             android:text="@string/add"
             android:layout_weight="1"
+            android:id="@+id/btnAddEmail"
             app:rippleColor="@color/black"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
@@ -28,6 +30,7 @@
             android:layout_height="wrap_content"
             android:text="@string/delete"
             android:layout_weight="1"
+            android:id="@+id/btnDeleteEmail"
             app:rippleColor="@color/black"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
@@ -95,8 +98,6 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:choiceMode="singleChoice"
-        android:background="@android:color/white"
         android:listSelector="@android:color/darker_gray" />
 
 </LinearLayout>

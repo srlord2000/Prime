@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,7 +22,7 @@
             android:textStyle="bold"
             android:textSize="25sp"
             android:textColor="@color/black"
-            android:text="Add Station"
+            android:text="Add Clients"
             android:layout_marginTop="5dp"
             android:fontFamily="@font/robotobold"
             android:layout_gravity="center"/>
@@ -63,12 +63,12 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ipAddress1"
+                android:id="@+id/first_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/opensansregular"
-                android:hint="IP Address"
+                android:hint="First Name"
                 android:inputType="text"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
@@ -89,12 +89,12 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/station_name"
+                android:id="@+id/last_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/opensansregular"
-                android:hint="Station Name"
+                android:hint="Last Name"
                 android:inputType="text"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
@@ -105,35 +105,31 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_height="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_marginTop="15dp"
-            android:weightSum="2">
+            android:layout_height="match_parent"
+            android:theme="@style/EditTextTheme"
+            app:boxStrokeWidth="10dp"
+            app:errorEnabled="true"
+            >
 
-            <TextView
-                android:layout_marginLeft="3dp"
-                android:id="@+id/serviceTypeView1"
-                android:layout_width="15dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:text="Unit Type:"
-                android:fontFamily="@font/robotoregular"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@android:color/black" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/clientsEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/opensansregular"
+            android:hint="Email"
+            android:inputType="text"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="15sp"
+            />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/unitType1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:layout_weight="1"
-                android:tag="Sad"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-        </LinearLayout>
 
 
 

@@ -19,9 +19,12 @@ import android.os.Handler;
 import android.view.MenuItem;
 
 import com.example.prime.Views.Card;
+import com.example.prime.Views.Consumables;
 import com.example.prime.Views.Email;
+import com.example.prime.Views.Inventory;
 import com.example.prime.Views.Preset;
 import com.example.prime.Views.Profile;
+import com.example.prime.Views.Services;
 import com.example.prime.Views.Station;
 import com.google.android.material.navigation.NavigationView;
 
@@ -83,6 +86,46 @@ public class HomeActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            if(Profile.MyThread != null) {
+                Profile.MyThread.interrupt();
+                Profile.running = false;
+            }
+            if(Inventory.MyThread != null) {
+                Inventory.MyThread.interrupt();
+                Inventory.running = false;
+            }
+            if(Services.MyThread != null) {
+                Services.MyThread.interrupt();
+                Services.running = false;
+            }
+            if(Inventory.MyThread != null) {
+                Inventory.MyThread.interrupt();
+                Inventory.running = false;
+            }
+            if(Consumables.MyThread != null) {
+                Consumables.MyThread.interrupt();
+                Consumables.running = false;
+            }
+            if(Email.MyThread != null) {
+                Email.MyThread.interrupt();
+                Email.running = false;
+            }
+            if(Card.MyThread != null) {
+                Card.MyThread.interrupt();
+                Card.running = false;
+            }
+            if(Station.MyThread != null) {
+                Station.MyThread.interrupt();
+                Station.running = false;
+            }
+            if(Preset.MyThread != null) {
+                Preset.MyThread.interrupt();
+                Preset.running = false;
+            }
+            if(Preset.MyThread1 != null) {
+                Preset.MyThread1.interrupt();
+                Preset.running1 = false;
+            }
         }
     }
 
@@ -123,6 +166,18 @@ public class HomeActivity extends AppCompatActivity
                         Profile.MyThread.interrupt();
                         Profile.running = false;
                     }
+                    if(Services.MyThread != null) {
+                        Services.MyThread.interrupt();
+                        Services.running = false;
+                    }
+                    if(Inventory.MyThread != null) {
+                        Inventory.MyThread.interrupt();
+                        Inventory.running = false;
+                    }
+                    if(Consumables.MyThread != null) {
+                        Consumables.MyThread.interrupt();
+                        Consumables.running = false;
+                    }
                     if(Email.MyThread != null) {
                         Email.MyThread.interrupt();
                         Email.running = false;
@@ -149,9 +204,21 @@ public class HomeActivity extends AppCompatActivity
                         Email.MyThread.interrupt();
                         Email.running = false;
                     }
+                    if(Services.MyThread != null) {
+                        Services.MyThread.interrupt();
+                        Services.running = false;
+                    }
                     if(Profile.MyThread != null) {
                         Profile.MyThread.interrupt();
                         Profile.running = false;
+                    }
+                    if(Inventory.MyThread != null) {
+                        Inventory.MyThread.interrupt();
+                        Inventory.running = false;
+                    }
+                    if(Consumables.MyThread != null) {
+                        Consumables.MyThread.interrupt();
+                        Consumables.running = false;
                     }
                     if(Card.MyThread != null) {
                         Card.MyThread.interrupt();
@@ -161,9 +228,11 @@ public class HomeActivity extends AppCompatActivity
                         Station.MyThread.interrupt();
                         Station.running = false;
                     }
-                    if(Preset.MyThread != null && Preset.MyThread1 != null) {
+                    if(Preset.MyThread != null) {
                         Preset.MyThread.interrupt();
                         Preset.running = false;
+                    }
+                    if(Preset.MyThread1 != null) {
                         Preset.MyThread1.interrupt();
                         Preset.running1 = false;
                     }
@@ -175,6 +244,18 @@ public class HomeActivity extends AppCompatActivity
                         Email.MyThread.interrupt();
                         Email.running = false;
                     }
+                    if(Services.MyThread != null) {
+                        Services.MyThread.interrupt();
+                        Services.running = false;
+                    }
+                    if(Inventory.MyThread != null) {
+                        Inventory.MyThread.interrupt();
+                        Inventory.running = false;
+                    }
+                    if(Consumables.MyThread != null) {
+                        Consumables.MyThread.interrupt();
+                        Consumables.running = false;
+                    }
                     if(Profile.MyThread != null) {
                         Profile.MyThread.interrupt();
                         Profile.running = false;
@@ -187,9 +268,11 @@ public class HomeActivity extends AppCompatActivity
                         Station.MyThread.interrupt();
                         Station.running = false;
                     }
-                    if(Preset.MyThread != null && Preset.MyThread1 != null) {
+                    if(Preset.MyThread != null) {
                         Preset.MyThread.interrupt();
                         Preset.running = false;
+                    }
+                    if(Preset.MyThread1 != null) {
                         Preset.MyThread1.interrupt();
                         Preset.running1 = false;
                     }
@@ -201,6 +284,18 @@ public class HomeActivity extends AppCompatActivity
                         Email.MyThread.interrupt();
                         Email.running = false;
                     }
+                    if(Services.MyThread != null) {
+                        Services.MyThread.interrupt();
+                        Services.running = false;
+                    }
+                    if(Inventory.MyThread != null) {
+                        Inventory.MyThread.interrupt();
+                        Inventory.running = false;
+                    }
+                    if(Consumables.MyThread != null) {
+                        Consumables.MyThread.interrupt();
+                        Consumables.running = false;
+                    }
                     if(Profile.MyThread != null) {
                         Profile.MyThread.interrupt();
                         Profile.running = false;
@@ -213,9 +308,11 @@ public class HomeActivity extends AppCompatActivity
                         Station.MyThread.interrupt();
                         Station.running = false;
                     }
-                    if(Preset.MyThread != null && Preset.MyThread1 != null) {
+                    if(Preset.MyThread != null) {
                         Preset.MyThread.interrupt();
                         Preset.running = false;
+                    }
+                    if(Preset.MyThread1 != null) {
                         Preset.MyThread1.interrupt();
                         Preset.running1 = false;
                     }
@@ -228,6 +325,18 @@ public class HomeActivity extends AppCompatActivity
                             Email.MyThread.interrupt();
                             Email.running = false;
                         }
+                        if(Services.MyThread != null) {
+                            Services.MyThread.interrupt();
+                            Services.running = false;
+                        }
+                        if(Inventory.MyThread != null) {
+                            Inventory.MyThread.interrupt();
+                            Inventory.running = false;
+                        }
+                        if(Consumables.MyThread != null) {
+                            Consumables.MyThread.interrupt();
+                            Consumables.running = false;
+                        }
                         if(Station.MyThread != null) {
                             Station.MyThread.interrupt();
                             Station.running = false;
@@ -236,9 +345,11 @@ public class HomeActivity extends AppCompatActivity
                             Card.MyThread.interrupt();
                             Card.running = false;
                         }
-                        if(Preset.MyThread != null && Preset.MyThread1 != null) {
+                        if(Preset.MyThread != null) {
                             Preset.MyThread.interrupt();
                             Preset.running = false;
+                        }
+                        if(Preset.MyThread1 != null) {
                             Preset.MyThread1.interrupt();
                             Preset.running1 = false;
                         }
@@ -260,6 +371,18 @@ public class HomeActivity extends AppCompatActivity
                     }
 
                 } else if (id == R.id.nav_logout) {
+                    if(Inventory.MyThread != null) {
+                        Inventory.MyThread.interrupt();
+                        Inventory.running = false;
+                    }
+                    if(Services.MyThread != null) {
+                        Services.MyThread.interrupt();
+                        Services.running = false;
+                    }
+                    if(Consumables.MyThread != null) {
+                        Consumables.MyThread.interrupt();
+                        Consumables.running = false;
+                    }
                     if(Email.MyThread != null) {
                         Email.MyThread.interrupt();
                         Email.running = false;
@@ -276,12 +399,13 @@ public class HomeActivity extends AppCompatActivity
                         Station.MyThread.interrupt();
                         Station.running = false;
                     }
-                    if(Preset.MyThread != null && Preset.MyThread1 != null) {
+                    if(Preset.MyThread != null) {
                         Preset.MyThread.interrupt();
                         Preset.running = false;
+                    }
+                    if(Preset.MyThread1 != null) {
                         Preset.MyThread1.interrupt();
                         Preset.running1 = false;
-
                     }
                     Intent intent = new Intent(HomeActivity.this, MainActivity.class);
                     startActivity(intent);

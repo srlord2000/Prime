@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -31,6 +35,7 @@ import com.example.prime.RecyclerAdapter.ClientsAdapter;
 import com.example.prime.RecyclerAdapter.StationAdapter;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,12 +53,13 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class Email extends Fragment {
+    public static String result1;
     public static Boolean running;
     public static Thread MyThread;
     private ArrayList<ClientsModel> clientsModels;
     private String text1;
     private RecyclerView recyclerView;
-    private Button add, delete, scan;
+    private Button add, delete, sender;
     private ClientsAdapter clientsAdapter;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     ApiClient apiInterface;
@@ -82,6 +88,7 @@ public class Email extends Fragment {
         recyclerView = view.findViewById(R.id.listView);
         delete = view.findViewById(R.id.btnDeleteEmail);
         add = view.findViewById(R.id.btnAddEmail);
+        sender = view.findViewById(R.id.btnSenderEdit);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
         clientsAdapter = new ClientsAdapter(mContext, clientsModels);
@@ -110,9 +117,33 @@ public class Email extends Fragment {
         };
         MyThread.start();
 
-        delete.setOnClickListener(new View.OnClickListener() {
+        sender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
+                final View mView = getLayoutInflater().inflate(R.layout.sendereditlayout, null);
+                final EditText email = mView.findViewById(R.id.sender_email);
+                final EditText password = mView.findViewById(R.id.sender_password);
+                final TextView settings = mView.findViewById(R.id.link_settings);
+                Spanned policy = Html.fromHtml(getString(R.string.settingstext), HtmlCompat.FROM_HTML_MODE_LEGACY);
+                Button submit = mView.findViewById(R.id.dialog_submit);
+                Button close = mView.findViewById(R.id.dialog_close);
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+                if (dialog.getWindow() != null){
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.show();
+                }
+
+
+                settings.setText(policy);
+                settings.setMovementMethod(LinkMovementMethod.getInstance());
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
                 ArrayList<String> sad = new ArrayList<>();
                 if (clientsAdapter.getSelected().size() > 0) {
                     StringBuilder stringBuilder = new StringBuilder();
@@ -146,19 +177,29 @@ public class Email extends Fragment {
                             @Override
                             public void onFailure(Call call, IOException e) {
                                 call.cancel();
+                                View contextView = view.findViewById(android.R.id.content);
+                                Snackbar.make(contextView, "Failed!", Snackbar.LENGTH_SHORT)
+                                        .show();
                             }
 
                             @Override
                             public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                 Log.e("TAG", response.message());
+                                if (getActivity() != null) {
+                                    View contextView = getActivity().findViewById(android.R.id.content);
+                                    Snackbar.make(contextView, "Delete Successful!", Snackbar.LENGTH_SHORT)
+                                            .show();
+                                }
                                 Log.e(TAG, "onResponse: "+response.body().string() );
                             }
                         });
-                        Log.e("", "onClick: " + sad);
-                        Toast.makeText(mContext, "Delete Successfully!", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(mContext, "No Selection", Toast.LENGTH_SHORT).show();
+                    if (getActivity() != null) {
+                        View contextView = getActivity().findViewById(android.R.id.content);
+                        Snackbar.make(contextView, "No Selection!", Snackbar.LENGTH_SHORT)
+                                .show();
+                    }
                 }
             }
         });
@@ -168,11 +209,11 @@ public class Email extends Fragment {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
-                View mView = getLayoutInflater().inflate(R.layout.addclientslayout, null);
+                final View mView = getLayoutInflater().inflate(R.layout.addclientslayout, null);
                 final EditText email = mView.findViewById(R.id.clientsEmail);
                 final EditText first_name = mView.findViewById(R.id.first_name);
                 final EditText last_name = mView.findViewById(R.id.last_name);
-                Button submit1 = mView.findViewById(R.id.dialog_submit);
+                Button submit = mView.findViewById(R.id.dialog_submit);
                 Button close = mView.findViewById(R.id.dialog_close);
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
@@ -181,6 +222,67 @@ public class Email extends Fragment {
                     dialog.show();
                 }
 
+                submit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View view) {
+                        if (!email.getText().toString().isEmpty() && !first_name.getText().toString().isEmpty() && !last_name.getText().toString().isEmpty()) {
+                            Toast.makeText(mContext, text1, Toast.LENGTH_SHORT).show();
+                            final String emails,firstn,lastn;
+                            emails = email.getText().toString();
+                            firstn = first_name.getText().toString();
+                            lastn = last_name.getText().toString();
+                            JSONObject obj = new JSONObject();
+                            try {
+                                obj.put("first_name", firstn);
+                                obj.put("last_name", lastn);
+                                obj.put("email",emails);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            OkHttpClient client = new OkHttpClient();
+                            RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
+                            Log.e(TAG, "onClick: "+obj );
+                            okhttp3.Request request = new okhttp3.Request.Builder()
+                                    .url("http://192.168.0.100/clients/add")
+                                    .addHeader("Cookie","ci_session="+id)
+                                    .post(body)
+                                    .build();
+                            client.newCall(request).enqueue(new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+                                    if (getActivity() != null) {
+                                        View contextView = getActivity().findViewById(android.R.id.content);
+                                        Snackbar.make(contextView, "Failed, Try Again!", Snackbar.LENGTH_SHORT)
+                                                .show();
+                                    }
+                                    call.cancel();
+                                    Log.e(TAG, "onFailure: error");
+                                }
+
+                                @Override
+                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                    dialog.dismiss();
+                                    if (getActivity() != null) {
+                                        View contextView = getActivity().findViewById(android.R.id.content);
+                                        Snackbar.make(contextView, "Add Successfully!", Snackbar.LENGTH_SHORT)
+                                                .show();
+                                    }
+                                    Log.e("TAG", response.body().string());
+                                }
+                            });
+
+
+
+
+                        } else {
+                            if (getActivity() != null) {
+                                View contextView = getActivity().findViewById(android.R.id.content);
+                                Snackbar.make(contextView, "Please Input Complete Details!", Snackbar.LENGTH_SHORT)
+                                        .show();
+                            }
+                        }
+                    }
+                });
 
 
                 close.setOnClickListener(new View.OnClickListener() {

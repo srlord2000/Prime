@@ -16,6 +16,7 @@
     <string name="menu_logout">Logout</string>
 
 
+    <string name="settingstext">Allow Shop Server Portal to send notification by logging into the sender gmail and turning on this &lt;a href=https://myaccount.google.com/lesssecureapps>setting&lt;/a></string>
     <string name="cancel">Cancel</string>
     <string name="add">ADD</string>
     <string name="edit">EDIT</string>

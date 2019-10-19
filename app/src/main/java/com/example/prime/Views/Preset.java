@@ -113,7 +113,6 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
         id = sharedPrefsCookiePersistor.loadAll().get(0).value();
         load();
         load1();
-        services();
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,7 +204,7 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
                     System.out.println("counter: "+i);
                     i++;
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         System.out.println("Sleep interrupted");
                     }

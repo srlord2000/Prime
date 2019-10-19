@@ -61,6 +61,16 @@ public interface ApiClient {
         @GET("services/show")
         Call<ResponseBody> getServiceId(@Header("Cookie") String token, @Query("unitid") String query);
 
+        @GET("inventory/show")
+        Call<ResponseBody> getInventory(@Header("Cookie") String token);
+
+        @GET("inventory/item/show")
+        Call<ResponseBody> getConsumables(@Header("Cookie") String token);
+
+        @GET("inventory/services/show")
+        Call<ResponseBody> getServicesItem(@Header("Cookie") String token);
+
+
         @Headers({"Accept:application/json", "Content-Type:application/json;"})
         @FormUrlEncoded
         @POST("cards/remove")

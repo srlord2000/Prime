@@ -46,6 +46,7 @@
             android:layout_height="48dp"
             app:backgroundTint="#8f8f8f"
             android:layout_weight="1"
+            android:id="@+id/btnSenderEdit"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
             android:paddingStart="23dp"

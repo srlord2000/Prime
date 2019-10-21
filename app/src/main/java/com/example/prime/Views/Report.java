@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.aditya.filebrowser.FileBrowser;
 import com.example.prime.R;
 
 import java.io.File;
@@ -126,12 +127,16 @@ public class Report extends Fragment {
     public void openFolder()
     {
 
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        Uri uri = Uri.parse(mContext.getExternalFilesDir(null).getPath()
-                + "/myFolder/");
-        intent.setDataAndType(uri, "text/csv");
-        startActivity(Intent.createChooser(intent, "Open folder"));
+        Intent i4 = new Intent(getContext(), FileBrowser.class);
+        startActivity(i4);
+
+//        Intent selectFile = new Intent();
+//        selectFile.setAction("com.sec.android.app.myfiles.PICK_DATA_MULTIPLE");
+//        selectFile.putExtra("CONTENT_TYPE", "*/*");
+//        selectFile.addCategory(Intent.CATEGORY_DEFAULT);
+//        startActivity(selectFile);
     }
+
 }
 
 

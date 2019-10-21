@@ -28,6 +28,7 @@
             android:layout_marginEnd="11dp" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/view"

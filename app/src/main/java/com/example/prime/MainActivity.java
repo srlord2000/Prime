@@ -104,13 +104,6 @@ public class MainActivity extends AppCompatActivity {
             sharedPrefsCookiePersistor.clear();
         }
 
-        forgot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,Forgot.class);
-                startActivity(intent);
-            }
-        });
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -20,9 +20,6 @@
             android:name=".AddPreset"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".Forgot"
-            android:configChanges="orientation|screenSize" />
-        <activity
             android:name=".HomeActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_home"

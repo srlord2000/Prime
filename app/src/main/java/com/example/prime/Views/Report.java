@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ import java.util.Calendar;
 
 public class Report extends Fragment {
     Context mContext;
-    Button dateButton,downloadButton;
+    Button dateButton,downloadButton,viewButton;
     private long downloadID;
 
     final Calendar newCalendar = Calendar.getInstance();
@@ -68,6 +69,7 @@ public class Report extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         dateButton = view.findViewById(R.id.dateReport);
         downloadButton = view.findViewById(R.id.btnDownload);
+        viewButton = view.findViewById(R.id.btnView);
         getActivity().registerReceiver(onDownloadComplete,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
 
@@ -93,6 +95,13 @@ public class Report extends Fragment {
 
             }
         });
+
+        viewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openFolder();
+            }
+        });
     }
 
 
@@ -114,6 +123,15 @@ public class Report extends Fragment {
         downloadID = downloadManager.enqueue(request);// enqueue puts the download request in the queue.
     }
 
+    public void openFolder()
+    {
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Uri uri = Uri.parse(mContext.getExternalFilesDir(null).getPath()
+                + "/myFolder/");
+        intent.setDataAndType(uri, "text/csv");
+        startActivity(Intent.createChooser(intent, "Open folder"));
+    }
 }
 
 

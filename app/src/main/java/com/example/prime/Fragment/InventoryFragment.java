@@ -26,7 +26,7 @@ public class InventoryFragment extends Fragment {
 
     @Override
     public void onViewCreated (@NonNull View view, Bundle savedInstanceState){
-        getActivity().setTitle("Reports");
+        getActivity().setTitle("Inventory");
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Inventory"));
         tabLayout.addTab(tabLayout.newTab().setText("Consumables"));

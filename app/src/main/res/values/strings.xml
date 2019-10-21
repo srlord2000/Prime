@@ -56,6 +56,21 @@
         <item>Other</item>
     </string-array>
 
+    <string-array name="spinnerDays">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
+    <string-array name="spinnerShifts">
+        <item>One</item>
+        <item>Two</item>
+    </string-array>
+
     <string name="array">Presets</string>
     <string-array name="array">
         <item>Wash</item>

@@ -60,6 +60,7 @@
             android:layout_width="50dp"
             android:layout_height="48dp"
             app:backgroundTint="#8f8f8f"
+            android:id="@+id/btnSetTime"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:textColor="@color/white"
             android:paddingStart="23dp"

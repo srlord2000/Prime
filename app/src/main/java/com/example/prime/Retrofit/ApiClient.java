@@ -70,6 +70,9 @@ public interface ApiClient {
         @GET("inventory/services/show")
         Call<ResponseBody> getServicesItem(@Header("Cookie") String token);
 
+        @GET("info/show/sender")
+        Call<ResponseBody> getSender(@Header("Cookie") String token);
+
 
         @Headers({"Accept:application/json", "Content-Type:application/json;"})
         @FormUrlEncoded

@@ -29,8 +29,37 @@
         <item name="colorControlActivated">@color/black</item>
 
 
+    </style>
 
+
+
+    <style name="MyTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="android:timePickerDialogTheme">@style/TimePickerDialogTheme</item>
+    </style>
+
+    <style name="TimePickerDialogTheme" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">#ff2d6073</item> <!-- colorAccent here seems to work just fine? -->
+        <item name="android:timePickerStyle">@style/TimePickerDialogStyle</item>
+    </style>
+
+    <style name="TimePickerDialogStyle" parent="@android:style/Widget.Material.Light.TimePicker">
+
+        <item name="colorAccent">#ff2d6073</item> <!-- colorAccent here seems to work just fine? -->
+
+        <item name="android:positiveButtonText"></item>
+        <item name="android:timePickerMode">spinner</item>
+        <item name="android:headerBackground">#ff2d6073</item>
+        <item name="android:headerTimeTextAppearance">@style/TextAppearance.TimePickerDialogStyle.TimeLabel</item> <!-- TimePicker Time *TextAppearance* -->
+        <item name="android:numbersTextColor">#ff000000</item>
+        <item name="android:numbersSelectorColor">#ff2d6073</item>
+        <item name="android:numbersBackgroundColor">#ffdddddd</item>
 
     </style>
 
+    <style name="TextAppearance.TimePickerDialogStyle.TimeLabel" parent="@android:style/TextAppearance.Material">
+
+        <item name="android:textSize">60sp</item> <!-- from -->
+        <item name="android:textColor">#ffD0D102</item>
+
+    </style>
 </resources>

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.aditya.filebrowser.Constants;
 import com.aditya.filebrowser.FileBrowser;
 import com.example.prime.R;
 
@@ -127,8 +128,10 @@ public class Report extends Fragment {
     public void openFolder()
     {
 
-        Intent i4 = new Intent(getContext(), FileBrowser.class);
-        startActivity(i4);
+//        Intent i4 = new Intent(getContext(), FileBrowser.class);
+//        startActivity(i4);
+        Intent i = new Intent(mContext, FileBrowser.class); //works for all 3 main classes (i.e FileBrowser, FileChooser, FileBrowserWithCustomHandler)
+        i.putExtra(Constants.INITIAL_DIRECTORY, new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"Downloads").getAbsolutePath());
 
 //        Intent selectFile = new Intent();
 //        selectFile.setAction("com.sec.android.app.myfiles.PICK_DATA_MULTIPLE");

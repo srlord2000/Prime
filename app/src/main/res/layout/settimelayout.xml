@@ -30,12 +30,14 @@
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textSize="20sp"
+            android:textAlignment="center"
             android:text="Set the Cutoff Time for Email Notification"
             android:textColor="@color/black"
             android:layout_marginTop="15dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
+            android:paddingBottom="20dp"
             android:layout_gravity="start"/>
 
         <TextView
@@ -56,21 +58,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/robotoregular"
-                android:text="Shifts:"
+                android:text="Shifts"
                 android:textColor="@color/black"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="20sp"
                 android:layout_gravity="start"
                 android:layout_marginStart="10dp">
 
             </TextView>
 
             <Spinner
+                style="@style/Widget.AppCompat.DropDownItem.Spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -94,7 +98,7 @@
                 android:fontFamily="@font/robotoregular"
                 android:text="Daily Cut Off Time"
                 android:textColor="@color/black"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium">
+                android:textSize="20sp">
             </TextView>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -105,8 +109,11 @@
                 app:boxStrokeWidth="10dp"
                 android:id="@+id/layout"
                 android:theme="@style/EditTextTheme"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Time"
@@ -157,6 +164,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxStrokeWidth="10dp"
                     android:theme="@style/EditTextTheme"
+                    android:layout_marginLeft="10dp"
                     >
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -182,6 +190,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxStrokeWidth="10dp"
                     android:theme="@style/EditTextTheme"
+                    android:layout_marginRight="10dp"
                     >
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -204,7 +213,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:weightSum="2"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingBottom="5dp">
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -213,6 +223,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxStrokeWidth="10dp"
                     android:theme="@style/EditTextTheme"
+                    android:layout_marginLeft="10dp"
                     >
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -238,6 +249,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxStrokeWidth="10dp"
                     android:theme="@style/EditTextTheme"
+                    android:layout_marginRight="10dp"
                     >
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -271,13 +283,14 @@
                 android:fontFamily="@font/robotoregular"
                 android:text="Weekly Report Cut Off Day:"
                 android:textColor="@color/black"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="20sp"
                 android:layout_gravity="start"
                 android:layout_marginStart="10dp">
 
             </TextView>
 
             <Spinner
+                style="@style/Widget.AppCompat.DropDownItem.Spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -297,17 +310,6 @@
                 android:layout_marginTop="10dp"
                 android:backgroundTint="#02aff3"
                 android:text="Submit"
-                android:layout_gravity="center"
-                android:textColor="@android:color/white"
-                android:layout_marginRight="20dp"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/testSender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="#02aff3"
-                android:text="Test"
                 android:layout_gravity="center"
                 android:textColor="@android:color/white"
                 android:layout_marginRight="20dp"/>

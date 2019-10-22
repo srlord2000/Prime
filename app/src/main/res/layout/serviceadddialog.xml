@@ -26,20 +26,30 @@
             android:layout_marginTop="5dp"
             android:fontFamily="@font/robotobold"
             android:layout_gravity="center"/>
-
-
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:visibility="gone"
-            android:id="@+id/hostType1"
             android:textStyle="bold"
             android:textSize="25sp"
-            android:text="manual"
+            android:text="Details"
             android:textColor="@color/black"
             android:fontFamily="@font/robotobold"
             android:layout_marginTop="5dp"
             android:layout_gravity="start"/>
+
+
+        <TextView
+            android:id="@+id/hostType1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/robotobold"
+            android:text="manual"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
 
 

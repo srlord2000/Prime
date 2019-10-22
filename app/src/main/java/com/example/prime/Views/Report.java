@@ -133,8 +133,8 @@ public class Report extends Fragment {
 //        Intent i = new Intent(mContext, FileBrowser.class); //works for all 3 main classes (i.e FileBrowser, FileChooser, FileBrowserWithCustomHandler)
 //        i.putExtra(Constants.INITIAL_DIRECTORY, new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"Downloads").getAbsolutePath());
         Intent i = new Intent(mContext, FileBrowser.class); //works for all 3 main classes (i.e FileBrowser, FileChooser, FileBrowserWithCustomHandler)
+        i.putExtra(Constants.INITIAL_DIRECTORY, new File(mContext.getExternalFilesDir(null).getAbsolutePath(),"Download").getAbsolutePath());
         i.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "xlsx;xls");
-
 //        Intent selectFile = new Intent();
 //        selectFile.setAction("com.sec.android.app.myfiles.PICK_DATA_MULTIPLE");
 //        selectFile.putExtra("CONTENT_TYPE", "*/*");

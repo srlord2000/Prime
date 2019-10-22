@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#ededed">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv"
@@ -11,41 +12,66 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:strokeColor="@color/black"
-        app:strokeWidth="1dp">
+        app:strokeWidth="1dp"
+        android:background="#ededed">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="#ededed">
 
             <TextView
                 style="outline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Washer"
+                android:textColor="@color/black"
+                android:textSize="25sp"
                 android:fontFamily="@font/robotobold"
-               android:layout_gravity="center"
+                android:layout_gravity="center"
                 />
 
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cv1"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            >
+            <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:strokeColor="@color/black"
-                app:strokeWidth="2dp"
-                android:layout_gravity="center">
+                android:text="Wash 1"
+                android:layout_marginRight="10dp"
+                android:visibility="visible"
+                app:backgroundTint="#02aff3"
 
-              <com.google.android.material.button.MaterialButton
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="Washer">
-
-              </com.google.android.material.button.MaterialButton>
-            </com.google.android.material.card.MaterialCardView>
+                />
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wash 2"
+                android:layout_marginRight="10dp"
+                app:backgroundTint="#02aff3"
+                />
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wash 3"
+                android:layout_marginRight="10dp"
+                app:backgroundTint="#02aff3"
+                />
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Abort"
+                app:backgroundTint="#FF0000"
+                />
+        </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv2"
         style="@style/Widget.MaterialComponents.CardView"
@@ -53,47 +79,50 @@
         android:layout_height="wrap_content"
         app:strokeColor="@color/black"
         app:strokeWidth="1dp"
-        android:layout_marginTop="20dp">
+        android:background="#ededed">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="#ededed">
 
             <TextView
+                style="outline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Dryer"
+                android:textColor="@color/black"
+                android:textSize="25sp"
                 android:fontFamily="@font/robotobold"
                 android:layout_gravity="center"
                 />
 
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cv3"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:strokeColor="@color/black"
-                app:strokeWidth="2dp"
-                android:layout_gravity="center">
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                >
 
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dryer">
+                    android:text="BASIC"
+                    android:layout_marginRight="10dp"
+                    app:backgroundTint="#02aff3"
+                    />
 
-                </com.google.android.material.button.MaterialButton>
-            </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="EXTEND"
+                    app:backgroundTint="#02aff3"
+                    />
+
+            </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Abort"
-        android:layout_gravity="center">
-
-    </com.google.android.material.button.MaterialButton>
 
 </LinearLayout>

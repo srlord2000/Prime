@@ -210,14 +210,14 @@
         </LinearLayout>
 
     </LinearLayout>
-
+    <!--New tap card UI-->
     <LinearLayout
         android:id="@+id/unregisteredLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/circleddialog"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:textColor="@color/black"
@@ -316,25 +316,23 @@
 
             <TextView
                 android:id="@+id/serviceTypeView1"
-                android:layout_width="15dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:ems="10"
-                android:layout_weight="1"
+                android:ems="7"
                 android:fontFamily="@font/robotoregular"
                 android:gravity="start"
-                android:text="Service Type"
+                android:text="Service Type:"
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/serviceType"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:entries="@array/spinnerItems"
                 android:gravity="start"
-                android:layout_weight="1"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         </LinearLayout>
@@ -372,13 +370,15 @@
 
     </LinearLayout>
 
+
+    <!--Scanning-->
     <LinearLayout
         android:id="@+id/scan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/scanround"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -415,7 +415,7 @@
             android:layout_gravity="center"
             android:textColor="@android:color/black" />
     </LinearLayout>
-
+    <!--Authentication Failed-->
     <LinearLayout
         android:id="@+id/retry"
         android:layout_width="match_parent"

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="5dp">
-
+    <!--Admin Authentication-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
         </LinearLayout>
     </LinearLayout>
 
-
+    <!--Staff Account Settings UI-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -108,6 +108,17 @@
             android:textSize="25sp"
             android:fontFamily="@font/robotobold"
             android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:text="Details"
+            android:textColor="@color/black"
+            android:fontFamily="@font/robotobold"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="start"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"

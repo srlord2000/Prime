@@ -21,7 +21,7 @@
             android:layout_toStartOf="@id/editAdmin"
             android:textStyle="bold"
             android:textColor="@color/colorPrimaryDark"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textSize="18sp"
             android:paddingTop="10dp"
             android:text="@string/admin_settings"/>
 
@@ -36,7 +36,7 @@
             android:text="@string/edit"
             android:contentDescription="@string/scan"
             app:iconSize="20dp"
-            app:icon="@drawable/ic_edit"/>
+            app:icon="@drawable/ic_mode_edit_black_24dp"/>
 
         <View
             android:id="@+id/view1"
@@ -125,7 +125,7 @@
             android:layout_toStartOf="@id/editStaff"
             android:textStyle="bold"
             android:textColor="@color/colorPrimaryDark"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textSize="18sp"
             android:paddingTop="10dp"
             android:text="@string/staff_settings"/>
 
@@ -139,7 +139,7 @@
             android:contentDescription="@string/scan"
             android:text="@string/edit"
             android:textColor="@color/black"
-            app:icon="@drawable/ic_edit"
+            app:icon="@drawable/ic_mode_edit_black_24dp"
             app:iconSize="20dp" />
 
         <View

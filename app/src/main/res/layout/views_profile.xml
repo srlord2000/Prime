@@ -25,7 +25,7 @@
                 android:layout_toStartOf="@id/editAccount"
                 android:textStyle="bold"
                 android:textColor="@color/colorPrimaryDark"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textSize="18sp"
                 android:paddingTop="10dp"
                 android:text="@string/general"/>
 
@@ -40,7 +40,7 @@
                 android:text="@string/edit"
                 android:contentDescription="@string/scan"
                 app:iconSize="20dp"
-                app:icon="@drawable/ic_edit"/>
+                app:icon="@drawable/ic_mode_edit_black_24dp"/>
 
             <View
                 android:id="@+id/view1"
@@ -120,6 +120,7 @@
 
 
             <TextView
+                android:paddingTop="18dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -127,7 +128,7 @@
                 android:textStyle="bold"
                 android:layout_centerVertical="true"
                 android:textColor="@color/colorPrimaryDark"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textSize="18sp"
                 android:text="@string/change_logo"/>
 
             <com.google.android.material.button.MaterialButton
@@ -170,7 +171,7 @@
                 android:paddingTop="10dp"
                 android:text="@string/date_and_time"
                 android:textColor="@color/colorPrimaryDark"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.button.MaterialButton
@@ -298,7 +299,7 @@
                 android:textStyle="bold"
                 android:layout_marginTop="7dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textSize="18sp"
                 android:paddingTop="10dp"
                 android:text="@string/additional_settings"/>
 

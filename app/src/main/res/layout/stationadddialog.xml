@@ -115,9 +115,9 @@
             <TextView
                 android:layout_marginLeft="3dp"
                 android:id="@+id/serviceTypeView1"
-                android:layout_width="15dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:ems="5"
                 android:gravity="start"
                 android:text="Unit Type:"
                 android:fontFamily="@font/robotoregular"
@@ -126,10 +126,10 @@
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/unitType1"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:layout_weight="1"
+
                 android:tag="Sad"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 

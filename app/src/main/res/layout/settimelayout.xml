@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:id="@+id/shift1"
-            android:visibility="visible"
+            android:visibility="gone"
             android:orientation="vertical">
 
             <TextView

@@ -76,7 +76,7 @@ public class Email extends Fragment {
     public static Boolean running;
     public static Thread MyThread;
     private ArrayList<ClientsModel> clientsModels;
-    private String text1;
+    private String text1, days1;
     private RecyclerView recyclerView;
     private Button add, delete, sender, sendtime;
     private ClientsAdapter clientsAdapter;
@@ -230,6 +230,13 @@ public class Email extends Fragment {
                     }
                 });
 
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
             }
         });
 
@@ -368,8 +375,7 @@ public class Email extends Fragment {
 
                         } else {
                             if (getActivity() != null) {
-                                View contextView = getActivity().findViewById(android.R.id.content);
-                                Snackbar.make(contextView, "Please Input Complete Details!", Snackbar.LENGTH_SHORT)
+                                Snackbar.make(mView, "Please Input Complete Details!", Snackbar.LENGTH_SHORT)
                                         .show();
                             }
                         }
@@ -395,27 +401,36 @@ public class Email extends Fragment {
                 final View mView = getLayoutInflater().inflate(R.layout.settimelayout, null);
                 final Spinner shift = mView.findViewById(R.id.shiftsSpinner);
                 final Spinner day = mView.findViewById(R.id.daysSpinner);
-                final TextInputEditText clock = mView.findViewById(R.id.senderTime);
+                final EditText clock = mView.findViewById(R.id.senderTime);
+                final EditText first = mView.findViewById(R.id.firstShift);
+                final EditText second = mView.findViewById(R.id.secondShift);
+                final EditText firstend = mView.findViewById(R.id.firstEnd);
+                final EditText secondend = mView.findViewById(R.id.secondEnd);
                 final LinearLayout oneShift = mView.findViewById(R.id.shift1);
                 final LinearLayout twoShift = mView.findViewById(R.id.shift2);
                 final TextInputLayout textInputLayout = mView.findViewById(R.id.layout);
                 clock.setFocusable(false);
                 clock.setKeyListener(null);
+                first.setFocusable(false);
+                first.setKeyListener(null);
+                second.setFocusable(false);
+                second.setKeyListener(null);
+                firstend.setFocusable(false);
+                firstend.setKeyListener(null);
+                secondend.setFocusable(false);
+                secondend.setKeyListener(null);
                 Spanned policy = Html.fromHtml(getString(R.string.settingstext), HtmlCompat.FROM_HTML_MODE_LEGACY);
                 Button submit = mView.findViewById(R.id.dialog_submit);
-                Button test = mView.findViewById(R.id.testSender);
                 Button close = mView.findViewById(R.id.dialog_close);
-                clock.setInputType(InputType.TYPE_NULL);
                 final int text = 1;
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
                 if (dialog.getWindow() != null) {
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    dialog.show();
-                }
+                    dialog.show(); }
                 ArrayAdapter<String> shifts = new ArrayAdapter<>(mContext,R.layout.spinnershiftlist,getResources().getStringArray(R.array.spinnerShifts));
                 shift.setAdapter(shifts);
-                ArrayAdapter<String> days = new ArrayAdapter<>(mContext,R.layout.spinnerdayslist,getResources().getStringArray(R.array.spinnerDays));
+                final ArrayAdapter<String> days = new ArrayAdapter<>(mContext,R.layout.spinnerdayslist,getResources().getStringArray(R.array.spinnerDays));
                 day.setAdapter(days);
 
                 shift.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -447,131 +462,415 @@ public class Email extends Fragment {
                     }
                 });
 
-                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm", Locale.US);
-                Date date = null;
-                try {
-                    date = sdf.parse("16:30");
-                } catch (ParseException e) {
-                }
-                final Calendar c = Calendar.getInstance();
-                c.setTime(date);
-//                clock.setHour(c.get(Calendar.HOUR_OF_DAY));
-//                clock.setMinute(c.get(Calendar.MINUTE));
+                day.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        days1 = String.valueOf(adapterView.getSelectedItemPosition());
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        days1 = String.valueOf(adapterView.getSelectedItemPosition());
+                    }
+                });
+
 
                 final SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm a", Locale.US);
-                String re = sdf1.format(c.getTime());
-                clock.setText(re);
                 clock.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Date d = null;
-                        Calendar cal = Calendar.getInstance();
-                        String curtime = clock.getText().toString();
-                        try {
-                            d = sdf1.parse(curtime);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        cal.setTime(d);
-
-
-                        int hour = cal.get(Calendar.HOUR_OF_DAY);
-                        int minute = cal.get(Calendar.MINUTE);
-                        TimePickerDialog mTimePicker;
-                        mTimePicker = new TimePickerDialog(mContext,R.style.TimePickerDialogTheme, new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                                String time;
-                                time = selectedHour+":"+selectedMinute;
-                                SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm", Locale.US);
-                                Date date2 = null;
-                                try {
-                                    date2 = sdf2.parse(time);
-                                } catch (ParseException e) {
-                                }
-                                final Calendar c2 = Calendar.getInstance();
-                                c2.setTime(date2);
-
-                                SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm a", Locale.US);
-                                String re = sdf1.format(c2.getTime());
-                                clock.setText(re);
+                        if (!clock.getText().toString().isEmpty()) {
+                            Date d = null;
+                            Calendar cal = Calendar.getInstance();
+                            String curtime = clock.getText().toString();
+                            try {
+                                d = sdf1.parse(curtime);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
-                        }, hour, minute, false);//Yes 24 hour time
-                        mTimePicker.setTitle("Select Time");
-                        mTimePicker.show();
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.gravity = Gravity.RIGHT;
-                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params1.gravity = Gravity.LEFT;
-                        mTimePicker.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLACK);
-                        mTimePicker.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
-                        mTimePicker.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.TRANSPARENT);
-                        mTimePicker.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundColor(Color.TRANSPARENT);
+                            cal.setTime(d);
+                            int hour = cal.get(Calendar.HOUR_OF_DAY);
+                            int minute = cal.get(Calendar.MINUTE);
+                            TimePickerDialog mTimePicker;
+                            mTimePicker = new TimePickerDialog(mContext, R.style.TimePickerDialogTheme, new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                                    String time;
+                                    time = selectedHour + ":" + selectedMinute;
+                                    SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm", Locale.US);
+                                    Date date2 = null;
+                                    try {
+                                        date2 = sdf2.parse(time);
+                                    } catch (ParseException e) {
+                                    }
+                                    final Calendar c2 = Calendar.getInstance();
+                                    c2.setTime(date2);
+
+                                    SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm a", Locale.US);
+                                    String re = sdf1.format(c2.getTime());
+                                    clock.setText(re);
+                                }
+                            }, hour, minute, false);//Yes 24 hour time
+                            mTimePicker.setTitle("Select Time");
+                            mTimePicker.show();
+                            mTimePicker.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                            mTimePicker.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+                            mTimePicker.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.TRANSPARENT);
+                            mTimePicker.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundColor(Color.TRANSPARENT);
+                        }
                     }
                 });
 
-                textInputLayout.setOnClickListener(new View.OnClickListener() {
+                first.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Date d = null;
-                        Calendar cal = Calendar.getInstance();
-                        String curtime = clock.getText().toString();
-                        try {
-                            d = sdf1.parse(curtime);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        cal.setTime(d);
-
-
-                        int hour = cal.get(Calendar.HOUR_OF_DAY);
-                        int minute = cal.get(Calendar.MINUTE);
-                        TimePickerDialog mTimePicker;
-                        mTimePicker = new TimePickerDialog(mContext,R.style.TimePickerDialogTheme, new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                                String time;
-                                time = selectedHour+":"+selectedMinute;
-                                SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm", Locale.US);
-                                Date date2 = null;
-                                try {
-                                    date2 = sdf2.parse(time);
-                                } catch (ParseException e) {
-                                }
-                                final Calendar c2 = Calendar.getInstance();
-                                c2.setTime(date2);
-
-                                SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm a", Locale.US);
-                                String re = sdf1.format(c2.getTime());
-                                clock.setText(re);
+                        if (!first.getText().toString().isEmpty()){
+                            Date d = null;
+                            Calendar cal = Calendar.getInstance();
+                            String curtime = first.getText().toString();
+                            try {
+                                d = sdf1.parse(curtime);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
-                        }, hour, minute, false);//Yes 24 hour time
-                        mTimePicker.setTitle("Select Time");
-                        mTimePicker.show();
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.gravity = Gravity.RIGHT;
+                            cal.setTime(d);
 
-                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params1.gravity = Gravity.LEFT;
+                            int hour = cal.get(Calendar.HOUR_OF_DAY);
+                            int minute = cal.get(Calendar.MINUTE);
+                            TimePickerDialog mTimePicker;
+                            mTimePicker = new TimePickerDialog(mContext, R.style.TimePickerDialogTheme, new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                                    String time;
+                                    time = selectedHour + ":" + selectedMinute;
+                                    SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm", Locale.US);
+                                    Date date2 = null;
+                                    try {
+                                        date2 = sdf2.parse(time);
+                                    } catch (ParseException e) {
+                                    }
+                                    final Calendar c2 = Calendar.getInstance();
+                                    c2.setTime(date2);
 
-                        mTimePicker.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLACK);
-                        mTimePicker.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
-                        mTimePicker.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.TRANSPARENT);
-                        mTimePicker.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundColor(Color.TRANSPARENT);
+                                    SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm a", Locale.US);
+                                    String re = sdf1.format(c2.getTime());
+                                    first.setText(re);
+                                }
+                            }, hour, minute, false);//Yes 24 hour time
+                            mTimePicker.setTitle("Select Time");
+                            mTimePicker.show();
+                            mTimePicker.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                            mTimePicker.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+                            mTimePicker.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.TRANSPARENT);
+                            mTimePicker.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundColor(Color.TRANSPARENT);
+                        }
                     }
                 });
 
-
-                test.setOnClickListener(new View.OnClickListener() {
+                second.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int hour , minute;
-//                        hour =clock.getHour();
-//                        minute =clock.getMinute();
+                        if (!second.getText().toString().isEmpty()){
+                            Date d = null;
+                            Calendar cal = Calendar.getInstance();
+                            String curtime = second.getText().toString();
+                            try {
+                                d = sdf1.parse(curtime);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            cal.setTime(d);
 
+                            int hour = cal.get(Calendar.HOUR_OF_DAY);
+                            int minute = cal.get(Calendar.MINUTE);
+                            TimePickerDialog mTimePicker;
+                            mTimePicker = new TimePickerDialog(mContext, R.style.TimePickerDialogTheme, new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                                    String time;
+                                    time = selectedHour + ":" + selectedMinute;
+                                    SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm", Locale.US);
+                                    Date date2 = null;
+                                    try {
+                                        date2 = sdf2.parse(time);
+                                    } catch (ParseException e) {
+                                    }
+                                    final Calendar c2 = Calendar.getInstance();
+                                    c2.setTime(date2);
+
+                                    SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm a", Locale.US);
+                                    String re = sdf1.format(c2.getTime());
+                                    second.setText(re);
+                                }
+                            }, hour, minute, false);//Yes 24 hour time
+                            mTimePicker.setTitle("Select Time");
+                            mTimePicker.show();
+                            mTimePicker.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                            mTimePicker.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+                            mTimePicker.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.TRANSPARENT);
+                            mTimePicker.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundColor(Color.TRANSPARENT);
+                        }
                     }
                 });
 
+                firstend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!firstend.getText().toString().isEmpty()){
+                            Date d = null;
+                            Calendar cal = Calendar.getInstance();
+                            String curtime = firstend.getText().toString();
+                            try {
+                                d = sdf1.parse(curtime);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            cal.setTime(d);
+
+                            int hour = cal.get(Calendar.HOUR_OF_DAY);
+                            int minute = cal.get(Calendar.MINUTE);
+                            TimePickerDialog mTimePicker;
+                            mTimePicker = new TimePickerDialog(mContext, R.style.TimePickerDialogTheme, new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                                    String time;
+                                    time = selectedHour + ":" + selectedMinute;
+                                    SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm", Locale.US);
+                                    Date date2 = null;
+                                    try {
+                                        date2 = sdf2.parse(time);
+                                    } catch (ParseException e) {
+                                    }
+                                    final Calendar c2 = Calendar.getInstance();
+                                    c2.setTime(date2);
+
+                                    SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm a", Locale.US);
+                                    String re = sdf1.format(c2.getTime());
+                                    firstend.setText(re);
+                                }
+                            }, hour, minute, false);//Yes 24 hour time
+                            mTimePicker.setTitle("Select Time");
+                            mTimePicker.show();
+                            mTimePicker.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                            mTimePicker.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+                            mTimePicker.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.TRANSPARENT);
+                            mTimePicker.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundColor(Color.TRANSPARENT);
+                        }
+                    }
+                });
+
+                secondend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!secondend.getText().toString().isEmpty()){
+                            Date d = null;
+                            Calendar cal = Calendar.getInstance();
+                            String curtime = secondend.getText().toString();
+                            try {
+                                d = sdf1.parse(curtime);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            cal.setTime(d);
+
+                            int hour = cal.get(Calendar.HOUR_OF_DAY);
+                            int minute = cal.get(Calendar.MINUTE);
+                            TimePickerDialog mTimePicker;
+                            mTimePicker = new TimePickerDialog(mContext, R.style.TimePickerDialogTheme, new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                                    String time;
+                                    time = selectedHour + ":" + selectedMinute;
+                                    SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm", Locale.US);
+                                    Date date2 = null;
+                                    try {
+                                        date2 = sdf2.parse(time);
+                                    } catch (ParseException e) {
+                                    }
+                                    final Calendar c2 = Calendar.getInstance();
+                                    c2.setTime(date2);
+
+                                    SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm a", Locale.US);
+                                    String re = sdf1.format(c2.getTime());
+                                    secondend.setText(re);
+                                }
+                            }, hour, minute, false);//Yes 24 hour time
+                            mTimePicker.setTitle("Select Time");
+                            mTimePicker.show();
+                            mTimePicker.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                            mTimePicker.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+                            mTimePicker.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.TRANSPARENT);
+                            mTimePicker.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundColor(Color.TRANSPARENT);
+                        }
+                    }
+                });
+
+                submit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm a", Locale.US);
+                        SimpleDateFormat sdf3 = new SimpleDateFormat("HH:mm", Locale.US);
+                        Date dateone = null;
+                        Date datefirst = null;
+                        Date datesecond = null;
+                        Date datefirstend = null;
+                        Date datesecondend = null;
+                        Log.i(TAG, "onClick: "+clock.getText().toString());
+                        try {
+                            dateone = sdf2.parse(clock.getText().toString());
+                            datefirst = sdf2.parse(first.getText().toString());
+                            datesecond = sdf2.parse(second.getText().toString());
+                            datefirstend = sdf2.parse(firstend.getText().toString());
+                            datesecondend = sdf2.parse(secondend.getText().toString());
+                        } catch (ParseException e) {
+                        }
+
+
+                        assert dateone != null;
+                        String time1 = sdf3.format(dateone);
+                        assert datefirst != null;
+                        String ftime1 = sdf3.format(datefirst);
+                        assert datesecond != null;
+                        String stime1 = sdf3.format(datesecond);
+                        assert datefirstend != null;
+                        String fetime2 = sdf3.format(datefirstend);
+                        assert datesecondend != null;
+                        String setime2 = sdf3.format(datesecondend);
+
+
+                        JSONObject obj = new JSONObject();
+                        try {
+                            if(text1.equals("1")) {
+                                obj.put("cday", days1);
+                                obj.put("ctime", time1);
+                                obj.put("shifts", text1);
+                            }
+                            else if (text1.equals("2")) {
+                                obj.put("cday", days1);
+                                obj.put("rtime1",ftime1 );
+                                obj.put("rtime2", stime1);
+                                obj.put("ctime1", fetime2);
+                                obj.put("ctime2", setime2);
+                                obj.put("shifts", text1);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(mContext, text1, Toast.LENGTH_SHORT).show();
+
+                        OkHttpClient client = new OkHttpClient();
+
+                        RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
+
+                        okhttp3.Request request = new okhttp3.Request.Builder()
+                                .url("http://192.168.0.100/info/edit/cron")
+                                .post(body)
+                                .addHeader("Cookie", "ci_session=" + id)
+                                .build();
+                        client.newCall(request).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                call.cancel();
+                            }
+
+                            @Override
+                            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                Log.d("TAG", response.body().string());
+                            }
+                        });
+
+                        Toast.makeText(mContext,
+                                text1,
+                                Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                });
+
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm", Locale.US);
+                        Date dateone = null;
+                        try {
+                            dateone = sdf2.parse(clock.getText().toString());
+                        } catch (ParseException e) {
+                        }
+
+                        Log.i(TAG, "onClick: "+dateone.getTime());
+                    }
+                });
+
+
+                retrofit2.Call<ResponseBody> call = apiInterface.getCron("ci_session="+id);
+                call.enqueue(new  retrofit2.Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try {
+                            if (response.body() != null) {
+                                String result = response.body().string();
+                                JSONObject jsonObject = new JSONObject(result);
+                                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm", Locale.US);
+                                Date clock1 = null;
+                                Date first1 = null;
+                                Date second1 = null;
+                                Date endfirst1 = null;
+                                Date endsecond1 = null;
+                                try {
+                                    clock1 = sdf.parse(jsonObject.getString("ctime"));
+                                    first1 = sdf.parse(jsonObject.getString("rtime1"));
+                                    second1 = sdf.parse(jsonObject.getString("rtime2"));
+                                    endfirst1 = sdf.parse(jsonObject.getString("ctime1"));
+                                    endsecond1 = sdf.parse(jsonObject.getString("ctime2"));
+                                } catch (ParseException e) {
+                                }
+                                Calendar c1 = Calendar.getInstance();
+                                if (clock1 != null) {
+                                    c1.setTime(clock1);
+                                }
+                                Calendar c2 = Calendar.getInstance();
+                                if (first1 != null) {
+                                    c2.setTime(first1);
+                                }
+                                Calendar c3 = Calendar.getInstance();
+                                if (second1 != null) {
+                                    c3.setTime(second1);
+                                }
+                                Calendar c4 = Calendar.getInstance();
+                                if (endfirst1 != null) {
+                                    c4.setTime(endfirst1);
+                                }
+                                Calendar c5 = Calendar.getInstance();
+                                if (endsecond1 != null) {
+                                    c5.setTime(endsecond1);
+                                }
+                                SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm a", Locale.US);
+                                clock.setText(sdf1.format(c1.getTime()));
+                                first.setText(sdf1.format(c2.getTime()));
+                                second.setText(sdf1.format(c3.getTime()));
+                                firstend.setText(sdf1.format(c4.getTime()));
+                                secondend.setText(sdf1.format(c5.getTime()));
+                                day.setSelection(jsonObject.getInt("cday"));
+                                int shiftd = jsonObject.getInt("shifts");
+                                if (shiftd == 1){
+                                    shift.setSelection(0);
+                                }else {
+                                    shift.setSelection(1);
+                                }
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                        Log.d(TAG, "onFailure: ");
+                    }
+                });
 
 
             }

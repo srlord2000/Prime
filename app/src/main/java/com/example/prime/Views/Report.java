@@ -47,6 +47,7 @@ public class Report extends Fragment {
     Context mContext;
     Button dateButton,downloadButton,viewButton;
     private long downloadID;
+    String url;
 
     final Calendar newCalendar = Calendar.getInstance();
     @Override
@@ -109,7 +110,8 @@ public class Report extends Fragment {
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               beginDownload();
+
+                beginDownload(url);
 
             }
         });
@@ -124,7 +126,7 @@ public class Report extends Fragment {
 
 
 
-    private void beginDownload()
+    private void beginDownload(String url)
     {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://192.168.0.100/");
@@ -133,7 +135,7 @@ public class Report extends Fragment {
 
         ApiClient downloadService = retrofit.create(ApiClient.class);
 
-        Call<ResponseBody> call = downloadService.downloadFileWithFixedUrl();
+        Call<ResponseBody> call = downloadService.downloadFileWithFixedUrl(url);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -176,7 +178,7 @@ public class Report extends Fragment {
     private boolean writeResponseBodyToDisk(ResponseBody body) {
         try {
             // todo change the file location/name according to your needs
-            File futureStudioIconFile = new File(getActivity().getExternalFilesDir(null) + File.separator + "Future Studio Icon.png");
+            File futureStudioIconFile = new File(getActivity().getExternalFilesDir(null) + File.separator + "EDIWOW");
 
             InputStream inputStream = null;
             OutputStream outputStream = null;

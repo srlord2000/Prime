@@ -82,5 +82,8 @@ public interface ApiClient {
         @POST("cards/remove")
         Call<ResponseBody> deleteCard(@Header("Cookie") String token,@Field("id") JSONArray body);
 
+        @GET("/assets/img/refe.doc")
+        Call<ResponseBody> downloadFileWithFixedUrl();
+
 
 }

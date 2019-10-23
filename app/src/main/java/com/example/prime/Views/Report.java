@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,13 @@ import androidx.fragment.app.Fragment;
 
 import com.aditya.filebrowser.Constants;
 import com.aditya.filebrowser.FileBrowser;
+import com.aditya.filebrowser.FolderChooser;
 import com.example.prime.R;
 
 import java.io.File;
 import java.util.Calendar;
+
+import static com.android.volley.VolleyLog.TAG;
 
 public class Report extends Fragment {
     Context mContext;
@@ -71,7 +75,7 @@ public class Report extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         dateButton = view.findViewById(R.id.dateReport);
         downloadButton = view.findViewById(R.id.btnDownload);
-        viewButton = view.findViewById(R.id.btnView);
+        viewButton = view.findViewById(R.id.btnView1);
         getActivity().registerReceiver(onDownloadComplete,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
 
@@ -131,10 +135,13 @@ public class Report extends Fragment {
 //        Intent i4 = new Intent(getContext(), FileBrowser.class);
 //        startActivity(i4);
 //        Intent i = new Intent(mContext, FileBrowser.class); //works for all 3 main classes (i.e FileBrowser, FileChooser, FileBrowserWithCustomHandler)
-//        i.putExtra(Constants.INITIAL_DIRECTORY, new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"Downloads").getAbsolutePath());
         Intent i = new Intent(mContext, FileBrowser.class); //works for all 3 main classes (i.e FileBrowser, FileChooser, FileBrowserWithCustomHandler)
-        i.putExtra(Constants.INITIAL_DIRECTORY, new File(mContext.getExternalFilesDir(null).getAbsolutePath(),"Download").getAbsolutePath());
+        i.putExtra(Constants.INITIAL_DIRECTORY, new File(mContext.getObbDir().getParentFile().getParentFile().getParent()+"/Download/"));
         i.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "xlsx;xls");
+
+        Log.e(TAG, "openFolder: "+mContext.getObbDir().getParentFile().getParentFile().getParent()+"/Download/");
+        startActivity(i);
+
 //        Intent selectFile = new Intent();
 //        selectFile.setAction("com.sec.android.app.myfiles.PICK_DATA_MULTIPLE");
 //        selectFile.putExtra("CONTENT_TYPE", "*/*");

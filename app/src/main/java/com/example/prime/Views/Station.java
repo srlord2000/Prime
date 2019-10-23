@@ -176,12 +176,21 @@ public class Station extends Fragment {
                             public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                 Log.e("TAG", response.message());
                                 Log.e(TAG, "onResponse: "+response.body().string() );
+                                if (getActivity() != null) {
+                                    View contextView = getActivity().findViewById(android.R.id.content);
+                                    Snackbar.make(contextView, "Deleted Successfully!", Snackbar.LENGTH_SHORT)
+                                            .show();
+                                }
                             }
                         });
                         Log.e("", "onClick: " + sad);
                     }
                 } else {
-                    Toast.makeText(mContext, "No Selection", Toast.LENGTH_SHORT).show();
+                    if (getActivity() != null) {
+                        View contextView = getActivity().findViewById(android.R.id.content);
+                        Snackbar.make(contextView, "Please Select Station to Delete!", Snackbar.LENGTH_SHORT)
+                                .show();
+                    }
                 }
             }
         });
@@ -236,7 +245,7 @@ public class Station extends Fragment {
                             host1 = host12.getText().toString();
                             ip = ip11.getText().toString();
                             station =  station11.getText().toString();
-                            JSONObject obj = new JSONObject();
+                            final JSONObject obj = new JSONObject();
                             try {
                                 obj.put("ipaddress", ip);
                                 obj.put("unit_id", type);
@@ -264,20 +273,30 @@ public class Station extends Fragment {
 
                                 @Override
                                 public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                    Log.e("TAG", response.body().string());
+                                    dialog.dismiss();
+                                    String res = response.body().string();
+                                    String msg;
+                                    try {
+                                        JSONObject object = new JSONObject(res);
+                                        msg = object.getString("msg");
+                                        Log.i(TAG, "CHECK: "+msg);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    if (getActivity() != null) {
+                                        View contextView = getActivity().findViewById(android.R.id.content);
+                                        Snackbar.make(contextView, "Add Successfully!", Snackbar.LENGTH_SHORT).show();
+                                        }
+
                                 }
                             });
 
-                            Toast.makeText(mContext,
-                                    text1,
-                                    Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-
-
                         } else {
-                            Toast.makeText(mContext,
-                                    R.string.error_msg,
-                                    Toast.LENGTH_SHORT).show();
+                            if (getActivity() != null) {
+                                View contextView = getActivity().findViewById(android.R.id.content);
+                                Snackbar.make(contextView, "Complete all Fields!", Snackbar.LENGTH_SHORT)
+                                        .show();
+                            }
                         }
                     }
                 });

@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AdvancedOption"></activity>
+        <activity android:name=".dynamicbuttons"></activity>
+        <activity android:name=".AdvancedOption" />
         <activity
             android:name=".AddPreset"
             android:configChanges="orientation|screenSize" />

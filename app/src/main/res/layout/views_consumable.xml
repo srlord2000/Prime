@@ -69,7 +69,7 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:text="Item"/>
+            android:text="Items"/>
 
         <TextView
             android:layout_width="15dp"

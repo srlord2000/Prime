@@ -178,7 +178,7 @@ public class Report extends Fragment {
     private boolean writeResponseBodyToDisk(ResponseBody body) {
         try {
             // todo change the file location/name according to your needs
-            File futureStudioIconFile = new File(getActivity().getExternalFilesDir(null) ,"DUMMY");
+            File futureStudioIconFile = new File(getActivity().getExternalFilesDir(null) + File.separator + "EDIWOW.doc");
 
             InputStream inputStream = null;
             OutputStream outputStream = null;

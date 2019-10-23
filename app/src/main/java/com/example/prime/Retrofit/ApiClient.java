@@ -16,6 +16,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface ApiClient {
 
@@ -83,7 +84,7 @@ public interface ApiClient {
         Call<ResponseBody> deleteCard(@Header("Cookie") String token,@Field("id") JSONArray body);
 
         @GET("/assets/img/refe.doc")
-        Call<ResponseBody> downloadFileWithFixedUrl(String url);
+        Call<ResponseBody> downloadFileWithFixedUrl(@Url String url);
 
 
 }

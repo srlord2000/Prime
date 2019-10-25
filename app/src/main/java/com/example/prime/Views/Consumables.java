@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -25,13 +27,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prime.Model.ConsumablesModel;
+import com.example.prime.Model.EditPriceModel;
 import com.example.prime.Model.InventoryModel;
 import com.example.prime.Persistent.SharedPrefsCookiePersistor;
 import com.example.prime.R;
 import com.example.prime.RecyclerAdapter.ConsumablesAdapter;
 import com.example.prime.RecyclerAdapter.InventoryAdapter;
+import com.example.prime.RecyclerAdapter.PresetAdapter;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,11 +44,16 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
-public class Consumables extends Fragment {
+public class Consumables extends Fragment{
     public static Boolean running;
     public static Thread MyThread;
     private ArrayList<ConsumablesModel> consumablesModels;
@@ -89,6 +99,63 @@ public class Consumables extends Fragment {
         id = sharedPrefsCookiePersistor.loadAll().get(0).value();
         data1();
 
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> sad = new ArrayList<>();
+                if (consumablesAdapter.getSelected().size() > 0) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int i = 0; i < consumablesAdapter.getSelected().size(); i++) {
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("id", consumablesAdapter.getSelected().get(i).getId());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        stringBuilder.append(consumablesAdapter.getSelected().get(i).getId());
+                        stringBuilder.append("\n");
+                        sad.add(obj.toString());
+
+                        OkHttpClient client = new OkHttpClient();
+
+                        RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
+
+                        okhttp3.Request request = new okhttp3.Request.Builder()
+                                .url("http://192.168.0.100/inventory/item/remove")
+                                .addHeader("Cookie","ci_session="+id)
+                                .post(body)
+                                .build();
+
+                        client.newCall(request).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                call.cancel();
+                            }
+
+                            @Override
+                            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                Log.d("TAG", response.body().string());
+                                if (getActivity() != null) {
+                                    View contextView = getActivity().findViewById(android.R.id.content);
+                                    Snackbar.make(contextView, "Deleted Successfully!", Snackbar.LENGTH_SHORT)
+                                            .show();
+                                }
+                            }
+                        });
+                        Log.e("", "onClick: " + sad);
+                    }
+                } else {
+                    if (getActivity() != null) {
+                        View contextView = getActivity().findViewById(android.R.id.content);
+                        Snackbar.make(contextView, "No Selection!", Snackbar.LENGTH_SHORT)
+                                .show();
+                    }
+                }
+            }
+        });
+
         running = true;
         MyThread = new Thread() {//create thread
             @Override
@@ -98,7 +165,7 @@ public class Consumables extends Fragment {
                     System.out.println("counter: " + i);
                     i++;
                     try {
-                        Thread.sleep(1500);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         System.out.println("Sleep interrupted");
                     }
@@ -128,7 +195,50 @@ public class Consumables extends Fragment {
                 submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if (!item.getText().toString().isEmpty()) {
+                            ArrayList<String> sad = new ArrayList<>();
+                            StringBuilder stringBuilder = new StringBuilder();
+                            JSONObject obj = new JSONObject();
+                            try {
+                                obj.put("name", item.getText().toString());
+                                obj.put("price",price.getText().toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            stringBuilder.append("\n");
+                            sad.add(obj.toString());
+                            OkHttpClient client = new OkHttpClient();
+                            RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
+                            okhttp3.Request request = new okhttp3.Request.Builder()
+                                    .url("http://192.168.0.100/inventory/item/add")
+                                    .addHeader("Cookie", "ci_session=" + id)
+                                    .post(body)
+                                    .build();
 
+                            client.newCall(request).enqueue(new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+                                    call.cancel();
+                                }
+
+                                @Override
+                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                    Log.d("TAG", response.body().string());
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            Log.e("", "onClick: " + sad);
+
+
+
+                        } else {
+                            if (getActivity() != null) {
+                                View contextView = getActivity().findViewById(android.R.id.content);
+                                Snackbar.make(contextView, "Complete Details!", Snackbar.LENGTH_SHORT)
+                                        .show();
+                            }
+                        }
                     }
                 });
 
@@ -138,6 +248,86 @@ public class Consumables extends Fragment {
                         dialog.dismiss();
                     }
                 });
+            }
+        });
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (consumablesAdapter.getSelected().size() != 1) {
+                    if (getActivity() != null) {
+                        View contextView = getActivity().findViewById(android.R.id.content);
+                        Snackbar.make(contextView, "1 Selection Only!", Snackbar.LENGTH_SHORT)
+                                .show();
+                    }
+                } else {
+                    for (int i = 0; i < consumablesAdapter.getSelected().size(); i++) {
+                        final String ids, name, prices;
+                        name = consumablesAdapter.getSelected().get(i).getItemName();
+                        ids = consumablesAdapter.getSelected().get(i).getId();
+                        prices = consumablesAdapter.getSelected().get(i).getPrice();
+
+                        AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
+                        final View mView = getLayoutInflater().inflate(R.layout.editconsumablesdialog, null);
+                        final EditText item = mView.findViewById(R.id.consumablesItem);
+                        final EditText price = mView.findViewById(R.id.consumablesPrice);
+                        Button submit = mView.findViewById(R.id.dialog_submit);
+                        Button close = mView.findViewById(R.id.dialog_close);
+                        mBuilder.setView(mView);
+                        final AlertDialog dialog = mBuilder.create();
+                        if (dialog.getWindow() != null) {
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            dialog.show();
+                        }
+                        item.setText(name);
+                        price.setText(prices);
+
+                        close.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        submit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                OkHttpClient client = new OkHttpClient();
+                                JSONObject userJson = new JSONObject();
+                                try {
+                                    userJson.put("id", ids);
+                                    userJson.put("name", item.getText().toString());
+                                    userJson.put("price", price.getText().toString());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                Log.e("", "onClick: " + userJson);
+
+                                RequestBody body = RequestBody.create(String.valueOf(userJson), JSON);
+
+                                okhttp3.Request request = new okhttp3.Request.Builder()
+                                        .url("http://192.168.0.100/inventory/item/edit")
+                                        .addHeader("Cookie", "ci_session=" + id)
+                                        .post(body)
+                                        .build();
+
+                                client.newCall(request).enqueue(new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+                                        call.cancel();
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                        Log.d("TAG", response.body().toString());
+                                        dialog.dismiss();
+
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
             }
         });
 

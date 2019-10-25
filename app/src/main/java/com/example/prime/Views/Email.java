@@ -192,10 +192,6 @@ public class Email extends Fragment {
                                 }
                             });
 
-                            Toast.makeText(mContext,
-                                    text1,
-                                    Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
 
 
                         } else {

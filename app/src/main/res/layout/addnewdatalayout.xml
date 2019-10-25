@@ -83,22 +83,20 @@
             android:id="@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
             android:backgroundTint="#FF0000"
             android:text="Delete"
             android:paddingLeft="13dp"
-
+            android:layout_marginEnd="10dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:icon="@drawable/ic_delete" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
             android:text="Edit"
-            app:icon="@drawable/ic_mode_edit_black_24dp"
+            app:icon="@drawable/ic_edit"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:paddingLeft="13dp"
             android:backgroundTint="#02aff3"
             />

@@ -113,6 +113,7 @@ public class AddDataAdapter extends RecyclerView.Adapter<AddDataAdapter.MultiVie
                     final EditText price = mView.findViewById(R.id.etPrice);
                     final EditText pulse = mView.findViewById(R.id.etPulse);
                     Button submit = mView.findViewById(R.id.btnSubmit);
+                    Button close = mView.findViewById(R.id.btnCancel1);
 
                     name.setText(presets.get(pos).getName());
                     int index;
@@ -160,6 +161,12 @@ public class AddDataAdapter extends RecyclerView.Adapter<AddDataAdapter.MultiVie
                             add.setPulse(pulse.getText().toString());
                             presets.set(pos, add);
                             notifyItemChanged(pos);
+                            dialog.dismiss();
+                        }
+                    });
+                    close.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
                             dialog.dismiss();
                         }
                     });

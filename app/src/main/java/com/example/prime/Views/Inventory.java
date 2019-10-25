@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -22,14 +23,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.prime.Adapter.InventorySpinnerAdapter;
 import com.example.prime.Model.CardsModel;
+import com.example.prime.Model.GroupModel;
 import com.example.prime.Model.InventoryModel;
+import com.example.prime.Model.InventorySpinnerModel;
 import com.example.prime.Persistent.SharedPrefsCookiePersistor;
 import com.example.prime.R;
 import com.example.prime.RecyclerAdapter.CardAdapter;
+import com.example.prime.RecyclerAdapter.GroupAdapter;
 import com.example.prime.RecyclerAdapter.InventoryAdapter;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,9 +43,15 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class Inventory extends Fragment {
     public static Boolean running;
@@ -55,6 +67,7 @@ public class Inventory extends Fragment {
     private String id;
     private String TAG = "Inventory.java";
     private Context mContext;
+    protected List<InventorySpinnerModel> spinnerData;
 
     @Override
     public void onAttach(Context context) {
@@ -122,10 +135,66 @@ public class Inventory extends Fragment {
                     dialog.show();
                 }
 
+                item.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected( AdapterView<?> adapterView, View view,  int i, long l) {
+                        int id = adapterView.getSelectedItemPosition();
+                        text1 = spinnerData.get(id).getId();
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        int id = adapterView.getFirstVisiblePosition();
+                        text1 = spinnerData.get(id).getId();
+                    }
+                });
+
                 submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if (!text1.isEmpty()) {
+                            ArrayList<String> sad = new ArrayList<>();
+                            StringBuilder stringBuilder = new StringBuilder();
+                            JSONObject obj = new JSONObject();
+                            try {
+                                obj.put("id", text1);
+                                obj.put("stock",quantity.getText().toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            stringBuilder.append("\n");
+                            sad.add(obj.toString());
+                            OkHttpClient client = new OkHttpClient();
+                            RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
+                            okhttp3.Request request = new okhttp3.Request.Builder()
+                                    .url("http://192.168.0.100/inventory/add")
+                                    .addHeader("Cookie", "ci_session=" + id)
+                                    .post(body)
+                                    .build();
 
+                            client.newCall(request).enqueue(new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+                                    call.cancel();
+                                }
+
+                                @Override
+                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                    Log.d("TAG", response.body().string());
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            Log.e("", "onClick: " + sad);
+
+
+
+                        } else {
+                            if (getActivity() != null) {
+                                View contextView = getActivity().findViewById(android.R.id.content);
+                                Snackbar.make(contextView, "Complete Details!", Snackbar.LENGTH_SHORT)
+                                        .show();
+                            }
+                        }
                     }
                 });
 
@@ -135,7 +204,53 @@ public class Inventory extends Fragment {
                         dialog.dismiss();
                     }
                 });
+
+
+                retrofit2.Call<ResponseBody> call = apiInterface.getConsumables("ci_session="+id);
+                call.enqueue(new  retrofit2.Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                        JSONArray array = null;
+                        try {
+                            String responseData = response.body().string();
+                            spinnerData = new ArrayList<>();
+                            array = new JSONArray(responseData);
+                            for(int i = 0; i<array.length(); i++) {
+                                InventorySpinnerModel dataObject = new InventorySpinnerModel();
+                                JSONObject json = null;
+                                try {
+                                    json = array.getJSONObject(i);
+                                    dataObject.setItemName(json.getString("item_name"));
+                                    dataObject.setId(json.getString("id"));
+                                    dataObject.setPrice("price");
+                                    dataObject.setTimeAdded("time_added");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                spinnerData.add(dataObject);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        if(null != spinnerData){
+                            InventorySpinnerAdapter spinnerAdapter = new InventorySpinnerAdapter(mContext, R.layout.inventoryspinnerlayout,spinnerData);
+                            item.setAdapter(spinnerAdapter);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                        Log.d(TAG, "onFailure: ");
+
+                    }
+                });
             }
+
         });
 
     }

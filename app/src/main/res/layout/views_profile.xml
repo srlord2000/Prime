@@ -40,7 +40,7 @@
                 android:text="@string/edit"
                 android:contentDescription="@string/scan"
                 app:iconSize="20dp"
-                app:icon="@drawable/ic_mode_edit_black_24dp"/>
+                app:icon="@drawable/ic_edit"/>
 
             <View
                 android:id="@+id/view1"
@@ -115,6 +115,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:visibility="gone"
             android:layout_marginBottom="15dp"
             android:orientation="horizontal">
 

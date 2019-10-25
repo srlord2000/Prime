@@ -111,7 +111,7 @@ public class Report extends Fragment {
             @Override
             public void onClick(View view) {
 
-                beginDownload(url);
+                beginDownload();
 
             }
         });
@@ -126,7 +126,7 @@ public class Report extends Fragment {
 
 
 
-    private void beginDownload(String url)
+    private void beginDownload()
     {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://192.168.0.100/");
@@ -135,7 +135,7 @@ public class Report extends Fragment {
 
         ApiClient downloadService = retrofit.create(ApiClient.class);
 
-        Call<ResponseBody> call = downloadService.downloadFileWithFixedUrl(url);
+        Call<ResponseBody> call = downloadService.downloadFileWithFixedUrl();
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override

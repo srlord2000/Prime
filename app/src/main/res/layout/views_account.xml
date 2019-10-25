@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        android:id="@+id/admin"
         android:padding="10dp">
 
         <TextView
@@ -36,7 +37,7 @@
             android:text="@string/edit"
             android:contentDescription="@string/scan"
             app:iconSize="20dp"
-            app:icon="@drawable/ic_mode_edit_black_24dp"/>
+            app:icon="@drawable/ic_edit"/>
 
         <View
             android:id="@+id/view1"
@@ -113,6 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        android:id="@+id/staff"
         android:padding="10dp">
 
 
@@ -139,7 +141,7 @@
             android:contentDescription="@string/scan"
             android:text="@string/edit"
             android:textColor="@color/black"
-            app:icon="@drawable/ic_mode_edit_black_24dp"
+            app:icon="@drawable/ic_edit"
             app:iconSize="20dp" />
 
         <View

@@ -43,6 +43,7 @@ import com.example.prime.R;
 import com.example.prime.RecyclerAdapter.CardAdapter;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
@@ -159,7 +160,11 @@ public class Card extends Fragment {
                         Log.e("", "onClick: " + sad);
                     }
                 } else {
-                    Toast.makeText(mContext, "No Selection", Toast.LENGTH_SHORT).show();
+                    if (getActivity() != null) {
+                        View contextView = getActivity().findViewById(android.R.id.content);
+                        Snackbar.make(contextView, "No Selection!", Snackbar.LENGTH_SHORT)
+                                .show();
+                    }
                 }
             }
         });

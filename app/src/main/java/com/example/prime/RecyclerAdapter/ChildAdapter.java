@@ -50,8 +50,8 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.MultiViewHol
 
     class MultiViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView id, price, pulse;
-        private LinearLayout linearLayout;
+        public TextView id, price, pulse;
+        public LinearLayout linearLayout;
 
 
         MultiViewHolder(@NonNull View itemView) {
@@ -65,6 +65,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.MultiViewHol
             id.setText(serviceModel.getServiceName());
             price.setText(serviceModel.getPrice());
             pulse.setText(serviceModel.getTapPulse());
+
         }
     }
 

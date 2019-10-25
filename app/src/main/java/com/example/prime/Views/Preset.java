@@ -38,6 +38,7 @@ import com.example.prime.RecyclerAdapter.EditPriceAdapter;
 import com.example.prime.RecyclerAdapter.PresetAdapter;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,10 +52,11 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
 public class Preset extends Fragment implements PresetAdapter.AdapterClickListener{
-
+    private String name;
     public static Boolean running1;
     public static Thread MyThread1;
     public static Boolean running;
@@ -95,6 +97,7 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        name = "";
         nameselect = "";
         nameid = "";
         groupid = "";
@@ -102,10 +105,12 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
         recyclerView = view.findViewById(R.id.listView);
         presetAdapter = new PresetAdapter(mContext,arrDummyData);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerView.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(presetAdapter);
         recyclerView.setHasFixedSize(true);
         add = view.findViewById(R.id.btnAddPreset);
         edit = view.findViewById(R.id.btnEditPrice);
+        delete = view.findViewById(R.id.btnDelete);
         prefs = PreferenceManager.getDefaultSharedPreferences( mContext);
         editor = prefs.edit();
         sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(mContext);
@@ -118,29 +123,31 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
             @Override
             public void onClick(View view) {
                 editPrices = new ArrayList<>();
-                editPriceAdapter = new EditPriceAdapter(mContext ,editPrices);
+                editPriceAdapter = new EditPriceAdapter(mContext, editPrices);
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
                 View mView = getLayoutInflater().inflate(R.layout.editprice, null);
                 RecyclerView recyclerView = mView.findViewById(R.id.recycler);
-                Button submit = mView.findViewById(R.id.btnSubmit);
-                Button advanced = mView.findViewById(R.id.btnAdvanced);
+                final Button submit = mView.findViewById(R.id.btnSubmit);
+                final Button advanced = mView.findViewById(R.id.btnAdvanced);
                 recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
                 recyclerView.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
                 recyclerView.setAdapter(editPriceAdapter);
                 mBuilder.setView(mView);
+                advanced.setEnabled(true);
                 final AlertDialog dialog = mBuilder.create();
 
-                if (dialog.getWindow() != null){
+                if (dialog.getWindow() != null) {
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 }
-                if(!nameselect.equals("")){
+                if (!nameselect.equals("")) {
                     dialog.show();
-                    dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+                    dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
                     dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
                     advanced.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            advanced.setEnabled(false);
                             Intent intent = new Intent(getActivity().getBaseContext(),
                                     AdvancedOption.class);
                             intent.putExtra("Key", nameselect);
@@ -178,17 +185,78 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
                     editPriceAdapter.setPrice(editPrices);
                     editPriceAdapter.notifyDataSetChanged();
 
-                }else {
+                } else {
                     Toast.makeText(mContext, "No Selection!", Toast.LENGTH_SHORT).show();
                 }
 
+                submit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        nameselect="";
+                        ArrayList<EditPriceModel> data = editPriceAdapter.getData();
+                        ArrayList<String> sad = new ArrayList<>();
+                        StringBuilder builder = new StringBuilder();
+                        final JSONObject jsonObject = new JSONObject();
+                        JSONArray obj = new JSONArray();
+                        try {
 
+                            for (int i = 0; i < data.size(); i++) {
+                                EditPriceModel editPrice = data.get(i);
+                                JSONObject cust = new JSONObject();
+                                cust.put("id", editPrice.getId());
+                                cust.put("price", editPrice.getPrice());
+                                obj.put(cust);
+                            }
+
+                            Log.e("", "onClick: " + obj);
+                        } catch (JSONException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        Log.e("", "onClick: " + obj);
+                        OkHttpClient client = new OkHttpClient();
+                        JSONObject userJson = new JSONObject();
+                        try {
+                            userJson.put("services", obj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Log.e("", "onClick: " + userJson);
+
+
+                        RequestBody body = RequestBody.create(String.valueOf(userJson), JSON);
+
+                        okhttp3.Request request = new okhttp3.Request.Builder()
+                                .url("http://192.168.0.100/services/edit")
+                                .addHeader("Cookie", "ci_session=" + id)
+                                .post(body)
+                                .build();
+
+                        client.newCall(request).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                call.cancel();
+                            }
+
+                            @Override
+                            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+
+                                Log.d("TAG", response.body().toString());
+                                dialog.dismiss();
+                            }
+                        });
+
+
+                    }
+
+                });
             }
         });
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                add.setEnabled(false);
                 Intent intent = new Intent(getActivity().getBaseContext(),
                         AddPreset.class);
                 getActivity().startActivity(intent);
@@ -216,6 +284,57 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
             }
         };
         MyThread1.start();
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!name.isEmpty()) {
+                    ArrayList<String> sad = new ArrayList<>();
+                    StringBuilder stringBuilder = new StringBuilder();
+                    JSONObject obj = new JSONObject();
+                    try {
+                        obj.put("unit_name", name);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    stringBuilder.append("\n");
+                    sad.add(obj.toString());
+
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
+                    okhttp3.Request request = new okhttp3.Request.Builder()
+                            .url("http://192.168.0.100/units/remove")
+                            .addHeader("Cookie", "ci_session=" + id)
+                            .post(body)
+                            .build();
+
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            call.cancel();
+                        }
+
+                        @Override
+                        public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                            Log.d("TAG", response.body().string());
+                        }
+                    });
+
+                    Log.e("", "onClick: " + sad);
+
+                    presetAdapter.notifyDataSetChanged();
+
+                } else {
+                    if (getActivity() != null) {
+                        View contextView = getActivity().findViewById(android.R.id.content);
+                        Snackbar.make(contextView, "No Selection!", Snackbar.LENGTH_SHORT)
+                                .show();
+                    }
+                }
+            }
+        });
 
 
     }
@@ -469,6 +588,7 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
         presetAdapter.selected(position);
         Drawable background = Objects.requireNonNull(recyclerView.findViewHolderForLayoutPosition(position)).itemView.getBackground();
         if (((ColorDrawable) background).getColor() == Color.parseColor("#707070")) {
+            name = arrDummyData.get(position).getUnitName();
             nameselect = arrDummyData.get(position).getUnitName();
             nameid = arrDummyData.get(position).getId();
             groupid = arrDummyData.get(position).getGroupId();
@@ -480,5 +600,11 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
             groupid = "";
             Log.e("", "onItemClick: sad");
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        add.setEnabled(true);
     }
 }

@@ -84,7 +84,7 @@ public interface ApiClient {
         Call<ResponseBody> deleteCard(@Header("Cookie") String token,@Field("id") JSONArray body);
 
         @GET("/assets/img/refe.doc")
-        Call<ResponseBody> downloadFileWithFixedUrl(@Url String url);
+        Call<ResponseBody> downloadFileWithFixedUrl();
 
 
 }

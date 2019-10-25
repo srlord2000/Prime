@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/circleddialog"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:text="Add Bypass"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/robotobold"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="Enable bypass monitoring for esuds-enabled machines"
+        android:textColor="@color/black"
+        android:layout_margin="5dp"
+        android:textAlignment="center"
+        android:fontFamily="@font/robotobold"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="start"/>
+
+
+
+    <Spinner
+        android:id="@+id/etServiceType"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:entries="@array/bypass" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#02aff3"
+            android:text="Submit"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:layout_marginRight="20dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:id="@+id/btnCancel1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:strokeColor="#02aff3"
+            android:text="Close"
+            android:layout_gravity="center"
+            android:textColor="@android:color/black" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.prime.Model.ConsumablesModel;
 import com.example.prime.Model.InventoryModel;
 import com.example.prime.R;
+import com.example.prime.Views.Consumables;
 
 import java.util.ArrayList;
 
@@ -78,6 +79,8 @@ public class ConsumablesAdapter extends RecyclerView.Adapter<ConsumablesAdapter.
 
                 }
             });
+
+
         }
     }
 
@@ -94,4 +97,5 @@ public class ConsumablesAdapter extends RecyclerView.Adapter<ConsumablesAdapter.
         }
         return selected;
     }
+
 }

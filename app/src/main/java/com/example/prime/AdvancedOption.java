@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -186,6 +188,62 @@ public class AdvancedOption extends AppCompatActivity {
 //            }
 //        });
 
+        bypass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(AdvancedOption.this);
+                View mView = getLayoutInflater().inflate(R.layout.addbypass, null);
+                final android.widget.Spinner type = mView.findViewById(R.id.etServiceType);
+                Button submit = mView.findViewById(R.id.btnSubmit);
+                Button close = mView.findViewById(R.id.btnCancel1);
+
+                type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        int id = adapterView.getSelectedItemPosition();
+                        name1 = adapterView.getSelectedItem().toString();
+                        Log.e(TAG, "onNothingSelected: " + name1);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        int id = adapterView.getFirstVisiblePosition();
+                        name1 = adapterView.getSelectedItem().toString();
+                        Log.e(TAG, "onNothingSelected: " + name1);
+
+                    }
+                });
+
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+                if(dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.show();
+                }
+                submit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AddDataModel add = new AddDataModel();
+                        add.setName("bypass");
+                        add.setType(name1);
+                        add.setLevel("0");
+                        add.setPrice("0");
+                        add.setPulse("0");
+                        adds.add(add);
+                        addAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
+
+                    }
+                });
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -197,6 +255,7 @@ public class AdvancedOption extends AppCompatActivity {
                 final EditText price = mView.findViewById(R.id.etPrice);
                 final EditText pulse = mView.findViewById(R.id.etPulse);
                 Button submit = mView.findViewById(R.id.btnSubmit);
+                Button close = mView.findViewById(R.id.btnCancel1);
 
                 type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -231,6 +290,12 @@ public class AdvancedOption extends AppCompatActivity {
                         addAdapter.notifyDataSetChanged();
                         dialog.dismiss();
 
+                    }
+                });
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
                     }
                 });
             }

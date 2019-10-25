@@ -64,4 +64,35 @@
     </style>
 
 
+
+
+    <style name="DatePickerDialogTheme" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">#ff2d6073</item> <!-- colorAccent here seems to work just fine? -->
+        <item name="android:datePickerStyle">@style/DatePickerDialogStyle</item>
+    </style>
+
+    <style name="DatePickerDialogStyle" parent="@android:style/Widget.Material.Light.DatePicker">
+
+        <item name="colorAccent">#ff2d6073</item> <!-- colorAccent here seems to work just fine? -->
+
+        <item name="android:positiveButtonText"></item>
+        <item name="android:datePickerMode">spinner</item>
+        <item name="android:headerBackground">#ff2d6073</item>
+        <item name="android:headerYearTextAppearance">@style/TextAppearance.DatePickerDialogStyle.DateLabel</item>
+        <item name="android:headerMonthTextAppearance">@style/TextAppearance.DatePickerDialogStyle.DateLabel</item>
+        <item name="android:headerDayOfMonthTextAppearance">@style/TextAppearance.DatePickerDialogStyle.DateLabel</item>
+        <item name="android:numbersTextColor">#ff000000</item>
+        <item name="android:numbersSelectorColor">#ff2d6073</item>
+        <item name="android:numbersBackgroundColor">#ffdddddd</item>
+
+    </style>
+
+    <style name="TextAppearance.DatePickerDialogStyle.DateLabel" parent="@android:style/TextAppearance.Material">
+
+        <item name="android:textSize">60sp</item> <!-- from -->
+        <item name="android:textColor">#ffD0D102</item>
+
+    </style>
+
+
 </resources>

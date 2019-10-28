@@ -87,12 +87,12 @@ public class Report extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         dateButton = view.findViewById(R.id.dateReport);
-        downloadButton = view.findViewById(R.id.btnDownload);
-        viewButton = view.findViewById(R.id.btnView1);
+//        downloadButton = view.findViewById(R.id.btnDownload);
+//        viewButton = view.findViewById(R.id.btnView1);
         getActivity().registerReceiver(onDownloadComplete,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-
-
-
+//
+//
+//
         final DatePickerDialog StartTime = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
@@ -107,21 +107,21 @@ public class Report extends Fragment {
             }
         });
 
-        downloadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                beginDownload();
-
-            }
-        });
-
-        viewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openFolder();
-            }
-        });
+//        downloadButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                beginDownload();
+//
+//            }
+//        });
+//
+//        viewButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                openFolder();
+//            }
+//        });
     }
 
 

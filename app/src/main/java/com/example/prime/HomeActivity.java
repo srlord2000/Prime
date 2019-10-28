@@ -16,6 +16,7 @@ import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.prime.Views.Card;
@@ -52,6 +53,8 @@ public class HomeActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(this);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        Log.e("", "leveluser: "+prefs.getString("level", "") );
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);

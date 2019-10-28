@@ -13,7 +13,7 @@ public class StaffSetting extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.views_account, container, false);
+        return inflater.inflate(R.layout.views_staffsetting, container, false);
 
     }
 

@@ -195,6 +195,7 @@ public class AddPreset extends AppCompatActivity {
                 Button submit = mView.findViewById(R.id.btnSubmit);
                 Button close = mView.findViewById(R.id.btnCancel1);
 
+
                 type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -304,6 +305,7 @@ public class AddPreset extends AppCompatActivity {
                 });
             }
         });
+
         retrofit2.Call<ResponseBody> call = apiInterface.getGroup("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override

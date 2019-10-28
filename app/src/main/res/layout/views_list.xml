@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
-        android:weightSum="3"
+        android:weightSum="3.2"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:paddingStart="10dp"
@@ -24,10 +24,28 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:text="Station"/>
+            android:text="Time"/>
 
         <TextView
-            android:layout_width="5dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:text="Station Name"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/white"
+            android:text="Type"/>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textStyle="bold"
@@ -35,16 +53,8 @@
             android:textColor="@color/white"
             android:text="Service"/>
 
-        <TextView
-            android:layout_width="5dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textStyle="bold"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            android:textColor="@color/white"
-            android:text="Time Added"/>
-
     </LinearLayout>
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -58,12 +68,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                android:weightSum="3"
-                android:orientation="horizontal">
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <TextView
                     android:layout_width="69dp"
@@ -86,24 +96,23 @@
                 <TextView
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:text="2019-10-17 3:40 PM"
-                    android:gravity="start"
                     android:layout_weight="1"
-                    />
+                    android:gravity="start"
+                    android:text="2019-10-17 3:40 PM"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="#000" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                android:weightSum="3"
-                android:orientation="horizontal">
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <TextView
                     android:layout_width="69dp"
@@ -126,23 +135,23 @@
                 <TextView
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:text="2019-10-17 3:32 PM"
+                    android:layout_weight="1"
                     android:gravity="start"
-                    android:layout_weight="1" />
+                    android:text="2019-10-17 3:32 PM"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="#000" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                android:weightSum="3"
-                android:orientation="horizontal">
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <TextView
                     android:layout_width="69dp"
@@ -165,23 +174,23 @@
                 <TextView
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:text="2019-10-17 3:30 PM"
+                    android:layout_weight="1"
                     android:gravity="start"
-                    android:layout_weight="1" />
+                    android:text="2019-10-17 3:30 PM"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="#000" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                android:weightSum="3"
-                android:orientation="horizontal">
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <TextView
                     android:id="@+id/txtStationName1"
@@ -204,15 +213,14 @@
                     android:textColor="#000" />
 
                 <TextView
+                    android:id="@+id/txtIp"
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:text="2019-10-17 3:30 PM"
-                    android:gravity="start"
                     android:layout_weight="1"
-                    android:id="@+id/txtIp"/>
-
+                    android:gravity="start"
+                    android:text="2019-10-17 3:30 PM"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="#000" />
 
 
             </LinearLayout>
@@ -220,12 +228,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                android:weightSum="3"
-                android:orientation="horizontal">
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <TextView
                     android:id="@+id/txtStationName2"
@@ -248,15 +256,14 @@
                     android:textColor="#000" />
 
                 <TextView
+                    android:id="@+id/txtIp1"
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:text="2019-10-17 3:25 PM"
-                    android:gravity="start"
                     android:layout_weight="1"
-                    android:id="@+id/txtIp1"/>
-
+                    android:gravity="start"
+                    android:text="2019-10-17 3:25 PM"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="#000" />
 
 
             </LinearLayout>
@@ -264,12 +271,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                android:weightSum="3"
-                android:orientation="horizontal">
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <TextView
                     android:id="@+id/txtStationName3"
@@ -292,15 +299,14 @@
                     android:textColor="#000" />
 
                 <TextView
+                    android:id="@+id/txtIp3"
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:text="2019-10-17 3:20 PM"
-                    android:gravity="start"
                     android:layout_weight="1"
-                    android:id="@+id/txtIp3"/>
-
+                    android:gravity="start"
+                    android:text="2019-10-17 3:20 PM"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="#000" />
 
 
             </LinearLayout>
@@ -308,12 +314,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                android:weightSum="3"
-                android:orientation="horizontal">
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <TextView
                     android:layout_width="69dp"
@@ -336,24 +342,23 @@
                 <TextView
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:text="2019-10-17 3:10 PM"
-                    android:gravity="start"
                     android:layout_weight="1"
-                    />
+                    android:gravity="start"
+                    android:text="2019-10-17 3:10 PM"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="#000" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                android:weightSum="3"
-                android:orientation="horizontal">
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <TextView
                     android:layout_width="69dp"
@@ -376,23 +381,23 @@
                 <TextView
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:text="2019-10-17 2:50 PM"
+                    android:layout_weight="1"
                     android:gravity="start"
-                    android:layout_weight="1" />
+                    android:text="2019-10-17 2:50 PM"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="#000" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                android:weightSum="3"
-                android:orientation="horizontal">
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <TextView
                     android:layout_width="69dp"
@@ -415,18 +420,16 @@
                 <TextView
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:text="2019-10-17 2:30 PM"
+                    android:layout_weight="1"
                     android:gravity="start"
-                    android:layout_weight="1" />
+                    android:text="2019-10-17 2:30 PM"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="#000" />
 
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
-
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listView"

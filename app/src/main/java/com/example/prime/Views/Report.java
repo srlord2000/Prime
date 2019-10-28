@@ -162,10 +162,6 @@ public class Report extends Fragment {
     public void openFolder()
     {
 
-//      Intent i4 = new Intent(getContext(), FileBrowser.class);
-//      startActivity(i4);
-//      Intent i = new Intent(mContext, FileBrowser.class); //works for all 3 main classes (i.e FileBrowser, FileChooser, FileBrowserWithCustomHandler)
-
         Intent i = new Intent(mContext, FileBrowser.class); //works for all 3 main classes (i.e FileBrowser, FileChooser, FileBrowserWithCustomHandler)
         i.putExtra(Constants.INITIAL_DIRECTORY, new File(String.valueOf(mContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS))));
         i.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "xlsx;zip");
@@ -178,7 +174,7 @@ public class Report extends Fragment {
     private boolean writeResponseBodyToDisk(ResponseBody body) {
         try {
             // todo change the file location/name according to your needs
-            File file = new File(getActivity().getExternalFilesDir(null) + File.separator + "EDIWOW.doc");
+            File file = new File(getActivity().getExternalFilesDir(null) + File.separator + "Report.doc");
 
             InputStream inputStream = null;
             OutputStream outputStream = null;

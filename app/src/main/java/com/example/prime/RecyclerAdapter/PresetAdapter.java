@@ -129,7 +129,6 @@ public class PresetAdapter extends RecyclerView.Adapter<PresetAdapter.MultiViewH
                     default:
                         break;
                 }
-                name.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
                 linearLayout.setBackgroundColor(Color.parseColor("#707070"));
                 recyclerView.setBackgroundColor(Color.parseColor("#707070"));
                 sSelectedItems.put(getAdapterPosition(), true);

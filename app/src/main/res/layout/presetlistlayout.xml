@@ -18,16 +18,16 @@
         android:paddingTop="10dp"
         android:paddingEnd="10dp"
         android:paddingBottom="10dp"
-        android:weightSum="3.0">
+        android:weightSum="4">
 
         <TextView
             android:id="@+id/txtUnitName"
-            android:layout_width="wrap_content"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:textAllCaps="true"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             tools:text="1" />

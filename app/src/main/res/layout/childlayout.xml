@@ -13,12 +13,22 @@
         android:layout_marginBottom="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:weightSum="2.6"
+        android:weightSum="4"
         android:orientation="horizontal">
 
         <TextView
+
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_weight="1"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="#000" />
+
+
+        <TextView
             android:id="@+id/txtLevel"
-            android:layout_width="30dp"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="1"
@@ -28,7 +38,7 @@
 
         <TextView
             android:id="@+id/txtPrice"
-            android:layout_width="30dp"
+            android:layout_width="15dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="1"
@@ -38,7 +48,7 @@
 
         <TextView
             android:id="@+id/txtPulse"
-            android:layout_width="30dp"
+            android:layout_width="10dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="1"

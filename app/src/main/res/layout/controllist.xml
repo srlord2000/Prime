@@ -4,16 +4,20 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ededed">
+    android:background="@drawable/circleddialog">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cv"
-        style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
+        android:id="@+id/cardWash"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="15dp"
+        android:layout_marginLeft="@dimen/mtrl_card_spacing"
+        android:layout_marginTop="@dimen/mtrl_card_spacing"
+        android:layout_marginRight="@dimen/mtrl_card_spacing"
         app:strokeColor="@color/black"
-        app:strokeWidth="1dp"
-        android:background="#ededed">
+        android:visibility="gone"
+        android:gravity="center_horizontal"
+        app:strokeWidth="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,54 +36,32 @@
                 android:layout_gravity="center"
                 />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            >
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Wash 1"
-                android:layout_marginRight="10dp"
-                android:visibility="visible"
-                app:backgroundTint="#02aff3"
 
-                />
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Wash 2"
-                android:layout_marginRight="10dp"
-                app:backgroundTint="#02aff3"
-                />
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Wash 3"
-                android:layout_marginRight="10dp"
-                app:backgroundTint="#02aff3"
-                />
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Abort"
-                app:backgroundTint="#FF0000"
-                />
-        </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:id="@+id/recyclerWash"
+                android:layout_margin="5dp"
+                android:layout_height="wrap_content">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cv2"
-        style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="15dp"
+        android:id="@+id/cardDry"
+        android:layout_marginLeft="@dimen/mtrl_card_spacing"
+        android:layout_marginTop="@dimen/mtrl_card_spacing"
+        android:layout_marginRight="@dimen/mtrl_card_spacing"
         app:strokeColor="@color/black"
-        app:strokeWidth="1dp"
-        android:background="#ededed">
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        app:strokeWidth="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -98,31 +80,25 @@
                 android:layout_gravity="center"
                 />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-                >
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:id="@+id/recyclerDryer"
+                android:layout_margin="5dp"
+                android:layout_height="wrap_content">
 
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="BASIC"
-                    android:layout_marginRight="10dp"
-                    app:backgroundTint="#02aff3"
-                    />
+            </androidx.recyclerview.widget.RecyclerView>
 
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="EXTEND"
-                    app:backgroundTint="#02aff3"
-                    />
-
-            </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Abort"
+        android:id="@+id/abort"
+        android:layout_gravity="center_horizontal"
+        app:backgroundTint="#FF0000"
+        />
 
 
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -96,14 +98,20 @@ public class ControlAdapter extends RecyclerView.Adapter<ControlAdapter.MultiVie
         private TextView name;
         private Button cmd;
         private LinearLayout linearLayout;
+        private int mProgressStatus = 0;
+
+        private Handler mHandler = new Handler();
 
         MultiViewHolder(@NonNull View itemView) {
             super(itemView);
+
             name = itemView.findViewById(R.id.stationNames);
             cmd = itemView.findViewById(R.id.btnCmd);
+
         }
 
         void bind(final StationModel controlModel) {
+
             dryerModels = new ArrayList<>();
             washerModels = new ArrayList<>();
             sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(context);
@@ -120,9 +128,10 @@ public class ControlAdapter extends RecyclerView.Adapter<ControlAdapter.MultiVie
                     final View mView = LayoutInflater.from(context).inflate(R.layout.controllist, null);
                     final RecyclerView recyclerViewWasher = mView.findViewById(R.id.recyclerWash);
                     final RecyclerView recyclerViewDryer = mView.findViewById(R.id.recyclerDryer);
+                    final ProgressBar mProgressBar = mView.findViewById(R.id.progressBar);
                     final CardView cardViewWash = mView.findViewById(R.id.cardWash);
                     final CardView cardViewDry = mView.findViewById(R.id.cardDry);
-                    Button abort = mView.findViewById(R.id.abort);
+                    final Button abort = mView.findViewById(R.id.abort);
                     recyclerViewDryer.setLayoutManager(new GridLayoutManager(context,3));
                     recyclerViewDryer.setHasFixedSize(true);
                     recyclerViewWasher.setLayoutManager(new GridLayoutManager(context,3));
@@ -132,11 +141,30 @@ public class ControlAdapter extends RecyclerView.Adapter<ControlAdapter.MultiVie
                     recyclerViewWasher.setAdapter(washerAdapter);
                     recyclerViewDryer.setAdapter(dryerAdapter);
                     mBuilder.setView(mView);
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    cardViewWash.setVisibility(View.GONE);
+                    abort.setVisibility(View.GONE);
+                    cardViewDry.setVisibility(View.GONE);
                     final AlertDialog dialog = mBuilder.create();
                     if (dialog.getWindow() != null){
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog.show();
                     }
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (mProgressStatus < 100){
+                                mProgressStatus++;
+                                android.os.SystemClock.sleep(50);
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mProgressBar.setProgress(mProgressStatus);
+                                    }
+                                });
+                            }
+                        }
+                    }).start();
 
                     retrofit2.Call<ResponseBody> call = apiInterface.getServiceId("ci_session="+id,cmd.getTag().toString());
                     call.enqueue(new  retrofit2.Callback<ResponseBody>() {
@@ -144,6 +172,7 @@ public class ControlAdapter extends RecyclerView.Adapter<ControlAdapter.MultiVie
                         public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
                             try {
                                 if(response.body() != null) {
+
                                     String res = response.body().string();
                                     dryerModels = new ArrayList<>();
                                     washerModels = new ArrayList<>();
@@ -161,7 +190,9 @@ public class ControlAdapter extends RecyclerView.Adapter<ControlAdapter.MultiVie
                                                 json = array.getJSONObject(i);
                                                 type = json.getString(GET_JSON_FROM_SERVER_NAME3);
                                                 if(type.toLowerCase().equals("wash")) {
+                                                    mProgressBar.setVisibility(View.GONE);
                                                     cardViewWash.setVisibility(View.VISIBLE);
+                                                    abort.setVisibility(View.VISIBLE);
                                                     washerModel.setId(json.getString(GET_JSON_FROM_SERVER_NAME1));
                                                     washerModel.setServiceName(json.getString(GET_JSON_FROM_SERVER_NAME2));
                                                     washerModel.setServiceType(json.getString(GET_JSON_FROM_SERVER_NAME3));
@@ -172,7 +203,9 @@ public class ControlAdapter extends RecyclerView.Adapter<ControlAdapter.MultiVie
                                                     washerModel.setUnitName(json.getString(GET_JSON_FROM_SERVER_NAME8));
                                                     washerModel.setUnitId(json.getString(GET_JSON_FROM_SERVER_NAME9));
                                                 }else if (type.toLowerCase().equals("dry")){
+                                                    mProgressBar.setVisibility(View.GONE);
                                                     cardViewDry.setVisibility(View.VISIBLE);
+                                                    abort.setVisibility(View.VISIBLE);
                                                     dryerModel.setId(json.getString(GET_JSON_FROM_SERVER_NAME1));
                                                     dryerModel.setServiceName(json.getString(GET_JSON_FROM_SERVER_NAME2));
                                                     dryerModel.setServiceType(json.getString(GET_JSON_FROM_SERVER_NAME3));

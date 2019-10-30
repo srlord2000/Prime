@@ -95,10 +95,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Abort"
+        android:visibility="gone"
         android:id="@+id/abort"
         android:layout_gravity="center_horizontal"
         app:backgroundTint="#FF0000"
         />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 
 </LinearLayout>

@@ -3,7 +3,7 @@ package com.example.prime.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ControlModel {
+public class ListModel {
     @SerializedName("station_name")
     @Expose
     private String stationName;
@@ -23,7 +23,7 @@ public class ControlModel {
     @Expose
     private String groupName;
 
-    public ControlModel(String stationName, String serviceType, String serviceLevel, String serviceName, String timeAdded, String groupName) {
+    public ListModel(String stationName, String serviceType, String serviceLevel, String serviceName, String timeAdded, String groupName) {
         this.stationName = stationName;
         this.serviceType = serviceType;
         this.serviceLevel = serviceLevel;
@@ -32,7 +32,7 @@ public class ControlModel {
         this.groupName = groupName;
     }
 
-    public ControlModel() {
+    public ListModel() {
     }
 
     public String getStationName() {

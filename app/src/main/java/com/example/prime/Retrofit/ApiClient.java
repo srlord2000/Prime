@@ -77,6 +77,9 @@ public interface ApiClient {
         @GET("info/show/cron")
         Call<ResponseBody> getCron(@Header("Cookie") String token);
 
+        @GET("/tally/breakdown")
+        Call<ResponseBody> getList(@Header("Cookie") String token, @Query("to") String to, @Query("from") String from );
+
 
         @Headers({"Accept:application/json", "Content-Type:application/json;"})
         @FormUrlEncoded

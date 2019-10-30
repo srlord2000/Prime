@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.prime.Model.ControlModel;
 import com.example.prime.Model.DryerModel;
 import com.example.prime.Model.StationModel;
 import com.example.prime.Model.WasherModel;

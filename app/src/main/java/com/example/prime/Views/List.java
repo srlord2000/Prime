@@ -28,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -116,8 +117,10 @@ public class List extends Fragment {
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         Date tomorrow = calendar.getTime();
         String to = sdf1.format(tomorrow);
-        Log.i(TAG, "data: " +to);
-        retrofit2.Call<ResponseBody> call = apiInterface.getList("ci_session="+id,to,from);
+        long unix = tomorrow.getTime()/1000;
+        String t = String.valueOf(unix);
+        Log.i(TAG, "data: " +t);
+        retrofit2.Call<ResponseBody> call = apiInterface.getList("ci_session="+id, t,"0");
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -181,7 +184,19 @@ public class List extends Fragment {
     }
 
     private void data1(){
-        retrofit2.Call<ResponseBody> call = apiInterface.getList("ci_session="+id,"2019-09-02","2019-08-28");
+        final SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        String from = sdf1.format(today);
+        Log.i(TAG, "data: " +from);
+
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        Date tomorrow = calendar.getTime();
+        String to = sdf1.format(tomorrow);
+        long unix = tomorrow.getTime()/1000;
+        String t = String.valueOf(unix);
+        Log.i(TAG, "data: " +t);
+        retrofit2.Call<ResponseBody> call = apiInterface.getList("ci_session="+id, t,"0");
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {

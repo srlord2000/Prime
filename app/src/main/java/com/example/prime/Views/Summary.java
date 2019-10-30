@@ -53,6 +53,7 @@ public class Summary extends Fragment {
     String GET_JSON_FROM_SERVER_NAME6 = "unit_id";
     String GET_JSON_FROM_SERVER_NAME7 = "unit_name";
     String GET_JSON_FROM_SERVER_NAME8 = "ipaddress";
+    private HashSet<String> hashSet;
     ApiClient apiInterface;
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
     private String id;
@@ -75,10 +76,13 @@ public class Summary extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        strings = new ArrayList<>();
         sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(mContext);
         apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
         id = sharedPrefsCookiePersistor.loadAll().get(0).value();
         data();
+
+
     }
 
     private void data(){
@@ -89,41 +93,27 @@ public class Summary extends Fragment {
                 try {
                     if(response.body() != null) {
                         String res = response.body().string();
-                            stationModels = new ArrayList<>();
+
                             strings = new ArrayList<>();
                             try {
-                                stationModels.clear();
                                 Log.e(TAG, "onResponse222: "+res );
                                 JSONArray array = new JSONArray(res);
                                 for (int i = 0; i < array.length(); i++) {
 
-                                    StationModel station = new StationModel();
                                     StringModel stringModel = new StringModel();
                                     JSONObject json = null;
                                     try {
                                         json = array.getJSONObject(i);
-                                        station.setId(json.getString(GET_JSON_FROM_SERVER_NAME1));
-                                        station.setHostId(json.getString(GET_JSON_FROM_SERVER_NAME2));
-                                        station.setStationName(json.getString(GET_JSON_FROM_SERVER_NAME3));
-                                        station.setHostname(json.getString(GET_JSON_FROM_SERVER_NAME4));
-                                        station.setStatus(json.getString(GET_JSON_FROM_SERVER_NAME5));
-                                        station.setUnitId(json.getString(GET_JSON_FROM_SERVER_NAME6));
-                                        station.setUnitName(json.getString(GET_JSON_FROM_SERVER_NAME7));
-                                        station.setIpaddress(json.getString(GET_JSON_FROM_SERVER_NAME8));
-                                        
                                         strings.add(json.getString(GET_JSON_FROM_SERVER_NAME6));
-
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                    stationModels.add(station);
-
-
                                 }
-                                HashSet<String> hashSet = new HashSet<String>(strings);
+                                hashSet = new HashSet<String>(strings);
                                 strings.clear();
                                 strings.addAll(hashSet);
                                 Log.e(TAG, "onResponsedasdasdsad: "+strings );
+                                str();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -136,12 +126,26 @@ public class Summary extends Fragment {
                 }
 
             }
-
             @Override
             public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
                 Log.d(TAG, "onFailure: ");
 
             }
         });
+    }
+
+    private void str(){
+        for (int i = 0; i < strings.size(); i++) {
+            final String in;
+            try {
+                 in = strings.get(i).toString();
+
+                 Log.e(TAG, "str: "+in);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
     }
 }

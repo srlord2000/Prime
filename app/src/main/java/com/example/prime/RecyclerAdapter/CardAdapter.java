@@ -38,7 +38,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MultiViewHolde
     @Override
     public MultiViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(context).inflate(R.layout.cardlistlayout, viewGroup, false);
-
         return new MultiViewHolder(view);
     }
 

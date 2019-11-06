@@ -138,7 +138,6 @@ public class Control extends Fragment {
                                 Log.e(TAG, "onResponse222: "+res );
                                 JSONArray array = new JSONArray(res);
                                 for (int i = 0; i < array.length(); i++) {
-
                                     StationModel station = new StationModel();
                                     JSONObject json = null;
                                     try {
@@ -198,7 +197,7 @@ public class Control extends Fragment {
                         stationModels = new ArrayList<>();
                         try {
                             stationModels.clear();
-                            Log.e(TAG, "onResponse222: "+res );
+//                            Log.e(TAG, "onResponse222: "+res );
                             JSONArray array = new JSONArray(res);
                             for (int i = 0; i < array.length(); i++) {
                                 StationModel station = new StationModel();

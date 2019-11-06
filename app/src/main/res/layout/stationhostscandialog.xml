@@ -178,6 +178,7 @@
 
     <LinearLayout
         android:orientation="vertical"
+        android:background="@drawable/circleddialog"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:visibility="gone"
@@ -379,7 +380,7 @@
         android:layout_width="match_parent"
         android:id="@+id/scan"
         android:visibility="visible"
-        android:background="@android:color/white">
+        android:background="@drawable/circleddialog">
 
         <TextView
             android:layout_height="wrap_content"
@@ -401,8 +402,9 @@
             android:text="Tap Master Key on a SAC"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:gravity="center"
-            android:background="@android:color/white"/>
+            />
 
     </LinearLayout>
+
 
 </LinearLayout>

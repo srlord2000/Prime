@@ -45,6 +45,7 @@ public class List extends Fragment {
     public static Thread MyThread;
     private ArrayList<ListModel> listModels;
     private String text1;
+    private String t;
     private RecyclerView recyclerView;
     private ListAdapter listAdapter;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -59,6 +60,7 @@ public class List extends Fragment {
     private String id;
     private String TAG="List.java";
     private Context mContext;
+    private String formattedDate;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -85,6 +87,8 @@ public class List extends Fragment {
         sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(mContext);
         apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
         id = sharedPrefsCookiePersistor.loadAll().get(0).value();
+        setdate();
+        date();
         data1();
         running = true;
         MyThread = new Thread() {//create thread
@@ -99,7 +103,16 @@ public class List extends Fragment {
                     } catch (InterruptedException e) {
                         System.out.println("Sleep interrupted");
                     }
+                    Date c = Calendar.getInstance().getTime();
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                    String formattedDate1 = df.format(c);
                     data();
+                    if (!formattedDate.equals(formattedDate1)){
+                        date();
+                        setdate();
+//                        Log.e(TAG, "run: "+formattedDate );
+//                        Log.e(TAG, "run: OHMYGULAY!!!!!!!!!!!!!!");
+                    }
                 }
                 System.out.println("onEnd Thread");
             }
@@ -108,18 +121,6 @@ public class List extends Fragment {
     }
 
     private void data(){
-        final SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        Calendar calendar = Calendar.getInstance();
-        Date today = calendar.getTime();
-        String from = sdf1.format(today);
-        Log.i(TAG, "data: " +from);
-
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        Date tomorrow = calendar.getTime();
-        String to = sdf1.format(tomorrow);
-        long unix = tomorrow.getTime()/1000;
-        String t = String.valueOf(unix);
-        Log.i(TAG, "data: " +t);
         retrofit2.Call<ResponseBody> call = apiInterface.getList("ci_session="+id, t,"0");
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
@@ -140,7 +141,7 @@ public class List extends Fragment {
                             listModels = new ArrayList<>();
                             try {
                                 listModels.clear();
-                                Log.e(TAG, "onResponse222: "+res );
+//                                Log.e(TAG, "onResponse222: "+res );
                                 JSONArray array = new JSONArray(res);
                                 for (int i = 0; i < array.length(); i++) {
 
@@ -184,18 +185,7 @@ public class List extends Fragment {
     }
 
     private void data1(){
-        final SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        Calendar calendar = Calendar.getInstance();
-        Date today = calendar.getTime();
-        String from = sdf1.format(today);
-        Log.i(TAG, "data: " +from);
 
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        Date tomorrow = calendar.getTime();
-        String to = sdf1.format(tomorrow);
-        long unix = tomorrow.getTime()/1000;
-        String t = String.valueOf(unix);
-        Log.i(TAG, "data: " +t);
         retrofit2.Call<ResponseBody> call = apiInterface.getList("ci_session="+id, t,"0");
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
@@ -213,7 +203,7 @@ public class List extends Fragment {
                         listModels = new ArrayList<>();
                         try {
                             listModels.clear();
-                            Log.e(TAG, "onResponse222: "+res );
+//                            Log.e(TAG, "onResponse222: "+res );
                             JSONArray array = new JSONArray(res);
                             for (int i = 0; i < array.length(); i++) {
                                 ListModel listModel = new ListModel();
@@ -249,6 +239,27 @@ public class List extends Fragment {
 
             }
         });
+    }
+    
+    private void setdate(){
+        final SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        String from = sdf1.format(today);
+        long unix1 = today.getTime()/1000;
+        String f = String.valueOf(unix1);
+
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        Date tomorrow = calendar.getTime();
+        String to = sdf1.format(tomorrow);
+        long unix = tomorrow.getTime()/1000;
+        t = String.valueOf(unix);
+    }
+
+    private void date(){
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        formattedDate = df.format(c);
     }
 
 }

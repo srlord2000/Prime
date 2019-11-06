@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -28,9 +29,6 @@ public interface ApiClient {
 
         @GET("services/show")
         Call<ResponseBody> getServices(@Header("Cookie") String token);
-
-        @POST("auth/check")
-        Call<ResponseBody> getData(@Body Object body);
 
         @GET("info/show/shop")
         Call<ResponseBody> getInfo(@Header("Cookie") String token);
@@ -77,14 +75,55 @@ public interface ApiClient {
         @GET("info/show/cron")
         Call<ResponseBody> getCron(@Header("Cookie") String token);
 
+        @GET("timectl/sync/http")
+        Call<ResponseBody> getSync(@Header("Cookie") String token);
+
+        @GET("host/scan")
+        Call<ResponseBody> getHost(@Header("Cookie") String token);
+
         @GET("/tally/breakdown")
         Call<ResponseBody> getList(@Header("Cookie") String token, @Query("to") String to, @Query("from") String from );
 
 
-        @Headers({"Accept:application/json", "Content-Type:application/json;"})
-        @FormUrlEncoded
+        @Headers("Content-Type: application/json")
+        @POST("info/edit/shop")
+        Call<ResponseBody> postShop(@Header("Cookie")String token, @Body RequestBody body);
+
+        @POST("timectl/sync/set")
+        Call<ResponseBody> postSetTime(@Header("Cookie")String token, @Body RequestBody body);
+
+        @POST("users/edit")
+        Call<ResponseBody> postUserEdit(@Header("Cookie")String token, @Body RequestBody body);
+
+        @POST("auth/check")
+        Call<ResponseBody> postAuth(@Header("Cookie") String token, @Body RequestBody body);
+
         @POST("cards/remove")
         Call<ResponseBody> deleteCard(@Header("Cookie") String token,@Field("id") JSONArray body);
+
+        @POST("inventory/add")
+        Call<ResponseBody> postAddInventory(@Header("Cookie")String token, @Body RequestBody body);
+
+        @POST("inventory/item/remove")
+        Call<ResponseBody> postItemRemove(@Header("Cookie")String token, @Body RequestBody body);
+
+        @POST("inventory/item/add")
+        Call<ResponseBody> postItemAdd(@Header("Cookie")String token, @Body RequestBody body);
+
+        @POST("inventory/item/edit")
+        Call<ResponseBody> postItemEdit(@Header("Cookie")String token, @Body RequestBody body);
+
+        @POST("inventory/services/remove")
+        Call<ResponseBody> postServiceRemove(@Header("Cookie")String token, @Body RequestBody body);
+
+        @POST("inventory/services/add")
+        Call<ResponseBody> postServiceAdd(@Header("Cookie")String token, @Body RequestBody body);
+
+        @POST("inventory/services/edit")
+        Call<ResponseBody> postServiceEdit(@Header("Cookie")String token, @Body RequestBody body);
+
+        @POST("stations/start")
+        Call<ResponseBody> postStationStart(@Header("Cookie")String token, @Body RequestBody body);
 
         @GET("/assets/img/refe.doc")
         Call<ResponseBody> downloadFileWithFixedUrl();

@@ -84,7 +84,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Time"
+                    android:hint="Date"
                     android:id="@+id/setDate"
                     android:inputType="text"
                     android:textColor="@color/black"
@@ -158,6 +158,17 @@
                 android:layout_marginTop="10dp"
                 android:backgroundTint="#02aff3"
                 android:text="Submit"
+                android:layout_gravity="center"
+                android:textColor="@android:color/white"
+                android:layout_marginRight="20dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dialog_sync"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="#02aff3"
+                android:text="Sync"
                 android:layout_gravity="center"
                 android:textColor="@android:color/white"
                 android:layout_marginRight="20dp"/>

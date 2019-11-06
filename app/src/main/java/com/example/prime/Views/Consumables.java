@@ -1,5 +1,6 @@
 package com.example.prime.Views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -52,6 +53,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class Consumables extends Fragment{
     public static Boolean running;
@@ -102,7 +104,7 @@ public class Consumables extends Fragment{
 
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 ArrayList<String> sad = new ArrayList<>();
                 if (consumablesAdapter.getSelected().size() > 0) {
                     StringBuilder stringBuilder = new StringBuilder();
@@ -118,30 +120,54 @@ public class Consumables extends Fragment{
                         stringBuilder.append("\n");
                         sad.add(obj.toString());
 
-                        OkHttpClient client = new OkHttpClient();
-
                         RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
-
-                        okhttp3.Request request = new okhttp3.Request.Builder()
-                                .url("http://192.168.0.100/inventory/item/remove")
-                                .addHeader("Cookie","ci_session="+id)
-                                .post(body)
-                                .build();
-
-                        client.newCall(request).enqueue(new Callback() {
+//                        okhttp3.Request request = new okhttp3.Request.Builder()
+//                                .url("http://192.168.0.100/inventory/item/remove")
+//                                .addHeader("Cookie","ci_session="+id)
+//                                .post(body)
+//                                .build();
+//                        client.newCall(request).enqueue(new Callback() {
+//                            @Override
+//                            public void onFailure(Call call, IOException e) {
+//                                call.cancel();
+//                            }
+//                            @Override
+//                            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+//                                Log.d("TAG", response.body().string());
+//                                if (getActivity() != null) {
+//                                    View contextView = getActivity().findViewById(android.R.id.content);
+//                                    Snackbar.make(contextView, "Deleted Successfully!", Snackbar.LENGTH_SHORT)
+//                                            .show();
+//                                }
+//                            }
+//                        });
+                        retrofit2.Call<ResponseBody> call = apiInterface.postItemRemove("ci_session="+id,body);
+                        call.enqueue(new  retrofit2.Callback<ResponseBody>() {
                             @Override
-                            public void onFailure(Call call, IOException e) {
-                                call.cancel();
-                            }
-
-                            @Override
-                            public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                Log.d("TAG", response.body().string());
-                                if (getActivity() != null) {
-                                    View contextView = getActivity().findViewById(android.R.id.content);
-                                    Snackbar.make(contextView, "Deleted Successfully!", Snackbar.LENGTH_SHORT)
-                                            .show();
+                            public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                                Log.e(TAG, "onResponse: "+response );
+                                try {
+                                    if(response.body()!= null) {
+                                        String res = response.body().string();
+                                        Log.e(TAG, "onResponse: "+res );
+                                        JSONObject jsonObject = new JSONObject(res);
+                                        if (jsonObject.getString("status").equals("0")) {
+                                            if (getActivity() != null) {
+                                                View contextView = getActivity().findViewById(android.R.id.content);
+                                                Snackbar.make(contextView, "Deleted Successfully!", Snackbar.LENGTH_SHORT)
+                                                        .show();
+                                            }
+                                        }
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
+                            }
+                            @Override
+                            public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                Log.d(TAG, "onFailure: ");
                             }
                         });
                         Log.e("", "onClick: " + sad);
@@ -207,27 +233,52 @@ public class Consumables extends Fragment{
                             }
                             stringBuilder.append("\n");
                             sad.add(obj.toString());
-                            OkHttpClient client = new OkHttpClient();
+
                             RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
-                            okhttp3.Request request = new okhttp3.Request.Builder()
-                                    .url("http://192.168.0.100/inventory/item/add")
-                                    .addHeader("Cookie", "ci_session=" + id)
-                                    .post(body)
-                                    .build();
+//                            okhttp3.Request request = new okhttp3.Request.Builder()
+//                                    .url("http://192.168.0.100/inventory/item/add")
+//                                    .addHeader("Cookie", "ci_session=" + id)
+//                                    .post(body)
+//                                    .build();
+//
+//                            client.newCall(request).enqueue(new Callback() {
+//                                @Override
+//                                public void onFailure(Call call, IOException e) {
+//                                    call.cancel();
+//                                }
+//
+//                                @Override
+//                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+//                                    Log.d("TAG", response.body().string());
+//                                    dialog.dismiss();
+//                                }
+//                            });
 
-                            client.newCall(request).enqueue(new Callback() {
+                            retrofit2.Call<ResponseBody> call = apiInterface.postItemAdd("ci_session="+id,body);
+                            call.enqueue(new  retrofit2.Callback<ResponseBody>() {
                                 @Override
-                                public void onFailure(Call call, IOException e) {
-                                    call.cancel();
+                                public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    Log.e(TAG, "onResponse: "+response );
+                                    try {
+                                        if(response.body()!= null) {
+                                            String res = response.body().string();
+                                            Log.e(TAG, "onResponse: "+res );
+                                            JSONObject jsonObject = new JSONObject(res);
+                                            if (jsonObject.getString("status").equals("0")) {
+                                                dialog.dismiss();
+                                            }
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-
                                 @Override
-                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                    Log.d("TAG", response.body().string());
-                                    dialog.dismiss();
+                                public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                    Log.d(TAG, "onFailure: ");
                                 }
                             });
-
                             Log.e("", "onClick: " + sad);
 
 
@@ -292,7 +343,6 @@ public class Consumables extends Fragment{
                         submit.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                OkHttpClient client = new OkHttpClient();
                                 JSONObject userJson = new JSONObject();
                                 try {
                                     userJson.put("id", ids);
@@ -302,26 +352,49 @@ public class Consumables extends Fragment{
                                     e.printStackTrace();
                                 }
                                 Log.e("", "onClick: " + userJson);
-
                                 RequestBody body = RequestBody.create(String.valueOf(userJson), JSON);
-
-                                okhttp3.Request request = new okhttp3.Request.Builder()
-                                        .url("http://192.168.0.100/inventory/item/edit")
-                                        .addHeader("Cookie", "ci_session=" + id)
-                                        .post(body)
-                                        .build();
-
-                                client.newCall(request).enqueue(new Callback() {
+//                                okhttp3.Request request = new okhttp3.Request.Builder()
+//                                        .url("http://192.168.0.100/inventory/item/edit")
+//                                        .addHeader("Cookie", "ci_session=" + id)
+//                                        .post(body)
+//                                        .build();
+//
+//                                client.newCall(request).enqueue(new Callback() {
+//                                    @Override
+//                                    public void onFailure(Call call, IOException e) {
+//                                        call.cancel();
+//                                    }
+//
+//                                    @Override
+//                                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+//                                        Log.d("TAG", response.body().toString());
+//                                        dialog.dismiss();
+//
+//                                    }
+//                                });
+                                retrofit2.Call<ResponseBody> call = apiInterface.postItemEdit("ci_session="+id,body);
+                                call.enqueue(new  retrofit2.Callback<ResponseBody>() {
                                     @Override
-                                    public void onFailure(Call call, IOException e) {
-                                        call.cancel();
+                                    public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        Log.e(TAG, "onResponse: "+response );
+                                        try {
+                                            if(response.body()!= null) {
+                                                String res = response.body().string();
+                                                Log.e(TAG, "onResponse: "+res );
+                                                JSONObject jsonObject = new JSONObject(res);
+                                                if (jsonObject.getString("status").equals("0")) {
+                                                    dialog.dismiss();
+                                                }
+                                            }
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
-
                                     @Override
-                                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                        Log.d("TAG", response.body().toString());
-                                        dialog.dismiss();
-
+                                    public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                        Log.d(TAG, "onFailure: ");
                                     }
                                 });
                             }

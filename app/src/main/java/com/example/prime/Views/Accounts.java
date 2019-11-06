@@ -1,5 +1,6 @@
 package com.example.prime.Views;
 
+import android.accessibilityservice.AccessibilityService;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -124,6 +126,7 @@ public class Accounts extends Fragment {
                                             obj.put("c_username", userAdmin.getText().toString());
                                             obj.put("c_password", oldpass.getText().toString());
                                             obj.put("new_password", newpass.getText().toString());
+                                            obj.put("new_password_conf",confpass.getText().toString());
                                         } else {
                                             Toast.makeText(mContext, "Password not Match!", Toast.LENGTH_SHORT).show();
                                         }
@@ -133,13 +136,16 @@ public class Accounts extends Fragment {
                                         obj.put("c_username", userAdmin.getText().toString());
                                         obj.put("c_password", oldpass.getText().toString());
                                         obj.put("new_email", newemail.getText().toString());
-                                    } else {
+                                    } else if (!newemail.getText().toString().equals("") && !newpass.getText().toString().equals("")) {
                                         obj = new JSONObject();
                                         obj.put("user_id", admin.getTag().toString());
                                         obj.put("c_username", userAdmin.getText().toString());
                                         obj.put("c_password", oldpass.getText().toString());
                                         obj.put("new_password", newpass.getText().toString());
+                                        obj.put("new_password_conf",confpass.getText().toString());
                                         obj.put("new_email", newemail.getText().toString());
+                                    }else {
+                                        Toast.makeText(mContext, "No Changes!", Toast.LENGTH_SHORT).show();
                                     }
 
                                 } else {
@@ -150,6 +156,7 @@ public class Accounts extends Fragment {
                                             obj.put("c_username", userAdmin.getText().toString());
                                             obj.put("c_password", oldpass.getText().toString());
                                             obj.put("new_password", newpass.getText().toString());
+                                            obj.put("new_password_conf",confpass.getText().toString());
                                             obj.put("new_username", user.getText().toString());
                                         } else {
                                             Toast.makeText(mContext, "Password not Match!", Toast.LENGTH_SHORT).show();
@@ -161,12 +168,19 @@ public class Accounts extends Fragment {
                                         obj.put("c_password", oldpass.getText().toString());
                                         obj.put("new_email", newemail.getText().toString());
                                         obj.put("new_username", user.getText().toString());
-                                    } else {
+                                    } else if (newemail.getText().toString().equals("") && newpass.getText().toString().equals("")) {
+                                        obj = new JSONObject();
+                                        obj.put("user_id", admin.getTag().toString());
+                                        obj.put("c_username", userAdmin.getText().toString());
+                                        obj.put("c_password", oldpass.getText().toString());
+                                        obj.put("new_username", user.getText().toString());
+                                    }else {
                                         obj = new JSONObject();
                                         obj.put("user_id", admin.getTag().toString());
                                         obj.put("c_username", userAdmin.getText().toString());
                                         obj.put("c_password", oldpass.getText().toString());
                                         obj.put("new_password", newpass.getText().toString());
+                                        obj.put("new_password_conf",confpass.getText().toString());
                                         obj.put("new_email", newemail.getText().toString());
                                         obj.put("new_username", user.getText().toString());
                                     }
@@ -185,40 +199,72 @@ public class Accounts extends Fragment {
                         }
 
                         if (!obj.toString().isEmpty()) {
-                            OkHttpClient client = new OkHttpClient();
                             Log.d("", "onClick: " + obj);
                             RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
-                            okhttp3.Request request = new okhttp3.Request.Builder()
-                                    .url("http://192.168.0.100/users/edit")
-                                    .addHeader("Cookie", "ci_session=" + id)
-                                    .post(body)
-                                    .build();
+//                            okhttp3.Request request = new okhttp3.Request.Builder()
+//                                    .url("http://192.168.0.100/users/edit")
+//                                    .addHeader("Cookie", "ci_session=" + id)
+//                                    .post(body)
+//                                    .build();
+//
+//                            client.newCall(request).enqueue(new Callback() {
+//                                @Override
+//                                public void onFailure(Call call, IOException e) {
+//                                    call.cancel();
+//                                }
+//
+//                                @Override
+//                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+//                                    try {
+//                                        String responseData = response.body().string();
+//                                        JSONObject jsonObject = new JSONObject(responseData);
+//                                        if (jsonObject.getString("status").equals("0")) {
+//                                            ((Activity) mView.getContext()).runOnUiThread(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    dialog.dismiss();
+//                                                    data();
+//                                                    Toast.makeText(mContext, "Changed Successful!", Toast.LENGTH_SHORT).show();
+//                                                }
+//                                            });
+//                                        }
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                    }
+//
+//                                }
+//                            });
 
-                            client.newCall(request).enqueue(new Callback() {
+                            retrofit2.Call<ResponseBody> call = apiInterface.postUserEdit("ci_session="+id,body);
+                            call.enqueue(new  retrofit2.Callback<ResponseBody>() {
                                 @Override
-                                public void onFailure(Call call, IOException e) {
-                                    call.cancel();
-                                }
-
-                                @Override
-                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    Log.e(TAG, "onResponse: "+response );
                                     try {
-                                        String responseData = response.body().string();
-                                        JSONObject jsonObject = new JSONObject(responseData);
-                                        if (jsonObject.getString("status").equals("0")) {
-                                            ((Activity) mView.getContext()).runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    dialog.dismiss();
-                                                    data();
-                                                    Toast.makeText(mContext, "Changed Successful!", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
+                                        if(response.body()!= null) {
+                                            String res = response.body().string();
+                                            Log.e(TAG, "onResponse: "+res );
+                                            JSONObject jsonObject = new JSONObject(res);
+                                            if (jsonObject.getString("status").equals("0")) {
+                                                ((Activity) mView.getContext()).runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        dialog.dismiss();
+                                                        data();
+                                                        Toast.makeText(mContext, "Changed Successful!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
                                         }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-
+                                }
+                                @Override
+                                public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                    Log.d(TAG, "onFailure: ");
                                 }
                             });
 
@@ -333,37 +379,69 @@ public class Accounts extends Fragment {
                             OkHttpClient client = new OkHttpClient();
                             Log.d("", "onClick: " + obj);
                             RequestBody body = RequestBody.create(String.valueOf(obj), JSON);
-                            okhttp3.Request request = new okhttp3.Request.Builder()
-                                    .url("http://192.168.0.100/users/edit")
-                                    .addHeader("Cookie", "ci_session=" + id)
-                                    .post(body)
-                                    .build();
-
-                            client.newCall(request).enqueue(new Callback() {
+//                            okhttp3.Request request = new okhttp3.Request.Builder()
+//                                    .url("http://192.168.0.100/users/edit")
+//                                    .addHeader("Cookie", "ci_session=" + id)
+//                                    .post(body)
+//                                    .build();
+//
+//                            client.newCall(request).enqueue(new Callback() {
+//                                @Override
+//                                public void onFailure(Call call, IOException e) {
+//                                    call.cancel();
+//                                }
+//
+//                                @Override
+//                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+//                                    dialog.dismiss();
+//                                    try {
+//                                        String responseData = response.body().string();
+//                                        JSONObject jsonObject = new JSONObject(responseData);
+//                                        if (jsonObject.getString("status").equals("0")) {
+//                                            ((Activity) mView.getContext()).runOnUiThread(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    data();
+//                                                    Toast.makeText(mContext, "Changed Successful!", Toast.LENGTH_SHORT).show();
+//                                                }
+//                                            });
+//                                        }
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                    }
+//
+//                                }
+//                            });
+                            retrofit2.Call<ResponseBody> call = apiInterface.postUserEdit("ci_session="+id,body);
+                            call.enqueue(new  retrofit2.Callback<ResponseBody>() {
                                 @Override
-                                public void onFailure(Call call, IOException e) {
-                                    call.cancel();
-                                }
-
-                                @Override
-                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                    dialog.dismiss();
+                                public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    Log.e(TAG, "onResponse: "+response );
                                     try {
-                                        String responseData = response.body().string();
-                                        JSONObject jsonObject = new JSONObject(responseData);
-                                        if (jsonObject.getString("status").equals("0")) {
-                                            ((Activity) mView.getContext()).runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    data();
-                                                    Toast.makeText(mContext, "Changed Successful!", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
+                                        if(response.body()!= null) {
+                                            String res = response.body().string();
+                                            Log.e(TAG, "onResponse: "+res );
+                                            JSONObject jsonObject = new JSONObject(res);
+                                            if (jsonObject.getString("status").equals("0")) {
+                                                ((Activity) mView.getContext()).runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        dialog.dismiss();
+                                                        data();
+                                                        Toast.makeText(mContext, "Changed Successful!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
                                         }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-
+                                }
+                                @Override
+                                public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                    Log.d(TAG, "onFailure: ");
                                 }
                             });
 
@@ -383,54 +461,95 @@ public class Accounts extends Fragment {
                             } catch (JSONException e2) {
                                 e2.printStackTrace();
                             }
-                            OkHttpClient client = new OkHttpClient();
-
                             RequestBody body = RequestBody.create(String.valueOf(userJson), JSON);
 
-                            okhttp3.Request request = new okhttp3.Request.Builder()
-                                    .url("http://192.168.0.100/auth/check")
-                                    .post(body)
-                                    .build();
-
-                            client.newCall(request).enqueue(new Callback() {
+//                            okhttp3.Request request = new okhttp3.Request.Builder()
+//                                    .url("http://192.168.0.100/auth/check")
+//                                    .post(body)
+//                                    .build();
+//
+//                            client.newCall(request).enqueue(new Callback() {
+//                                @Override
+//                                public void onFailure(Call call, IOException e) {
+//                                    call.cancel();
+//                                }
+//
+//                                @Override
+//                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+//                                    String res = response.body().string();
+//                                    final String msg;
+//                                    try {
+//                                        JSONObject object = new JSONObject(res);
+//                                        msg = object.getString("status");
+//                                        if(msg.equals("0")){
+//                                            ((Activity)mView.getContext()).runOnUiThread(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    linearLayout.setVisibility(View.GONE);
+//                                                    linearLayout1.setVisibility(View.VISIBLE);
+//                                                    cpass = adminpass.getText().toString();
+//                                                }
+//                                            });
+//
+//                                        }else {
+//                                            ((Activity)mView.getContext()).runOnUiThread(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    Toast.makeText(mContext, "Wrong Password, Try Again!", Toast.LENGTH_SHORT).show();
+//                                                }
+//                                            });
+//
+//                                        }
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                    }
+//
+//                                }
+//                            });
+                            retrofit2.Call<ResponseBody> call = apiInterface.postAuth("ci_session="+id,body);
+                            call.enqueue(new  retrofit2.Callback<ResponseBody>() {
                                 @Override
-                                public void onFailure(Call call, IOException e) {
-                                    call.cancel();
-                                }
-
-                                @Override
-                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                    String res = response.body().string();
-                                    final String msg;
+                                public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    Log.e(TAG, "onResponse: "+response );
                                     try {
-                                        JSONObject object = new JSONObject(res);
-                                        msg = object.getString("status");
-                                        if(msg.equals("0")){
-                                            ((Activity)mView.getContext()).runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    linearLayout.setVisibility(View.GONE);
-                                                    linearLayout1.setVisibility(View.VISIBLE);
-                                                    cpass = adminpass.getText().toString();
-                                                }
-                                            });
+                                        if(response.body()!= null) {
+                                            String res = response.body().string();
+                                            Log.e(TAG, "onResponse: "+res );
+                                            JSONObject jsonObject = new JSONObject(res);
+                                            if (jsonObject.getString("status").equals("0")) {
+                                                ((Activity) mView.getContext()).runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        linearLayout.setVisibility(View.GONE);
+                                                        linearLayout1.setVisibility(View.VISIBLE);
+                                                        cpass = adminpass.getText().toString();
+                                                        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                                                        if (imm != null) {
+                                                            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                                                        }
 
-                                        }else {
-                                            ((Activity)mView.getContext()).runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toast.makeText(mContext, "Wrong Password, Try Again!", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-
+                                                    }
+                                                });
+                                            }else {
+                                                ((Activity)mView.getContext()).runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(mContext, "Wrong Password, Try Again!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
                                         }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-
+                                }
+                                @Override
+                                public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                    Log.d(TAG, "onFailure: ");
                                 }
                             });
-
 
                         } else {
                             View contextView = mView.findViewById(android.R.id.content);

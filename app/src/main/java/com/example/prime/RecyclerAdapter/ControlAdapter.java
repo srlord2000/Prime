@@ -65,6 +65,7 @@ public class ControlAdapter extends RecyclerView.Adapter<ControlAdapter.MultiVie
     private String id;
     private String TAG="ControlAdapter.java";
     private boolean exist = false;
+    public static String n;
     public ControlAdapter(Context context, ArrayList<StationModel> stationModels) {
         this.context = context;
         this.stationModels = stationModels;
@@ -111,7 +112,6 @@ public class ControlAdapter extends RecyclerView.Adapter<ControlAdapter.MultiVie
         }
 
         void bind(final StationModel controlModel) {
-
             dryerModels = new ArrayList<>();
             washerModels = new ArrayList<>();
             sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(context);
@@ -122,6 +122,7 @@ public class ControlAdapter extends RecyclerView.Adapter<ControlAdapter.MultiVie
             cmd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    n = name.getText().toString();
                     dryerModels = new ArrayList<>();
                     washerModels = new ArrayList<>();
                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
@@ -132,6 +133,7 @@ public class ControlAdapter extends RecyclerView.Adapter<ControlAdapter.MultiVie
                     final CardView cardViewWash = mView.findViewById(R.id.cardWash);
                     final CardView cardViewDry = mView.findViewById(R.id.cardDry);
                     final Button abort = mView.findViewById(R.id.abort);
+                    final TextView name1 = mView.findViewById(R.id.name);
                     recyclerViewDryer.setLayoutManager(new GridLayoutManager(context,3));
                     recyclerViewDryer.setHasFixedSize(true);
                     recyclerViewWasher.setLayoutManager(new GridLayoutManager(context,3));
@@ -150,6 +152,7 @@ public class ControlAdapter extends RecyclerView.Adapter<ControlAdapter.MultiVie
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog.show();
                     }
+                    name1.setText(name.getText().toString());
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -179,7 +182,7 @@ public class ControlAdapter extends RecyclerView.Adapter<ControlAdapter.MultiVie
                                     try {
                                         dryerModels.clear();
                                         washerModels.clear();
-                                        Log.e(TAG, "onResponse222: "+res );
+//                                        Log.e(TAG, "onResponse222: "+res );
                                         JSONArray array = new JSONArray(res);
                                         for (int i = 0; i < array.length(); i++) {
                                             String type;

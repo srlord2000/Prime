@@ -1,10 +1,13 @@
 package com.example.prime.Views;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -18,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -27,23 +31,30 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 
-
+import com.example.prime.Adapter.SpinnerAdapters;
+import com.example.prime.Model.SpinnerModel;
+import com.example.prime.Model.StringModel;
 import com.example.prime.Persistent.SharedPrefsCookiePersistor;
 import com.example.prime.R;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -61,6 +72,7 @@ import static com.android.volley.VolleyLog.TAG;
 
 public class Profile extends Fragment {
 
+    private long timestamp;
     public static Boolean running;
     private Button btnEdit, btnServerTimeEdit;
     public static Thread MyThread;
@@ -69,6 +81,7 @@ public class Profile extends Fragment {
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
     private String id;
     private String TAG="Profile.java";
+    private ImageView imageView;
     private TextView shopname,branchname,date,time,timezone,auto;
 
     private Context mContext;
@@ -93,7 +106,8 @@ public class Profile extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
+        imageView = view.findViewById(R.id.logo);
         shopname = view.findViewById(R.id.shopName);
         btnEdit = view.findViewById(R.id.editAccount);
         btnServerTimeEdit = view.findViewById(R.id.editDateTime);
@@ -121,6 +135,14 @@ public class Profile extends Fragment {
                         System.out.println("Sleep interrupted");
                     }
                     time();
+                    Log.e(TAG, "onViewCreated: "+timestamp );
+                    ((Activity)view.getContext()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Picasso.get().load("http://192.168.0.100/assets/img/logo.png").into(imageView);
+                        }
+                    });
+
 
                 }
                 System.out.println("onEnd Thread");
@@ -164,34 +186,51 @@ public class Profile extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
-                            OkHttpClient client = new OkHttpClient();
-
+//                            OkHttpClient client = new OkHttpClient();
+//                            RequestBody body = RequestBody.create(String.valueOf(obj),JSON);
+//                            Request request = new Request.Builder()
+//                                    .url("http://192.168.0.100/info/edit/shop")
+//                                    .addHeader("Cookie","ci_session="+id)
+//                                    .post(body)
+//                                    .build();
+//                            client.newCall(request).enqueue(new Callback() {
+//                                @Override
+//                                public void onFailure(Call call, IOException e) {
+//                                    call.cancel();
+//                                }
+//                                @Override
+//                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+//                                    Log.d("TAG", response.body().string());
+//                                }
+//                            });
+//                            data();
+//                            Toast.makeText(mContext,
+//                                    R.string.success_msg,
+//                                    Toast.LENGTH_SHORT).show();
+//                            dialog.dismiss();
+                            Log.e(TAG, "onClick: "+obj );
                             RequestBody body = RequestBody.create(String.valueOf(obj),JSON);
-
-                            Request request = new Request.Builder()
-                                    .url("http://192.168.0.100/info/edit/shop")
-                                    .addHeader("Cookie","ci_session="+id)
-                                    .post(body)
-                                    .build();
-
-                            client.newCall(request).enqueue(new Callback() {
+                            retrofit2.Call<ResponseBody> call = apiInterface.postShop("ci_session="+id,body);
+                            call.enqueue(new  retrofit2.Callback<ResponseBody>() {
                                 @Override
-                                public void onFailure(Call call, IOException e) {
-                                    call.cancel();
+                                public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    Log.e(TAG, "onResponse: "+response );
+                                    try {
+                                        if(response.body()!= null) {
+                                            String res = response.body().string();
+                                            Log.e(TAG, "onResponse: "+res );
+                                            data();
+                                            dialog.dismiss();
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-
                                 @Override
-                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                    Log.d("TAG", response.body().string());
+                                public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                    Log.d(TAG, "onFailure: ");
                                 }
                             });
-                            data();
-                            Toast.makeText(mContext,
-                                    R.string.success_msg,
-                                    Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-
 
                         } else {
                             Toast.makeText(mContext,
@@ -211,15 +250,20 @@ public class Profile extends Fragment {
                 View mView = getLayoutInflater().inflate(R.layout.timeeditdialog, null);
                 Button close = mView.findViewById(R.id.dialog_close);
                 Button submit = mView.findViewById(R.id.dialog_submit);
+                Button sync = mView.findViewById(R.id.dialog_sync);
                 final EditText time = mView.findViewById(R.id.setTime);
                 final EditText date = mView.findViewById(R.id.setDate);
+                SimpleDateFormat formatTime = new SimpleDateFormat("h:mm a", Locale.US);
+                SimpleDateFormat formatDate = new SimpleDateFormat("YYYY-MM-dd", Locale.US);
+                String time1 = formatTime.format(new Date(timestamp));
+                String date1 = formatDate.format(new Date(timestamp));
                 time.setFocusable(false);
                 time.setKeyListener(null);
                 date.setFocusable(false);
                 date.setKeyListener(null);
                 mBuilder.setView(mView);
-                time.setText("12:12 PM");
-                date.setText("Date");
+                time.setText(time1);
+                date.setText(date1);
                 final AlertDialog dialog = mBuilder.create();
                 if (dialog.getWindow() != null){
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -230,6 +274,38 @@ public class Profile extends Fragment {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
+                    }
+                });
+
+                sync.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        retrofit2.Call<ResponseBody> call = apiInterface.getSync("ci_session="+id);
+                        call.enqueue(new  retrofit2.Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                                try {
+                                    if(response.body() != null) {
+                                        String res = response.body().string();
+                                        JSONObject object = new JSONObject(res);
+                                        if(object.getString("status").equals("0")){
+                                            dialog.dismiss();
+                                        }else {
+                                            
+                                        }
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            @Override
+                            public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                Log.d(TAG, "onFailure: ");
+
+                            }
+                        });
                     }
                 });
 
@@ -278,38 +354,39 @@ public class Profile extends Fragment {
                         }
                     }
                 });
-
+                final SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                 date.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (!date.getText().toString().isEmpty()) {
                             Date d = null;
-                            int mYear,mMonth,mDay;
                             Calendar cal = Calendar.getInstance();
+                            String curtime = date.getText().toString();
+                            try {
+                                d = sdf3.parse(curtime);
+                                cal.setTime(sdf3.parse(curtime));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            int mYear,mMonth,mDay;
                             mYear = cal.get(Calendar.YEAR);
                             mMonth = cal.get(Calendar.MONTH);
                             mDay = cal.get(Calendar.DAY_OF_MONTH);
                             DatePickerDialog mDate;
                             mDate = new DatePickerDialog(mContext, R.style.DatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
                                 @Override
-                                public void onDateSet(DatePicker datePicker, int mYear, int mMonth, int mDay) {
+                                public void onDateSet(DatePicker datePicker, int mYear1, int mMonth1, int mDay1) {
                                     String dates;
-                                    dates = mMonth + " " + mDay +" ,"+mYear;
-                                    SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm", Locale.US);
-                                    Date date2 = null;
-                                    try {
-                                        date2 = sdf2.parse(dates);
-                                    } catch (ParseException e) {
-                                    }
-                                    final Calendar c2 = Calendar.getInstance();
-                                    c2.setTime(date2);
-
-                                    SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm a", Locale.US);
-                                    String re = sdf1.format(c2.getTime());
-                                    date.setText(re);
+                                    Calendar myCalendar = Calendar.getInstance();
+                                    myCalendar.set(Calendar.YEAR, mYear1);
+                                    myCalendar.set(Calendar.MONTH, mMonth1);
+                                    myCalendar.set(Calendar.DAY_OF_MONTH, mDay1);
+                                    dates = sdf3.format(myCalendar.getTime());
+                                    date.setText(dates);
                                 }
                             }, mYear, mMonth, mDay);
-                                    mDate.setTitle("Select Time");
+                                    mDate.setTitle("Select Date");
                             mDate.show();
                             mDate.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLACK);
                             mDate.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
@@ -318,6 +395,66 @@ public class Profile extends Fragment {
                         }
                     }
                 });
+
+
+               submit.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+                       SimpleDateFormat displayFormat = new SimpleDateFormat("HH:mm", Locale.US);
+                       SimpleDateFormat parseFormat = new SimpleDateFormat("hh:mm a", Locale.US);
+                       JSONObject obj = new JSONObject();
+                       try {
+                           Date ds = parseFormat.parse(time.getText().toString());
+
+                           obj.put("time",displayFormat.format(ds));
+                           obj.put("date",date.getText().toString());
+                       } catch (JSONException e) {
+                           e.printStackTrace();
+                       } catch (ParseException e) {
+                           e.printStackTrace();
+                       }
+                       OkHttpClient client = new OkHttpClient();
+                       RequestBody body = RequestBody.create(String.valueOf(obj),JSON);
+//                       Request request = new Request.Builder()
+//                               .url("http://192.168.0.100/timectl/sync/set")
+//                               .addHeader("Cookie","ci_session="+id)
+//                               .post(body)
+//                               .build();
+//                       client.newCall(request).enqueue(new Callback() {
+//                           @Override
+//                           public void onFailure(Call call, IOException e) {
+//                               call.cancel();
+//                           }
+//
+//                           @Override
+//                           public void onResponse(Call call, okhttp3.Response response) throws IOException {
+//                               Log.d("TAG", response.body().string());
+//                           }
+//                       });
+                       retrofit2.Call<ResponseBody> call = apiInterface.postSetTime("ci_session="+id,body);
+                       call.enqueue(new  retrofit2.Callback<ResponseBody>() {
+                           @Override
+                           public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                               Log.e(TAG, "onResponse: "+response );
+//                               try {
+//                                   if(response.body()!= null) {
+//                                       String res = response.body().string();
+//                                       Log.e(TAG, "onResponse: "+res );
+//                                       data();
+//                                       dialog.dismiss();
+//                                   }
+//                               } catch (IOException e) {
+//                                   e.printStackTrace();
+//                               }
+                           }
+                           @Override
+                           public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                               Log.d(TAG, "onFailure: ");
+                           }
+                       });
+                   }
+               });
+
             }
         });
 
@@ -377,6 +514,7 @@ public class Profile extends Fragment {
                             String res = response.body().string();
                             JSONObject jsonObject = new JSONObject(res);
                             long result = jsonObject.getLong("timestamp") * 1000L;
+                            timestamp = result;
                             SimpleDateFormat formatTime = new SimpleDateFormat("h:mm:ss a", Locale.US);
                             SimpleDateFormat formatDate = new SimpleDateFormat("EEE MMMM dd, yyyy  ", Locale.US);
                             String time1 = formatTime.format(new Date(result));

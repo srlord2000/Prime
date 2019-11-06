@@ -6,6 +6,18 @@
     android:layout_height="wrap_content"
     android:background="@drawable/circleddialog">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:text="Name"
+        android:textColor="@color/black"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:id="@+id/name"
+        />
+
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:id="@+id/cardWash"
@@ -31,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:text="Washer"
                 android:textColor="@color/black"
-                android:textSize="25sp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:fontFamily="@font/robotobold"
                 android:layout_gravity="center"
                 />
@@ -75,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:text="Dryer"
                 android:textColor="@color/black"
-                android:textSize="25sp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:fontFamily="@font/robotobold"
                 android:layout_gravity="center"
                 />

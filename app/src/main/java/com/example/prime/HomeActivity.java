@@ -21,8 +21,10 @@ import android.view.MenuItem;
 
 import com.example.prime.Views.Card;
 import com.example.prime.Views.Consumables;
+import com.example.prime.Views.Control;
 import com.example.prime.Views.Email;
 import com.example.prime.Views.Inventory;
+import com.example.prime.Views.List;
 import com.example.prime.Views.Preset;
 import com.example.prime.Views.Profile;
 import com.example.prime.Views.Services;
@@ -92,6 +94,14 @@ public class HomeActivity extends AppCompatActivity
             if(Profile.MyThread != null) {
                 Profile.MyThread.interrupt();
                 Profile.running = false;
+            }
+            if(List.MyThread != null) {
+                List.MyThread.interrupt();
+                List.running = false;
+            }
+            if(Control.MyThread != null) {
+                Control.MyThread.interrupt();
+                Control.running = false;
             }
             if(Inventory.MyThread != null) {
                 Inventory.MyThread.interrupt();
@@ -169,6 +179,14 @@ public class HomeActivity extends AppCompatActivity
                         Profile.MyThread.interrupt();
                         Profile.running = false;
                     }
+                    if(List.MyThread != null) {
+                        List.MyThread.interrupt();
+                        List.running = false;
+                    }
+                    if(Control.MyThread != null) {
+                        Control.MyThread.interrupt();
+                        Control.running = false;
+                    }
                     if(Services.MyThread != null) {
                         Services.MyThread.interrupt();
                         Services.running = false;
@@ -206,6 +224,14 @@ public class HomeActivity extends AppCompatActivity
                     if(Email.MyThread != null) {
                         Email.MyThread.interrupt();
                         Email.running = false;
+                    }
+                    if(List.MyThread != null) {
+                        List.MyThread.interrupt();
+                        List.running = false;
+                    }
+                    if(Control.MyThread != null) {
+                        Control.MyThread.interrupt();
+                        Control.running = false;
                     }
                     if(Services.MyThread != null) {
                         Services.MyThread.interrupt();
@@ -247,6 +273,14 @@ public class HomeActivity extends AppCompatActivity
                         Email.MyThread.interrupt();
                         Email.running = false;
                     }
+                    if(List.MyThread != null) {
+                        List.MyThread.interrupt();
+                        List.running = false;
+                    }
+                    if(Control.MyThread != null) {
+                        Control.MyThread.interrupt();
+                        Control.running = false;
+                    }
                     if(Services.MyThread != null) {
                         Services.MyThread.interrupt();
                         Services.running = false;
@@ -286,6 +320,14 @@ public class HomeActivity extends AppCompatActivity
                     if(Email.MyThread != null) {
                         Email.MyThread.interrupt();
                         Email.running = false;
+                    }
+                    if(List.MyThread != null) {
+                        List.MyThread.interrupt();
+                        List.running = false;
+                    }
+                    if(Control.MyThread != null) {
+                        Control.MyThread.interrupt();
+                        Control.running = false;
                     }
                     if(Services.MyThread != null) {
                         Services.MyThread.interrupt();
@@ -331,6 +373,14 @@ public class HomeActivity extends AppCompatActivity
                         if(Services.MyThread != null) {
                             Services.MyThread.interrupt();
                             Services.running = false;
+                        }
+                        if(List.MyThread != null) {
+                            List.MyThread.interrupt();
+                            List.running = false;
+                        }
+                        if(Control.MyThread != null) {
+                            Control.MyThread.interrupt();
+                            Control.running = false;
                         }
                         if(Inventory.MyThread != null) {
                             Inventory.MyThread.interrupt();
@@ -381,6 +431,14 @@ public class HomeActivity extends AppCompatActivity
                     if(Services.MyThread != null) {
                         Services.MyThread.interrupt();
                         Services.running = false;
+                    }
+                    if(List.MyThread != null) {
+                        List.MyThread.interrupt();
+                        List.running = false;
+                    }
+                    if(Control.MyThread != null) {
+                        Control.MyThread.interrupt();
+                        Control.running = false;
                     }
                     if(Consumables.MyThread != null) {
                         Consumables.MyThread.interrupt();

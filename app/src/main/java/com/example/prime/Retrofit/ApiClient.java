@@ -60,6 +60,10 @@ public interface ApiClient {
         @GET("services/show")
         Call<ResponseBody> getServiceId(@Header("Cookie") String token, @Query("unitid") String query);
 
+        @GET("stations/sorts")
+        Call<ResponseBody> getSorts(@Header("Cookie") String token, @Query("unitid") String query);
+
+
         @GET("inventory/show")
         Call<ResponseBody> getInventory(@Header("Cookie") String token);
 

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.prime.Model.DryStationModel;
 import com.example.prime.Model.DrySummaryModel;
 import com.example.prime.Model.DryerModel;
 import com.example.prime.Model.ServiceModel;
@@ -23,6 +24,7 @@ import com.example.prime.Model.StationModel;
 import com.example.prime.Model.StringModel;
 import com.example.prime.Model.SummaryModel;
 import com.example.prime.Model.UnitModel;
+import com.example.prime.Model.WashStationModel;
 import com.example.prime.Model.WashSummaryModel;
 import com.example.prime.Model.WasherModel;
 import com.example.prime.Persistent.SharedPrefsCookiePersistor;
@@ -54,7 +56,10 @@ public class Summary extends Fragment {
     private ArrayList<SummaryModel> summaryModels;
     private ArrayList<DrySummaryModel> drySummaryModels = new ArrayList<>();
     private ArrayList<WashSummaryModel> washSummaryModels = new ArrayList<>();
+    private ArrayList<WashStationModel> washStationModels  = new ArrayList<>();
+    private ArrayList<DryStationModel> dryStationModels  = new ArrayList<>();
     private List<String> strings;
+    private ArrayList<String> unitname;
     private String text1;
     private RecyclerView recyclerView;
     private ControlAdapter controlAdapter;
@@ -78,7 +83,10 @@ public class Summary extends Fragment {
     String GET_JSON_FROM_SERVER_NAME16 = "unit_id";
     String GET_JSON_FROM_SERVER_NAME17 = "unit_name";
     String GET_JSON_FROM_SERVER_NAME18 = "ipaddress";
+
+
     private HashSet<String> hashSet;
+    private HashSet<String> hashSet1;
     ApiClient apiInterface;
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
     private String id;
@@ -109,6 +117,7 @@ public class Summary extends Fragment {
         prefs = PreferenceManager.getDefaultSharedPreferences( mContext);
         editor = prefs.edit();
         strings = new ArrayList<>();
+        unitname = new ArrayList<>();
         summaryModels = new ArrayList<>();
         sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(mContext);
         apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
@@ -143,6 +152,7 @@ public class Summary extends Fragment {
                         JSONObject jsonObject = object.getJSONObject(i);
                         final String unit_id = jsonObject.getString("id");
                         final String name = jsonObject.getString("unit_name");
+
                         retrofit2.Call<ResponseBody> call1 = apiInterface.getServiceId("ci_session="+id,unit_id);
                         call1.enqueue(new retrofit2.Callback<ResponseBody>() {
                             @Override
@@ -152,8 +162,8 @@ public class Summary extends Fragment {
                                     Log.e(TAG, "onResponse: "+res );
                                     editor.putString(unit_id, res);
                                     editor.commit();
-
                                     load1();
+
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
@@ -165,6 +175,29 @@ public class Summary extends Fragment {
 
                             }
                         });
+
+                        retrofit2.Call<ResponseBody> call2 = apiInterface.getSorts("ci_session="+id,unit_id);
+                        call2.enqueue(new retrofit2.Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                                try {
+                                    String res = response.body().string();
+                                    Log.e(TAG, "onResponse: "+res );
+                                    editor.putString(unit_id+"s",name);
+                                    editor.putString(name, res);
+                                    editor.commit();
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            @Override
+                            public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                Log.d(TAG, "onFailuretagtry: ");
+
+                            }
+                        });
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -194,6 +227,8 @@ public class Summary extends Fragment {
                     summaryModels.clear();
                     drySummaryModels.clear();
                     washSummaryModels.clear();
+                    washStationModels.clear();
+                    dryStationModels.clear();
                     JSONArray object = new JSONArray(responseData);
 
                     for(int i = 0; i<object.length();i++) {
@@ -201,6 +236,7 @@ public class Summary extends Fragment {
                         try {
                             json = object.getJSONObject(i);
                             strings.add(json.getString(GET_JSON_FROM_SERVER_NAME16));
+                            unitname.add(json.getString(GET_JSON_FROM_SERVER_NAME17));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -209,39 +245,106 @@ public class Summary extends Fragment {
                     strings.clear();
                     strings = new ArrayList<String>(hashSet);
                     Collections.sort(strings);
+
+                    hashSet1 = new HashSet<String>(unitname);
+                    unitname.clear();
+                    unitname = new ArrayList<String>(hashSet1);
+                    Collections.sort(unitname);
+
                     Log.e(TAG, "onResponse: "+strings +" "+ hashSet);
+
+                    Log.e(TAG, "onResponse: "+unitname +" "+ hashSet1);
                     for (int i = 0; i < strings.size(); i++) {
                         washSummaryModels = new ArrayList<>();
                         drySummaryModels = new ArrayList<>();
+                        washStationModels = new ArrayList<>();
+                        dryStationModels = new ArrayList<>();
+
+
                         final String id = strings.get(i);
                         String data1 = prefs.getString(id, "");
                         Log.e(TAG, "onResponse: "+data1 );
                         JSONArray jsonArray = new JSONArray(data1);
+
+                        final String id1 = prefs.getString(id+"s","");
+                        String data2 = prefs.getString(id1, "");
+                        Log.e(TAG, "onResponse: "+data2 );
+                        JSONArray jsonArray1 = new JSONArray(data2);
+
                         SummaryModel parent = new SummaryModel();
                         for (int j = 0; j < jsonArray.length(); j++) {
                             JSONObject json = jsonArray.getJSONObject(j);
+
                             String type = json.getString(GET_JSON_FROM_SERVER_NAME3);
-                            if(type.toLowerCase().equals("wash")) {
+                            if (type.toLowerCase().equals("wash")) {
                                 washSummaryModels.add(new WashSummaryModel(json.getString(GET_JSON_FROM_SERVER_NAME1), json.getString(GET_JSON_FROM_SERVER_NAME2)
                                         , json.getString(GET_JSON_FROM_SERVER_NAME3), json.getString(GET_JSON_FROM_SERVER_NAME4)
                                         , json.getString(GET_JSON_FROM_SERVER_NAME5), json.getString(GET_JSON_FROM_SERVER_NAME6)
                                         , json.getString(GET_JSON_FROM_SERVER_NAME7), json.getString(GET_JSON_FROM_SERVER_NAME8)
                                         , json.getString(GET_JSON_FROM_SERVER_NAME9)));
-                            }else if (type.toLowerCase().equals("dry")){
+                            } else if (type.toLowerCase().equals("dry")) {
                                 drySummaryModels.add(new DrySummaryModel(json.getString(GET_JSON_FROM_SERVER_NAME1), json.getString(GET_JSON_FROM_SERVER_NAME2)
                                         , json.getString(GET_JSON_FROM_SERVER_NAME3), json.getString(GET_JSON_FROM_SERVER_NAME4)
                                         , json.getString(GET_JSON_FROM_SERVER_NAME5), json.getString(GET_JSON_FROM_SERVER_NAME6)
                                         , json.getString(GET_JSON_FROM_SERVER_NAME7), json.getString(GET_JSON_FROM_SERVER_NAME8)
                                         , json.getString(GET_JSON_FROM_SERVER_NAME9)));
                             }
-                            parent.setUnitid(id);
                             parent.setUnitname(json.getString(GET_JSON_FROM_SERVER_NAME8));
                             parent.setWashSummaryModels(washSummaryModels);
                             parent.setDrySummaryModels(drySummaryModels);
                         }
+                            for (int j1 = 0; j1 < jsonArray1.length(); j1++) {
+                                JSONObject json1 = jsonArray1.getJSONObject(j1);
+
+                                washStationModels.add(new WashStationModel(json1.getString(GET_JSON_FROM_SERVER_NAME11), json1.getString(GET_JSON_FROM_SERVER_NAME12)
+                                        , json1.getString(GET_JSON_FROM_SERVER_NAME13), json1.getString(GET_JSON_FROM_SERVER_NAME14)
+                                        , json1.getString(GET_JSON_FROM_SERVER_NAME15), json1.getString(GET_JSON_FROM_SERVER_NAME16)
+                                        , json1.getString(GET_JSON_FROM_SERVER_NAME17), json1.getString(GET_JSON_FROM_SERVER_NAME18)));
+
+                                dryStationModels.add(new DryStationModel(json1.getString(GET_JSON_FROM_SERVER_NAME11), json1.getString(GET_JSON_FROM_SERVER_NAME12)
+                                        , json1.getString(GET_JSON_FROM_SERVER_NAME13), json1.getString(GET_JSON_FROM_SERVER_NAME14)
+                                        , json1.getString(GET_JSON_FROM_SERVER_NAME15), json1.getString(GET_JSON_FROM_SERVER_NAME16)
+                                        , json1.getString(GET_JSON_FROM_SERVER_NAME17), json1.getString(GET_JSON_FROM_SERVER_NAME18)));
+
+                                parent.setWashStationModels(washStationModels);
+                                parent.setDryStationModels(dryStationModels);
+                            }
+
+                            parent.setUnitid(id);
+
+
 
                         summaryModels.add(parent);
+
                     }
+
+//                    for (int i = 0; i < unitname.size(); i++) {
+//                        washStationModels = new ArrayList<>();
+//                        dryStationModels = new ArrayList<>();
+//                        final String id = unitname.get(i);
+//                        String data1 = prefs.getString(id, "");
+//                        Log.e(TAG, "onResponse: "+data1 );
+//                        JSONArray jsonArray = new JSONArray(data1);
+//
+//                        for (int j = 0; j < jsonArray.length(); j++) {
+//                            JSONObject json = jsonArray.getJSONObject(j);
+//
+//                            washStationModels.add(new WashStationModel(json.getString(GET_JSON_FROM_SERVER_NAME11), json.getString(GET_JSON_FROM_SERVER_NAME12)
+//                                        , json.getString(GET_JSON_FROM_SERVER_NAME13), json.getString(GET_JSON_FROM_SERVER_NAME14)
+//                                        , json.getString(GET_JSON_FROM_SERVER_NAME15), json.getString(GET_JSON_FROM_SERVER_NAME16)
+//                                        , json.getString(GET_JSON_FROM_SERVER_NAME17), json.getString(GET_JSON_FROM_SERVER_NAME18)));
+//
+//                            dryStationModels.add(new DryStationModel(json.getString(GET_JSON_FROM_SERVER_NAME11), json.getString(GET_JSON_FROM_SERVER_NAME12)
+//                                    , json.getString(GET_JSON_FROM_SERVER_NAME13), json.getString(GET_JSON_FROM_SERVER_NAME14)
+//                                    , json.getString(GET_JSON_FROM_SERVER_NAME15), json.getString(GET_JSON_FROM_SERVER_NAME16)
+//                                    , json.getString(GET_JSON_FROM_SERVER_NAME17), json.getString(GET_JSON_FROM_SERVER_NAME18)));
+//
+//                            parent.setDryStationModels(dryStationModels);
+//                            parent.setWashStationModels(washStationModels);
+//                        }
+//
+//                        summaryModels.add(parent);
+//                    }
                 } catch (IOException | JSONException e1) {
                     e1.printStackTrace();
                 }

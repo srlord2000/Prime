@@ -18,6 +18,10 @@ public class SummaryModel {
 
     private ArrayList<DrySummaryModel> drySummaryModels;
 
+    private ArrayList<DryStationModel> dryStationModels;
+
+    private ArrayList<WashStationModel> washStationModels;
+
     public SummaryModel(String unitid, String unitname, ArrayList<WashSummaryModel> washSummaryModels, ArrayList<DrySummaryModel> drySummaryModels) {
         this.unitid = unitid;
         this.unitname = unitname;
@@ -58,5 +62,21 @@ public class SummaryModel {
 
     public void setDrySummaryModels(ArrayList<DrySummaryModel> drySummaryModels) {
         this.drySummaryModels = drySummaryModels;
+    }
+
+    public ArrayList<DryStationModel> getDryStationModels() {
+        return dryStationModels;
+    }
+
+    public void setDryStationModels(ArrayList<DryStationModel> dryStationModels) {
+        this.dryStationModels = dryStationModels;
+    }
+
+    public ArrayList<WashStationModel> getWashStationModels() {
+        return washStationModels;
+    }
+
+    public void setWashStationModels(ArrayList<WashStationModel> washStationModels) {
+        this.washStationModels = washStationModels;
     }
 }

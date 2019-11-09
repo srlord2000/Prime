@@ -29,6 +29,7 @@ import com.example.prime.Views.Preset;
 import com.example.prime.Views.Profile;
 import com.example.prime.Views.Services;
 import com.example.prime.Views.Station;
+import com.example.prime.Views.Summary;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -179,6 +180,10 @@ public class HomeActivity extends AppCompatActivity
                         Profile.MyThread.interrupt();
                         Profile.running = false;
                     }
+                    if(Summary.MyThread != null) {
+                        Summary.MyThread.interrupt();
+                        Summary.running = false;
+                    }
                     if(List.MyThread != null) {
                         List.MyThread.interrupt();
                         List.running = false;
@@ -211,9 +216,11 @@ public class HomeActivity extends AppCompatActivity
                         Station.MyThread.interrupt();
                         Station.running = false;
                     }
-                    if(Preset.MyThread != null && Preset.MyThread1 != null) {
+                    if(Preset.MyThread != null ) {
                         Preset.MyThread.interrupt();
                         Preset.running = false;
+                    }
+                    if(Preset.MyThread1 != null) {
                         Preset.MyThread1.interrupt();
                         Preset.running1 = false;
                     }
@@ -224,6 +231,10 @@ public class HomeActivity extends AppCompatActivity
                     if(Email.MyThread != null) {
                         Email.MyThread.interrupt();
                         Email.running = false;
+                    }
+                    if(Summary.MyThread != null) {
+                        Summary.MyThread.interrupt();
+                        Summary.running = false;
                     }
                     if(List.MyThread != null) {
                         List.MyThread.interrupt();
@@ -273,6 +284,10 @@ public class HomeActivity extends AppCompatActivity
                         Email.MyThread.interrupt();
                         Email.running = false;
                     }
+                    if(Summary.MyThread != null) {
+                        Summary.MyThread.interrupt();
+                        Summary.running = false;
+                    }
                     if(List.MyThread != null) {
                         List.MyThread.interrupt();
                         List.running = false;
@@ -320,6 +335,10 @@ public class HomeActivity extends AppCompatActivity
                     if(Email.MyThread != null) {
                         Email.MyThread.interrupt();
                         Email.running = false;
+                    }
+                    if(Summary.MyThread != null) {
+                        Summary.MyThread.interrupt();
+                        Summary.running = false;
                     }
                     if(List.MyThread != null) {
                         List.MyThread.interrupt();
@@ -369,6 +388,10 @@ public class HomeActivity extends AppCompatActivity
                         if(Email.MyThread != null) {
                             Email.MyThread.interrupt();
                             Email.running = false;
+                        }
+                        if(Summary.MyThread != null) {
+                            Summary.MyThread.interrupt();
+                            Summary.running = false;
                         }
                         if(Services.MyThread != null) {
                             Services.MyThread.interrupt();
@@ -427,6 +450,10 @@ public class HomeActivity extends AppCompatActivity
                     if(Inventory.MyThread != null) {
                         Inventory.MyThread.interrupt();
                         Inventory.running = false;
+                    }
+                    if(Summary.MyThread != null) {
+                        Summary.MyThread.interrupt();
+                        Summary.running = false;
                     }
                     if(Services.MyThread != null) {
                         Services.MyThread.interrupt();

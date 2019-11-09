@@ -22,8 +22,8 @@
             android:textStyle="bold"
             android:textSize="25sp"
             android:textColor="@color/black"
-            android:text="Add Clients"
-            android:layout_marginTop="45dp"
+            android:text="Add Recipients"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/robotobold"
             android:layout_gravity="center"/>
 
@@ -137,7 +137,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="45dp"
+            android:layout_marginBottom="10dp"
             android:paddingBottom="10dp">
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/dialog_submit"

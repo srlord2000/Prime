@@ -45,11 +45,17 @@ public interface ApiClient {
         @GET("stations/show/all")
         Call<ResponseBody> getStation(@Header("Cookie") String token);
 
+        @GET("stations/show/all")
+        Call<ResponseBody> getStation1(@Header("Cookie") String token);
+
         @GET("cards/scan")
         Call<ResponseBody> cardScan(@Header("Cookie") String token);
 
         @GET("units/show")
         Call<ResponseBody> getUnits(@Header("Cookie") String token);
+
+        @GET("units/show")
+        Call<ResponseBody> getUnits1(@Header("Cookie") String token);
 
         @GET("groups/show")
         Call<ResponseBody> getGroup(@Header("Cookie") String token);
@@ -59,6 +65,9 @@ public interface ApiClient {
 
         @GET("services/show")
         Call<ResponseBody> getServiceId(@Header("Cookie") String token, @Query("unitid") String query);
+
+        @GET("services/show")
+        Call<ResponseBody> getServiceId1(@Header("Cookie") String token, @Query("unitid") String query);
 
         @GET("stations/sorts")
         Call<ResponseBody> getSorts(@Header("Cookie") String token, @Query("unitid") String query);

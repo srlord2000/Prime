@@ -414,7 +414,7 @@ public class Card extends Fragment {
                         public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
                             try {
                                 String res = response.body().string();
-                                Log.e(TAG, "onResponse: "+res );
+                                Log.e(TAG, "CARDSCAN: "+res );
 
                                 try {
                                     if (!res.contains("Could not read server response")){

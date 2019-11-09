@@ -128,13 +128,34 @@ public class Summary extends Fragment {
         summaryAdapter = new SummaryAdapter(mContext, summaryModels);
         recyclerView.setAdapter(summaryAdapter);
         load();
+//        running = true;
+//        MyThread = new Thread() {//create thread
+//            @Override
+//            public void run() {
+//                int i = 0;
+//                while (running) {
+//                    System.out.println("counter: " + i);
+//                    i++;
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        System.out.println("Sleep interrupted");
+//                    }
+//                    load();
+//
+//                }
+//                System.out.println("onEnd Thread");
+//            }
+//        };
+//        MyThread.start();
+
         //data();
 
 
 
     }
     private void load(){
-        retrofit2.Call<ResponseBody> call = apiInterface.getUnits("ci_session="+id);
+        retrofit2.Call<ResponseBody> call = apiInterface.getUnits1("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
@@ -153,14 +174,14 @@ public class Summary extends Fragment {
                         final String unit_id = jsonObject.getString("id");
                         final String name = jsonObject.getString("unit_name");
 
-                        retrofit2.Call<ResponseBody> call1 = apiInterface.getServiceId("ci_session="+id,unit_id);
+                        retrofit2.Call<ResponseBody> call1 = apiInterface.getServiceId1("ci_session="+id,unit_id);
                         call1.enqueue(new retrofit2.Callback<ResponseBody>() {
                             @Override
                             public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
                                 try {
                                     String res = response.body().string();
                                     Log.e(TAG, "onResponse: "+res );
-                                    editor.putString(unit_id, res);
+                                    editor.putString(unit_id+"sd", res);
                                     editor.commit();
                                     load1();
 
@@ -184,7 +205,7 @@ public class Summary extends Fragment {
                                     String res = response.body().string();
                                     Log.e(TAG, "onResponse: "+res );
                                     editor.putString(unit_id+"s",name);
-                                    editor.putString(name, res);
+                                    editor.putString(name+"s", res);
                                     editor.commit();
 
                                 } catch (IOException e) {
@@ -216,7 +237,7 @@ public class Summary extends Fragment {
     }
 
     private void load1(){
-        retrofit2.Call<ResponseBody> call = apiInterface.getStation("ci_session="+id);
+        retrofit2.Call<ResponseBody> call = apiInterface.getStation1("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
@@ -262,12 +283,12 @@ public class Summary extends Fragment {
 
 
                         final String id = strings.get(i);
-                        String data1 = prefs.getString(id, "");
+                        String data1 = prefs.getString(id+"sd", "");
                         Log.e(TAG, "onResponse: "+data1 );
                         JSONArray jsonArray = new JSONArray(data1);
 
                         final String id1 = prefs.getString(id+"s","");
-                        String data2 = prefs.getString(id1, "");
+                        String data2 = prefs.getString(id1+"s", "");
                         Log.e(TAG, "onResponse: "+data2 );
                         JSONArray jsonArray1 = new JSONArray(data2);
 

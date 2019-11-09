@@ -278,7 +278,7 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
                     }
                     check();
                     services();
-                    //check1();
+                    check1();
                 }
                 System.out.println("onEnd Thread");
             }

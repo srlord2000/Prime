@@ -3,6 +3,8 @@ package com.example.prime.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class DrySummaryModel {
     @SerializedName("id")
     @Expose
@@ -31,6 +33,8 @@ public class DrySummaryModel {
     @SerializedName("unit_id")
     @Expose
     private String unitId;
+
+    private ArrayList<DryCountModel> dryCountModels;
 
     public DrySummaryModel(String id, String serviceName, String serviceType, String serviceLevel, String price, String tapPulse, String timeAdded, String unitName, String unitId) {
         this.id = id;

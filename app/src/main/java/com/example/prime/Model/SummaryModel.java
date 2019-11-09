@@ -22,6 +22,7 @@ public class SummaryModel {
 
     private ArrayList<WashStationModel> washStationModels;
 
+
     public SummaryModel(String unitid, String unitname, ArrayList<WashSummaryModel> washSummaryModels, ArrayList<DrySummaryModel> drySummaryModels) {
         this.unitid = unitid;
         this.unitname = unitname;

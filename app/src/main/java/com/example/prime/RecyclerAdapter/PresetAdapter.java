@@ -136,8 +136,6 @@ public class PresetAdapter extends RecyclerView.Adapter<PresetAdapter.MultiViewH
             }
             sClickListener.onItemClick(getAdapterPosition());
         }
-
-
     }
 
 

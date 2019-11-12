@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.hardware.camera2.params.BlackLevelPattern;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,9 +45,19 @@ import com.example.prime.RecyclerAdapter.SummaryAdapter;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Color;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,14 +86,14 @@ import static com.android.volley.VolleyLog.TAG;
 
 public class Report extends Fragment {
     Context mContext;
-    Button dateButton,downloadButton;
+    Button dateButton, downloadButton;
     public static Boolean running;
     public static Thread MyThread;
     private ArrayList<SummaryModel> summaryModels;
     private ArrayList<DrySummaryModel> drySummaryModels = new ArrayList<>();
     private ArrayList<WashSummaryModel> washSummaryModels = new ArrayList<>();
-    private ArrayList<WashStationModel> washStationModels  = new ArrayList<>();
-    private ArrayList<DryStationModel> dryStationModels  = new ArrayList<>();
+    private ArrayList<WashStationModel> washStationModels = new ArrayList<>();
+    private ArrayList<DryStationModel> dryStationModels = new ArrayList<>();
     private List<String> strings;
     private ArrayList<String> unitname;
     private String text1;
@@ -115,14 +126,15 @@ public class Report extends Fragment {
     ApiClient apiInterface;
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
     private String id;
-    private String TAG="Reports.java";
+    private String TAG = "Reports.java";
     private Button send, notif;
     private SummaryAdapter summaryAdapter;
     private retrofit2.Call<ResponseBody> call;
-    SharedPreferences prefs ;
+    SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
     final Calendar newCalendar = Calendar.getInstance();
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -135,12 +147,10 @@ public class Report extends Fragment {
         return inflater.inflate(R.layout.view_reports, container, false);
 
 
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-
 
 
         dateButton = view.findViewById(R.id.dateReport);
@@ -168,9 +178,7 @@ public class Report extends Fragment {
         });
 
 
-
-
-        prefs = PreferenceManager.getDefaultSharedPreferences( mContext);
+        prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         editor = prefs.edit();
         strings = new ArrayList<>();
         unitname = new ArrayList<>();
@@ -185,18 +193,71 @@ public class Report extends Fragment {
         recyclerView.setAdapter(summaryAdapter);
         load();
 
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
 
 
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions((Activity) mContext,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+            return;
+        }
     }
 
     private void beginDownload() {
 
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Users"); //Creating a sheet
 
-    }
+                Row row = sheet.createRow(1);
+
+                CellStyle style1 = workbook.createCellStyle();
+                style1.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
+                style1.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+                Font font1 = workbook.createFont();
+                font1.setColor(IndexedColors.BLACK.getIndex());
+                style1.setFont(font1);
+
+                Cell cell2 = row.createCell(0);
+                cell2.setCellValue("Name");
+                cell2.setCellStyle(style1);
+
+
+
+
+
+        String fileName = "Reports[Today2].xlsx"; //Name of the file
+
+        String extStorageDirectory = (mContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)).toString();
+        File folder = new File(extStorageDirectory, "Reports");// Name of the folder you want to keep your file in the local storage.
+        folder.mkdir(); //creating the folder
+        File file = new File(folder, fileName);
+        try {
+            file.createNewFile(); // creating the file inside the folder
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
+        try {
+            FileOutputStream fileOut = new FileOutputStream(file); //Opening the file
+            workbook.write(fileOut); //Writing all your row column inside the file
+            fileOut.close(); //closing the file and done
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+}
 
 
     private void load(){
-        retrofit2.Call<ResponseBody> call = apiInterface.getUnits("ci_session="+id);
+        retrofit2.Call<ResponseBody> call = apiInterface.getUnits2("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
@@ -215,7 +276,7 @@ public class Report extends Fragment {
                         final String unit_id = jsonObject.getString("id");
                         final String name = jsonObject.getString("unit_name");
 
-                        retrofit2.Call<ResponseBody> call1 = apiInterface.getServiceId("ci_session="+id,unit_id);
+                        retrofit2.Call<ResponseBody> call1 = apiInterface.getServiceId2("ci_session="+id,unit_id);
                         call1.enqueue(new retrofit2.Callback<ResponseBody>() {
                             @Override
                             public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
@@ -278,7 +339,7 @@ public class Report extends Fragment {
     }
 
     private void load1(){
-        retrofit2.Call<ResponseBody> call = apiInterface.getStation("ci_session="+id);
+        retrofit2.Call<ResponseBody> call = apiInterface.getStation2("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
@@ -307,7 +368,6 @@ public class Report extends Fragment {
                     strings.clear();
                     strings = new ArrayList<String>(hashSet);
                     Collections.sort(strings);
-
                     hashSet1 = new HashSet<String>(unitname);
                     unitname.clear();
                     unitname = new ArrayList<String>(hashSet1);
@@ -393,7 +453,6 @@ public class Report extends Fragment {
             }
         });
     }
-
 }
 
 

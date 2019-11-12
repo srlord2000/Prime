@@ -10,10 +10,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 
-
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
@@ -73,8 +75,9 @@ import static com.android.volley.VolleyLog.TAG;
 public class Profile extends Fragment {
 
     private long timestamp;
+    final private int PICK_IMAGE_REQUEST = 1;
     public static Boolean running;
-    private Button btnEdit, btnServerTimeEdit;
+    private Button btnEdit, btnServerTimeEdit,eLogo;
     public static Thread MyThread;
     ApiClient apiInterface;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -107,7 +110,9 @@ public class Profile extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
+
         imageView = view.findViewById(R.id.logo);
+        eLogo = view.findViewById(R.id.editLogo);
         shopname = view.findViewById(R.id.shopName);
         btnEdit = view.findViewById(R.id.editAccount);
         btnServerTimeEdit = view.findViewById(R.id.editDateTime);
@@ -148,7 +153,18 @@ public class Profile extends Fragment {
                 System.out.println("onEnd Thread");
             }
         };
+
+
         MyThread.start();
+
+
+        eLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseImage();
+            }
+        });
+
 
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -557,5 +573,13 @@ public class Profile extends Fragment {
 //        };
 //        MyThread.start();
     }
+
+    public void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
 
 }

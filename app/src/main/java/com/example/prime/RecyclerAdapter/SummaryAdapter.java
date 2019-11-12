@@ -203,7 +203,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                                         integers.add(prod);
                                     }
 
-                                    Log.e(TAG, "SORTS!: "+integers );
+                                    Log.e(TAG, "SORTSs!: "+integers );
 
                                 } catch (IOException e) {
                                     e.printStackTrace();

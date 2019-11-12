@@ -31,7 +31,9 @@ import com.example.prime.Persistent.SharedPrefsCookiePersistor;
 import com.example.prime.R;
 import com.example.prime.RecyclerAdapter.CardAdapter;
 import com.example.prime.RecyclerAdapter.ControlAdapter;
+import com.example.prime.RecyclerAdapter.DrySummaryAdapter;
 import com.example.prime.RecyclerAdapter.SummaryAdapter;
+import com.example.prime.RecyclerAdapter.WashSummaryAdapter;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
 
@@ -100,7 +102,29 @@ public class Summary extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if(DrySummaryAdapter.MyThread != null){
+            DrySummaryAdapter.MyThread.run();
+            DrySummaryAdapter.running = true;
+        }
+        if(WashSummaryAdapter.MyThread != null){
+            WashSummaryAdapter.MyThread.run();
+            WashSummaryAdapter.running = true;
+        }
 //        mContext = context;
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        if(DrySummaryAdapter.MyThread != null){
+            DrySummaryAdapter.MyThread.interrupt();
+            DrySummaryAdapter.running = false;
+        }
+        if(WashSummaryAdapter.MyThread != null){
+            WashSummaryAdapter.MyThread.interrupt();
+            WashSummaryAdapter.running = false;
+        }
+
     }
 
 
@@ -127,6 +151,7 @@ public class Summary extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         summaryAdapter = new SummaryAdapter(mContext, summaryModels);
         recyclerView.setAdapter(summaryAdapter);
+
         load();
 //        running = true;
 //        MyThread = new Thread() {//create thread
@@ -155,7 +180,7 @@ public class Summary extends Fragment {
 
     }
     private void load(){
-        retrofit2.Call<ResponseBody> call = apiInterface.getUnits1("ci_session="+id);
+        retrofit2.Call<ResponseBody> call = apiInterface.getUnits2("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
@@ -174,7 +199,7 @@ public class Summary extends Fragment {
                         final String unit_id = jsonObject.getString("id");
                         final String name = jsonObject.getString("unit_name");
 
-                        retrofit2.Call<ResponseBody> call1 = apiInterface.getServiceId1("ci_session="+id,unit_id);
+                        retrofit2.Call<ResponseBody> call1 = apiInterface.getServiceId2("ci_session="+id,unit_id);
                         call1.enqueue(new retrofit2.Callback<ResponseBody>() {
                             @Override
                             public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
@@ -338,7 +363,8 @@ public class Summary extends Fragment {
                         summaryModels.add(parent);
 
                     }
-
+                    summaryAdapter.setPreset(summaryModels);
+                    summaryAdapter.notifyDataSetChanged();
 //                    for (int i = 0; i < unitname.size(); i++) {
 //                        washStationModels = new ArrayList<>();
 //                        dryStationModels = new ArrayList<>();
@@ -369,8 +395,7 @@ public class Summary extends Fragment {
                 } catch (IOException | JSONException e1) {
                     e1.printStackTrace();
                 }
-                summaryAdapter.setPreset(summaryModels);
-                summaryAdapter.notifyDataSetChanged();
+
             }
 
             public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
@@ -380,138 +405,138 @@ public class Summary extends Fragment {
         });
     }
 
-    private void data(){
-        call = apiInterface.getStation("ci_session="+id);
-        call.enqueue(new  retrofit2.Callback<ResponseBody>() {
-            @Override
-            public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    if(response.body() != null) {
-                        String res = response.body().string();
-
-                            strings = new ArrayList<>();
-                            try {
-                                Log.e(TAG, "onResponse222: "+res );
-                                JSONArray array = new JSONArray(res);
-                                for (int i = 0; i < array.length(); i++) {
-
-                                    StringModel stringModel = new StringModel();
-                                    JSONObject json = null;
-                                    try {
-                                        json = array.getJSONObject(i);
-                                        strings.add(json.getString(GET_JSON_FROM_SERVER_NAME16));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                hashSet = new HashSet<String>(strings);
-                                strings.clear();
-                                strings = new ArrayList<String>(hashSet);
-                                Collections.sort(strings);
-                                Log.e(TAG, "onResponsedasdasdsad: "+strings );
-                                str();
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            @Override
-            public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
-                Log.d(TAG, "onFailure: "+t.getMessage());
-
-            }
-        });
-    }
-
-    private void str(){
-        for (int i = 0; i < strings.size(); i++) {
-            final String in;
-            in = strings.get(i);
-            call = apiInterface.getServiceId("ci_session="+id,in);
-            call.enqueue(new  retrofit2.Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
-                            if(response.body() != null) {
-                                String res = response.body().string();
-                                drySummaryModels = new ArrayList<>();
-                                washSummaryModels = new ArrayList<>();
-                                summaryModels = new ArrayList<>();
-                                try {
-                                    SummaryModel summaryModel = new SummaryModel();
-                                    WashSummaryModel washerModel = new WashSummaryModel();
-                                    DrySummaryModel dryerModel = new DrySummaryModel();
-                                    Log.e(TAG, "onResponse222: "+res );
-                                    JSONArray array = new JSONArray(res);
-                                    for (int i = 0; i < array.length(); i++) {
-                                        String type;
-
-                                        JSONObject json = null;
-                                        try {
-                                            json = array.getJSONObject(i);
-                                            type = json.getString(GET_JSON_FROM_SERVER_NAME3);
-                                            summaryModel.setUnitname(json.getString(GET_JSON_FROM_SERVER_NAME2));
-                                            if(type.toLowerCase().equals("wash")) {
-                                                washerModel.setId(json.getString(GET_JSON_FROM_SERVER_NAME1));
-                                                washerModel.setServiceName(json.getString(GET_JSON_FROM_SERVER_NAME2));
-                                                washerModel.setServiceType(json.getString(GET_JSON_FROM_SERVER_NAME3));
-                                                washerModel.setServiceLevel(json.getString(GET_JSON_FROM_SERVER_NAME4));
-                                                washerModel.setPrice(json.getString(GET_JSON_FROM_SERVER_NAME5));
-                                                washerModel.setTapPulse(json.getString(GET_JSON_FROM_SERVER_NAME6));
-                                                washerModel.setTimeAdded(json.getString(GET_JSON_FROM_SERVER_NAME7));
-                                                washerModel.setUnitName(json.getString(GET_JSON_FROM_SERVER_NAME8));
-                                                washerModel.setUnitId(json.getString(GET_JSON_FROM_SERVER_NAME9));
-                                                washSummaryModels.add(washerModel);
-                                            }else if (type.toLowerCase().equals("dry")){
-                                                dryerModel.setId(json.getString(GET_JSON_FROM_SERVER_NAME1));
-                                                dryerModel.setServiceName(json.getString(GET_JSON_FROM_SERVER_NAME2));
-                                                dryerModel.setServiceType(json.getString(GET_JSON_FROM_SERVER_NAME3));
-                                                dryerModel.setServiceLevel(json.getString(GET_JSON_FROM_SERVER_NAME4));
-                                                dryerModel.setPrice(json.getString(GET_JSON_FROM_SERVER_NAME5));
-                                                dryerModel.setTapPulse(json.getString(GET_JSON_FROM_SERVER_NAME6));
-                                                dryerModel.setTimeAdded(json.getString(GET_JSON_FROM_SERVER_NAME7));
-                                                dryerModel.setUnitName(json.getString(GET_JSON_FROM_SERVER_NAME8));
-                                                dryerModel.setUnitId(json.getString(GET_JSON_FROM_SERVER_NAME9));
-                                                drySummaryModels.add(dryerModel);
-
-                                            }
-                                            summaryModel.setUnitid(in);
-                                            summaryModel.setDrySummaryModels(drySummaryModels);
-                                            summaryModel.setWashSummaryModels(washSummaryModels);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    }
-                                    summaryModels.add(summaryModel);
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        summaryAdapter.setPreset(summaryModels);
-                        summaryAdapter.notifyDataSetChanged();
-                    }
-                    @Override
-                    public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
-                        Log.d(TAG, "onFailure: "+t.getMessage());
-
-                    }
-                });
-        }
-
-
-    }
+//    private void data(){
+//        call = apiInterface.getStation("ci_session="+id);
+//        call.enqueue(new  retrofit2.Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+//                try {
+//                    if(response.body() != null) {
+//                        String res = response.body().string();
+//
+//                            strings = new ArrayList<>();
+//                            try {
+//                                Log.e(TAG, "onResponse222: "+res );
+//                                JSONArray array = new JSONArray(res);
+//                                for (int i = 0; i < array.length(); i++) {
+//
+//                                    StringModel stringModel = new StringModel();
+//                                    JSONObject json = null;
+//                                    try {
+//                                        json = array.getJSONObject(i);
+//                                        strings.add(json.getString(GET_JSON_FROM_SERVER_NAME16));
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+//                                hashSet = new HashSet<String>(strings);
+//                                strings.clear();
+//                                strings = new ArrayList<String>(hashSet);
+//                                Collections.sort(strings);
+//                                Log.e(TAG, "onResponsedasdasdsad: "+strings );
+//                                str();
+//
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                        }
+//
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//            @Override
+//            public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+//                Log.d(TAG, "onFailure: "+t.getMessage());
+//
+//            }
+//        });
+//    }
+//
+//    private void str(){
+//        for (int i = 0; i < strings.size(); i++) {
+//            final String in;
+//            in = strings.get(i);
+//            call = apiInterface.getServiceId1("ci_session="+id,in);
+//            call.enqueue(new  retrofit2.Callback<ResponseBody>() {
+//                    @Override
+//                    public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+//                        try {
+//                            if(response.body() != null) {
+//                                String res = response.body().string();
+//                                drySummaryModels = new ArrayList<>();
+//                                washSummaryModels = new ArrayList<>();
+//                                summaryModels = new ArrayList<>();
+//                                try {
+//                                    SummaryModel summaryModel = new SummaryModel();
+//                                    WashSummaryModel washerModel = new WashSummaryModel();
+//                                    DrySummaryModel dryerModel = new DrySummaryModel();
+//                                    Log.e(TAG, "onResponse222: "+res );
+//                                    JSONArray array = new JSONArray(res);
+//                                    for (int i = 0; i < array.length(); i++) {
+//                                        String type;
+//
+//                                        JSONObject json = null;
+//                                        try {
+//                                            json = array.getJSONObject(i);
+//                                            type = json.getString(GET_JSON_FROM_SERVER_NAME3);
+//                                            summaryModel.setUnitname(json.getString(GET_JSON_FROM_SERVER_NAME2));
+//                                            if(type.toLowerCase().equals("wash")) {
+//                                                washerModel.setId(json.getString(GET_JSON_FROM_SERVER_NAME1));
+//                                                washerModel.setServiceName(json.getString(GET_JSON_FROM_SERVER_NAME2));
+//                                                washerModel.setServiceType(json.getString(GET_JSON_FROM_SERVER_NAME3));
+//                                                washerModel.setServiceLevel(json.getString(GET_JSON_FROM_SERVER_NAME4));
+//                                                washerModel.setPrice(json.getString(GET_JSON_FROM_SERVER_NAME5));
+//                                                washerModel.setTapPulse(json.getString(GET_JSON_FROM_SERVER_NAME6));
+//                                                washerModel.setTimeAdded(json.getString(GET_JSON_FROM_SERVER_NAME7));
+//                                                washerModel.setUnitName(json.getString(GET_JSON_FROM_SERVER_NAME8));
+//                                                washerModel.setUnitId(json.getString(GET_JSON_FROM_SERVER_NAME9));
+//                                                washSummaryModels.add(washerModel);
+//                                            }else if (type.toLowerCase().equals("dry")){
+//                                                dryerModel.setId(json.getString(GET_JSON_FROM_SERVER_NAME1));
+//                                                dryerModel.setServiceName(json.getString(GET_JSON_FROM_SERVER_NAME2));
+//                                                dryerModel.setServiceType(json.getString(GET_JSON_FROM_SERVER_NAME3));
+//                                                dryerModel.setServiceLevel(json.getString(GET_JSON_FROM_SERVER_NAME4));
+//                                                dryerModel.setPrice(json.getString(GET_JSON_FROM_SERVER_NAME5));
+//                                                dryerModel.setTapPulse(json.getString(GET_JSON_FROM_SERVER_NAME6));
+//                                                dryerModel.setTimeAdded(json.getString(GET_JSON_FROM_SERVER_NAME7));
+//                                                dryerModel.setUnitName(json.getString(GET_JSON_FROM_SERVER_NAME8));
+//                                                dryerModel.setUnitId(json.getString(GET_JSON_FROM_SERVER_NAME9));
+//                                                drySummaryModels.add(dryerModel);
+//
+//                                            }
+//                                            summaryModel.setUnitid(in);
+//                                            summaryModel.setDrySummaryModels(drySummaryModels);
+//                                            summaryModel.setWashSummaryModels(washSummaryModels);
+//                                        } catch (JSONException e) {
+//                                            e.printStackTrace();
+//                                        }
+//
+//                                    }
+//                                    summaryModels.add(summaryModel);
+//
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                }
+//
+//                            }
+//
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        summaryAdapter.setPreset(summaryModels);
+//                        summaryAdapter.notifyDataSetChanged();
+//                    }
+//                    @Override
+//                    public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+//                        Log.d(TAG, "onFailure: "+t.getMessage());
+//
+//                    }
+//                });
+//        }
+//
+//
+//    }
 }

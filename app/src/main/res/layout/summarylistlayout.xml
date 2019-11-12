@@ -8,63 +8,132 @@
     android:background="@color/colorPrimary"
     android:id="@+id/presetLayout">
 
+
+
     <LinearLayout
+        android:id="@+id/washLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/washLayout"
         android:weightSum="6">
 
         <LinearLayout
+            android:id="@+id/stationsWashLayout"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_weight="1"
-            android:id="@+id/stationsWashLayout">
+            android:orientation="vertical">
+
             <TextView
+                android:id="@+id/serviceNameWash"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
                 android:background="@color/black"
-                android:id="@+id/serviceNameWash"
                 android:paddingStart="5dp"
-                android:paddingEnd="5dp"
                 android:paddingTop="5dp"
+                android:paddingEnd="5dp"
                 android:paddingBottom="5dp"
-                android:textStyle="bold"
-                android:text="Stacked Washer"/>
+                android:text="Stacked Washer"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="90dp"
+                android:id="@+id/subTotal1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                />
+            <TextView
+                android:layout_width="90dp"
+                android:id="@+id/amount1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                />
 
         </LinearLayout>
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listView"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:layout_weight="4"
-            />
+            android:scrollbars="horizontal"
+            android:layout_weight="4">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:scrollbars="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="@color/black"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:background="@color/black"
+                            />
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/listView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
         <TextView
-            android:layout_width="10dp"
+            android:layout_width="15dp"
             android:layout_height="wrap_content"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
             android:layout_weight="1"
-            android:textColor="@color/white"
             android:background="@color/black"
-            android:textStyle="bold"
-            android:text="Total"/>
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="5dp"
+            android:text="Total"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
 
 
     </LinearLayout>
+
 
 
 
@@ -99,18 +168,84 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <TextView
+                android:layout_width="90dp"
+                android:id="@+id/subTotal2"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                />
+            <TextView
+                android:layout_width="90dp"
+                android:id="@+id/amount2"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                />
+
+
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listView1"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:layout_weight="4"
-            />
+            android:scrollbars="horizontal"
+            android:layout_weight="4">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:scrollbars="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="@color/black"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:background="@color/black"
+                            />
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/listView1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
         <TextView
-            android:layout_width="10dp"
+            android:layout_width="15dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="@color/white"
@@ -124,5 +259,6 @@
 
 
     </LinearLayout>
+
 
 </LinearLayout>

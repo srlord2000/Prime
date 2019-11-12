@@ -24,7 +24,9 @@ import com.example.prime.Model.StationModel;
 import com.example.prime.Persistent.SharedPrefsCookiePersistor;
 import com.example.prime.R;
 import com.example.prime.RecyclerAdapter.ControlAdapter;
+import com.example.prime.RecyclerAdapter.DrySummaryAdapter;
 import com.example.prime.RecyclerAdapter.StationAdapter;
+import com.example.prime.RecyclerAdapter.WashSummaryAdapter;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
 
@@ -115,7 +117,7 @@ public class Control extends Fragment {
     }
 
     private void data(){
-        retrofit2.Call<ResponseBody> call = apiInterface.getStation("ci_session="+id);
+        retrofit2.Call<ResponseBody> call = apiInterface.getStation3("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -180,7 +182,7 @@ public class Control extends Fragment {
     }
 
     private void data1(){
-        retrofit2.Call<ResponseBody> call = apiInterface.getStation("ci_session="+id);
+        retrofit2.Call<ResponseBody> call = apiInterface.getStation2("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {

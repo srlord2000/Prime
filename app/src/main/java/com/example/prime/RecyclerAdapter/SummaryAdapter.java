@@ -36,10 +36,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -67,6 +71,9 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
     private HashSet<String> hashSet1;
     private List<String> strings;
     private ArrayList<String> unitname;
+    private String t;
+    private String formattedDate;
+    private ArrayList<Integer> integers;
 
 
     String GET_JSON_FROM_SERVER_NAME1 = "id";
@@ -119,7 +126,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
 
     class MultiViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView wash, dry;
+        private TextView wash, dry, subtotal1, amount1, subtotal2, amount2;
         private LinearLayout washLayout, dryLayout;
         private RecyclerView recyclerView, recyclerView1, recyclerView2, recyclerView3;
 
@@ -133,13 +140,23 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
             recyclerView3 = itemView.findViewById(R.id.listView3);
             washLayout = itemView.findViewById(R.id.washLayout);
             dryLayout = itemView.findViewById(R.id.dryLayout);
+            subtotal1 = itemView.findViewById(R.id.subTotal1);
+            amount1 = itemView.findViewById(R.id.amount1);
+            subtotal2 = itemView.findViewById(R.id.subTotal2);
+            amount2 = itemView.findViewById(R.id.amount2);
         }
 
         void bind(final SummaryModel summaryModel) {
+            setdate();
+            date();
             prefs = PreferenceManager.getDefaultSharedPreferences( context);
             editor = prefs.edit();
             strings = new ArrayList<>();
             unitname = new ArrayList<>();
+            washStationModels = new ArrayList<>();
+            washSummaryModels = new ArrayList<>();
+            dryStationModels = new ArrayList<>();
+            drySummaryModels = new ArrayList<>();
 
             sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(context);
             apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
@@ -152,27 +169,64 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                 wash.setText(name);
                 wash.setTag(summaryModel.getUnitid());
                 washSummaryAdapter = new WashSummaryAdapter(context,washSummaryModels);
+                recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                recyclerView.setAdapter(washSummaryAdapter);
                 washSummaryModels = summaryModel.getWashSummaryModels();
                 washSummaryAdapter.setStations(washSummaryModels);
                 washSummaryAdapter.notifyDataSetChanged();
-                recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                recyclerView.setAdapter(washSummaryAdapter);
                 recyclerView.setHasFixedSize(true);
 
-
-
                 washStationAdapter = new WashStationAdapter(context,washStationModels);
+                recyclerView2.setLayoutManager(new LinearLayoutManager(context));
+                recyclerView2.setAdapter(washStationAdapter);
                 washStationModels = summaryModel.getWashStationModels();
                 washStationAdapter.setStations(washStationModels);
                 washStationAdapter.notifyDataSetChanged();
-                recyclerView2.setLayoutManager(new LinearLayoutManager(context));
-                recyclerView2.setAdapter(washStationAdapter);
                 recyclerView2.setHasFixedSize(true);
 
+                for(int i=0;i<summaryModel.getWashStationModels().size();i++){
+                    retrofit2.Call<ResponseBody> call = apiInterface.getTally3("ci_session="+id,t,"0",summaryModel.getWashStationModels().get(i).getStationName(),"Wash");
+                        call.enqueue(new retrofit2.Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                                try {
+                                    String res = response.body().string();
+                                    JSONArray jsonArray = new JSONArray(res);
+                                    integers = new ArrayList<>();
+                                    for(int i=0;i<jsonArray.length();i++){
+                                        JSONObject ob = jsonArray.getJSONObject(i);
+                                        int count,price;
+                                        int prod;
+                                        count = ob.getInt("count");
+                                        price = ob.getInt("price");
+                                        prod = count * price;
+                                        integers.add(prod);
+                                    }
 
+                                    Log.e(TAG, "SORTS!: "+integers );
 
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            @Override
+                            public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                Log.d(TAG, "onFailuretagtry: ");
+
+                            }
+                        });
+                }
 
                 washLayout.setVisibility(View.VISIBLE);
+                subtotal1.setText("Sub Total");
+                amount1.setText("Amount");
+
+
+
+
+
 
             }else {
                 washLayout.setVisibility(View.GONE);
@@ -184,23 +238,24 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                 dry.setText(name);
                 dry.setTag(summaryModel.getUnitid());
                 drySummaryAdapter = new DrySummaryAdapter(context,drySummaryModels);
+                recyclerView1.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                recyclerView1.setAdapter(drySummaryAdapter);
                 drySummaryModels = summaryModel.getDrySummaryModels();
                 drySummaryAdapter.setStations(drySummaryModels);
                 drySummaryAdapter.notifyDataSetChanged();
-                recyclerView1.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                recyclerView1.setAdapter(drySummaryAdapter);
                 recyclerView1.setHasFixedSize(true);
 
                 dryStationAdapter = new DryStationAdapter(context,dryStationModels);
+                recyclerView3.setLayoutManager(new LinearLayoutManager(context));
+                recyclerView3.setAdapter(dryStationAdapter);
                 dryStationModels = summaryModel.getDryStationModels();
                 dryStationAdapter.setStations(dryStationModels);
                 dryStationAdapter.notifyDataSetChanged();
-                recyclerView3.setLayoutManager(new LinearLayoutManager(context));
-                recyclerView3.setAdapter(dryStationAdapter);
                 recyclerView3.setHasFixedSize(true);
 
-
                 dryLayout.setVisibility(View.VISIBLE);
+                subtotal2.setText("Sub Total");
+                amount2.setText("Amount");
             }else {
                 dryLayout.setVisibility(View.GONE);
             }
@@ -438,7 +493,26 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
 //        });
 //    }
 
+    private void setdate(){
+        final SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        String from = sdf1.format(today);
+        long unix1 = today.getTime()/1000;
+        String f = String.valueOf(unix1);
 
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        Date tomorrow = calendar.getTime();
+        String to = sdf1.format(tomorrow);
+        long unix = tomorrow.getTime()/1000;
+        t = String.valueOf(unix);
+    }
+
+    private void date(){
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        formattedDate = df.format(c);
+    }
 
     public ArrayList<SummaryModel> getAll() {
         return summaryModels;

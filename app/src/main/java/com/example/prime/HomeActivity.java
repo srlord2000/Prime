@@ -19,6 +19,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.prime.RecyclerAdapter.DrySummaryAdapter;
+import com.example.prime.RecyclerAdapter.WashSummaryAdapter;
 import com.example.prime.Views.Card;
 import com.example.prime.Views.Consumables;
 import com.example.prime.Views.Control;
@@ -180,6 +182,14 @@ public class HomeActivity extends AppCompatActivity
                         Profile.MyThread.interrupt();
                         Profile.running = false;
                     }
+                    if(WashSummaryAdapter.MyThread != null){
+                        WashSummaryAdapter.MyThread.interrupt();
+                        WashSummaryAdapter.running = false;
+                    }
+                    if(DrySummaryAdapter.MyThread != null){
+                        DrySummaryAdapter.MyThread.interrupt();
+                        DrySummaryAdapter.running = false;
+                    }
                     if(Summary.MyThread != null) {
                         Summary.MyThread.interrupt();
                         Summary.running = false;
@@ -231,6 +241,14 @@ public class HomeActivity extends AppCompatActivity
                     if(Email.MyThread != null) {
                         Email.MyThread.interrupt();
                         Email.running = false;
+                    }
+                    if(WashSummaryAdapter.MyThread != null){
+                        WashSummaryAdapter.MyThread.interrupt();
+                        WashSummaryAdapter.running = false;
+                    }
+                    if(DrySummaryAdapter.MyThread != null){
+                        DrySummaryAdapter.MyThread.interrupt();
+                        DrySummaryAdapter.running = false;
                     }
                     if(Summary.MyThread != null) {
                         Summary.MyThread.interrupt();
@@ -288,6 +306,14 @@ public class HomeActivity extends AppCompatActivity
                         Summary.MyThread.interrupt();
                         Summary.running = false;
                     }
+                    if(DrySummaryAdapter.MyThread != null){
+                        DrySummaryAdapter.MyThread.interrupt();
+                        DrySummaryAdapter.running = false;
+                    }
+                    if(WashSummaryAdapter.MyThread != null){
+                        WashSummaryAdapter.MyThread.interrupt();
+                        WashSummaryAdapter.running = false;
+                    }
                     if(List.MyThread != null) {
                         List.MyThread.interrupt();
                         List.running = false;
@@ -336,9 +362,17 @@ public class HomeActivity extends AppCompatActivity
                         Email.MyThread.interrupt();
                         Email.running = false;
                     }
+                    if(DrySummaryAdapter.MyThread != null){
+                        DrySummaryAdapter.MyThread.interrupt();
+                        DrySummaryAdapter.running = false;
+                    }
                     if(Summary.MyThread != null) {
                         Summary.MyThread.interrupt();
                         Summary.running = false;
+                    }
+                    if(WashSummaryAdapter.MyThread != null){
+                        WashSummaryAdapter.MyThread.interrupt();
+                        WashSummaryAdapter.running = false;
                     }
                     if(List.MyThread != null) {
                         List.MyThread.interrupt();
@@ -389,6 +423,10 @@ public class HomeActivity extends AppCompatActivity
                             Email.MyThread.interrupt();
                             Email.running = false;
                         }
+                        if(DrySummaryAdapter.MyThread != null){
+                            DrySummaryAdapter.MyThread.interrupt();
+                            DrySummaryAdapter.running = false;
+                        }
                         if(Summary.MyThread != null) {
                             Summary.MyThread.interrupt();
                             Summary.running = false;
@@ -396,6 +434,10 @@ public class HomeActivity extends AppCompatActivity
                         if(Services.MyThread != null) {
                             Services.MyThread.interrupt();
                             Services.running = false;
+                        }
+                        if(WashSummaryAdapter.MyThread != null){
+                            WashSummaryAdapter.MyThread.interrupt();
+                            WashSummaryAdapter.running = false;
                         }
                         if(List.MyThread != null) {
                             List.MyThread.interrupt();
@@ -451,9 +493,17 @@ public class HomeActivity extends AppCompatActivity
                         Inventory.MyThread.interrupt();
                         Inventory.running = false;
                     }
+                    if(DrySummaryAdapter.MyThread != null){
+                        DrySummaryAdapter.MyThread.interrupt();
+                        DrySummaryAdapter.running = false;
+                    }
                     if(Summary.MyThread != null) {
                         Summary.MyThread.interrupt();
                         Summary.running = false;
+                    }
+                    if(WashSummaryAdapter.MyThread != null){
+                        WashSummaryAdapter.MyThread.interrupt();
+                        WashSummaryAdapter.running = false;
                     }
                     if(Services.MyThread != null) {
                         Services.MyThread.interrupt();

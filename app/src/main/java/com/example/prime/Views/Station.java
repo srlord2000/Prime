@@ -302,7 +302,7 @@ public class Station extends Fragment {
                 });
 
                 //retro
-                retrofit2.Call<ResponseBody> call = apiInterface.getUnits("ci_session="+id);
+                retrofit2.Call<ResponseBody> call = apiInterface.getUnits3("ci_session="+id);
                 call.enqueue(new  retrofit2.Callback<ResponseBody>() {
                     @Override
                     public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -554,7 +554,7 @@ public class Station extends Fragment {
                 });
 
                 //retroSpinner
-                retrofit2.Call<ResponseBody> call = apiInterface.getUnits("ci_session="+id);
+                retrofit2.Call<ResponseBody> call = apiInterface.getUnits3("ci_session="+id);
                 call.enqueue(new  retrofit2.Callback<ResponseBody>() {
                     @Override
                     public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -606,7 +606,7 @@ public class Station extends Fragment {
     }
 
     private void data(){
-        retrofit2.Call<ResponseBody> call = apiInterface.getStation("ci_session="+id);
+        retrofit2.Call<ResponseBody> call = apiInterface.getStation5("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -672,7 +672,7 @@ public class Station extends Fragment {
     }
 
     private void data1(){
-        retrofit2.Call<ResponseBody> call = apiInterface.getStation("ci_session="+id);
+        retrofit2.Call<ResponseBody> call = apiInterface.getStation6("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {

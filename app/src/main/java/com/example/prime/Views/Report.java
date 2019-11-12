@@ -183,7 +183,7 @@ public class Report extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         summaryAdapter = new SummaryAdapter(mContext, summaryModels);
         recyclerView.setAdapter(summaryAdapter);
-        load();
+        //load();
 
 
 
@@ -196,7 +196,7 @@ public class Report extends Fragment {
 
 
     private void load(){
-        retrofit2.Call<ResponseBody> call = apiInterface.getUnits("ci_session="+id);
+        retrofit2.Call<ResponseBody> call = apiInterface.getUnits1("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
@@ -215,7 +215,7 @@ public class Report extends Fragment {
                         final String unit_id = jsonObject.getString("id");
                         final String name = jsonObject.getString("unit_name");
 
-                        retrofit2.Call<ResponseBody> call1 = apiInterface.getServiceId("ci_session="+id,unit_id);
+                        retrofit2.Call<ResponseBody> call1 = apiInterface.getServiceId1("ci_session="+id,unit_id);
                         call1.enqueue(new retrofit2.Callback<ResponseBody>() {
                             @Override
                             public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
@@ -278,7 +278,7 @@ public class Report extends Fragment {
     }
 
     private void load1(){
-        retrofit2.Call<ResponseBody> call = apiInterface.getStation("ci_session="+id);
+        retrofit2.Call<ResponseBody> call = apiInterface.getStation4("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {

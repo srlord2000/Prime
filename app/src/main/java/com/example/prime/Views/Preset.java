@@ -396,7 +396,7 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
     }
 
     private void load1(){
-        retrofit2.Call<ResponseBody> call = apiInterface.getUnits("ci_session="+id);
+        retrofit2.Call<ResponseBody> call = apiInterface.getUnits4("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
@@ -500,7 +500,7 @@ public class Preset extends Fragment implements PresetAdapter.AdapterClickListen
     }
 
     private void check(){
-        retrofit2.Call<ResponseBody> call = apiInterface.getUnits("ci_session="+id);
+        retrofit2.Call<ResponseBody> call = apiInterface.getUnits5("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {

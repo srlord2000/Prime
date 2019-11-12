@@ -51,6 +51,18 @@ public interface ApiClient {
         @GET("stations/show/all")
         Call<ResponseBody> getStation2(@Header("Cookie") String token);
 
+        @GET("stations/show/all")
+        Call<ResponseBody> getStation3(@Header("Cookie") String token);
+
+        @GET("stations/show/all")
+        Call<ResponseBody> getStation4(@Header("Cookie") String token);
+
+        @GET("stations/show/all")
+        Call<ResponseBody> getStation5(@Header("Cookie") String token);
+
+        @GET("stations/show/all")
+        Call<ResponseBody> getStation6(@Header("Cookie") String token);
+
         @GET("cards/scan")
         Call<ResponseBody> cardScan(@Header("Cookie") String token);
 
@@ -62,6 +74,15 @@ public interface ApiClient {
 
         @GET("units/show")
         Call<ResponseBody> getUnits2(@Header("Cookie") String token);
+
+        @GET("units/show")
+        Call<ResponseBody> getUnits3(@Header("Cookie") String token);
+
+        @GET("units/show")
+        Call<ResponseBody> getUnits4(@Header("Cookie") String token);
+
+        @GET("units/show")
+        Call<ResponseBody> getUnits5(@Header("Cookie") String token);
 
         @GET("groups/show")
         Call<ResponseBody> getGroup(@Header("Cookie") String token);
@@ -81,6 +102,17 @@ public interface ApiClient {
         @GET("stations/sorts")
         Call<ResponseBody> getSorts(@Header("Cookie") String token, @Query("unitid") String query);
 
+        @GET("stations/sorts")
+        Call<ResponseBody> getSorts1(@Header("Cookie") String token, @Query("unitid") String query);
+
+        @GET("tally/showsort")
+        Call<ResponseBody> getTally(@Header("Cookie") String token, @Query("to") String to, @Query("from") String from, @Query("sort") String sort, @Query("name") String name);
+
+        @GET("stations/sorts")
+        Call<ResponseBody> getSorts2(@Header("Cookie") String token, @Query("unitid") String query);
+
+        @GET("tally/showsort")
+        Call<ResponseBody> getTally1(@Header("Cookie") String token, @Query("to") String to, @Query("from") String from, @Query("sort") String sort, @Query("name") String name);
 
         @GET("inventory/show")
         Call<ResponseBody> getInventory(@Header("Cookie") String token);
@@ -96,6 +128,9 @@ public interface ApiClient {
 
         @GET("info/show/cron")
         Call<ResponseBody> getCron(@Header("Cookie") String token);
+
+        @GET("tally/sortstation")
+        Call<ResponseBody> getTally3(@Header("Cookie") String token, @Query("to") String to, @Query("from") String from, @Query("sort") String sort, @Query("name") String name);
 
         @GET("timectl/sync/http")
         Call<ResponseBody> getSync(@Header("Cookie") String token);

@@ -4,6 +4,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import com.example.prime.RecyclerAdapter.DrySummaryAdapter;
+import com.example.prime.RecyclerAdapter.WashSummaryAdapter;
 import com.example.prime.Views.Control;
 import com.example.prime.Views.List;
 import com.example.prime.Views.Summary;

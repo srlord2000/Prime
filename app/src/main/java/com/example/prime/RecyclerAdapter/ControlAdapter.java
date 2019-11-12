@@ -169,7 +169,7 @@ public class ControlAdapter extends RecyclerView.Adapter<ControlAdapter.MultiVie
                         }
                     }).start();
 
-                    retrofit2.Call<ResponseBody> call = apiInterface.getServiceId("ci_session="+id,cmd.getTag().toString());
+                    retrofit2.Call<ResponseBody> call = apiInterface.getServiceId1("ci_session="+id,cmd.getTag().toString());
                     call.enqueue(new  retrofit2.Callback<ResponseBody>() {
                         @Override
                         public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {

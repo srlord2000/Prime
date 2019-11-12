@@ -35,7 +35,7 @@ public class DryStationAdapter extends RecyclerView.Adapter<DryStationAdapter.Mu
     @NonNull
     @Override
     public DryStationAdapter.MultiViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.childstationdrylayout, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.childstationdry, viewGroup, false);
         return new DryStationAdapter.MultiViewHolder(view);
     }
 

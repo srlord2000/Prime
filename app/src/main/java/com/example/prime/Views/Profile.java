@@ -139,7 +139,7 @@ public class Profile extends Fragment {
                     ((Activity)view.getContext()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Picasso.get().load("http://192.168.0.100/assets/img/logo.png").into(imageView);
+                            Picasso.get().load("http://192.168.0.100/assets/img/logo1.png").into(imageView);
                         }
                     });
 

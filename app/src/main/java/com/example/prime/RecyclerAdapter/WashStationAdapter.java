@@ -35,7 +35,7 @@ public class WashStationAdapter extends RecyclerView.Adapter<WashStationAdapter.
     @NonNull
     @Override
     public WashStationAdapter.MultiViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.childstationwashlayout, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.childstationwash, viewGroup, false);
         return new WashStationAdapter.MultiViewHolder(view);
     }
 

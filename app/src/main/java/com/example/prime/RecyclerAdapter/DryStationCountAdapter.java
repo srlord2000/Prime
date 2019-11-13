@@ -74,4 +74,14 @@ public class DryStationCountAdapter extends RecyclerView.Adapter<DryStationCount
     public ArrayList<DryCountModel> getAll() {
         return dryCountModels;
     }
+
+    public ArrayList<DryCountModel> getSelected() {
+        ArrayList<DryCountModel> selected = new ArrayList<>();
+        for (int i = 0; i < dryCountModels.size(); i++) {
+            if (dryCountModels.get(i).isChecked()) {
+                selected.add(dryCountModels.get(i));
+            }
+        }
+        return selected;
+    }
 }

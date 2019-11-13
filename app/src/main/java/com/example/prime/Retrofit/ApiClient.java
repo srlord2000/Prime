@@ -133,6 +133,9 @@ public interface ApiClient {
         @GET("tally/sortstation")
         Call<ResponseBody> getTally3(@Header("Cookie") String token, @Query("to") String to, @Query("from") String from, @Query("sort") String sort, @Query("name") String name);
 
+        @GET("tally/sortstation")
+        Call<ResponseBody> getTally4(@Header("Cookie") String token, @Query("to") String to, @Query("from") String from, @Query("sort") String sort, @Query("name") String name);
+
         @GET("timectl/sync/http")
         Call<ResponseBody> getSync(@Header("Cookie") String token);
 

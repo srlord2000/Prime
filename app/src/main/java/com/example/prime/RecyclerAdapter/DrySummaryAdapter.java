@@ -28,6 +28,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,8 +48,10 @@ public class DrySummaryAdapter extends RecyclerView.Adapter<DrySummaryAdapter.Mu
     private ArrayList<DrySummaryModel> drySummaryModels;
     private ArrayList<DryCountModel> dryCountModels = new ArrayList<>();
     private String formattedDate;
-    private DryStationCountAdapter dryStationCountAdapter;
+    private DryStationCountAdapter dryCountAdapter;
     private String t;
+    public static int add = 0, sum = 0;
+    public static ArrayList<Integer> addd;
 
     ApiClient apiInterface;
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
@@ -82,7 +86,7 @@ public class DrySummaryAdapter extends RecyclerView.Adapter<DrySummaryAdapter.Mu
 
     class MultiViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView name;
+        public TextView name, subtotal,amount;
         public LinearLayout linearLayout;
         final private RecyclerView recyclerView;
 
@@ -90,11 +94,14 @@ public class DrySummaryAdapter extends RecyclerView.Adapter<DrySummaryAdapter.Mu
             super(itemView);
             name = itemView.findViewById(R.id.serName);
             recyclerView = itemView.findViewById(R.id.recycler);
+            subtotal = itemView.findViewById(R.id.subTotal);
+            amount = itemView.findViewById(R.id.amount);
         }
 
         void bind(final DrySummaryModel drySummaryModel) {
             setdate();
             date();
+            amount.setTag(drySummaryModel.getPrice());
             recyclerView.setTag(drySummaryModel.getUnitId());
             name.setTag(drySummaryModel.getServiceName());
             sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(context);
@@ -152,13 +159,14 @@ public class DrySummaryAdapter extends RecyclerView.Adapter<DrySummaryAdapter.Mu
 
                                     String responseData1 = null;
 
-
                                     try {
                                         responseData1 = response.body().string();
                                         dryCountModels = new ArrayList<>();
                                         JSONArray jsonArray1 = new JSONArray(responseData1);
                                         for (int j=0; j<jsonArray1.length();j++){
-
+                                            dryCountAdapter = new DryStationCountAdapter(context,dryCountModels);
+                                            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                                            recyclerView.setAdapter(dryCountAdapter);
                                             JSONObject jsonObject1= jsonArray1.getJSONObject(j);
                                             DryCountModel dryCountModel1 = new DryCountModel() ;
                                             try {
@@ -179,12 +187,34 @@ public class DrySummaryAdapter extends RecyclerView.Adapter<DrySummaryAdapter.Mu
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-                                    dryStationCountAdapter = new DryStationCountAdapter(context,dryCountModels);
+                                    dryCountAdapter = new DryStationCountAdapter(context,dryCountModels);
                                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                                    recyclerView.setAdapter(dryStationCountAdapter);
+                                    recyclerView.setAdapter(dryCountAdapter);
                                     recyclerView.setHasFixedSize(true);
-                                    dryStationCountAdapter.setStations(dryCountModels);
-                                    dryStationCountAdapter.notifyDataSetChanged();
+                                    addd = new ArrayList<>();
+                                    for(int i=0;i<dryCountAdapter.getSelected().size();i++)
+                                    {
+                                        addd.add(Integer.parseInt(dryCountAdapter.getSelected().get(i).getCount()));
+                                    }
+                                    Log.e(TAG, "Add: "+addd);
+                                    sum = 0;
+                                    for(int i=0; i<addd.size(); i++){
+                                        sum += addd.get(i);
+                                    }
+                                    Log.e(TAG, "ADDS1: "+sum );
+                                    subtotal.setText(String.valueOf(sum));
+                                    double harga = Double.parseDouble(amount.getTag().toString());
+                                    double product = harga * sum;
+                                    DecimalFormat df = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+                                    DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+                                    dfs.setCurrencySymbol("");
+                                    dfs.setMonetaryDecimalSeparator('.');
+                                    dfs.setGroupingSeparator(',');
+                                    df.setDecimalFormatSymbols(dfs);
+                                    String k = df.format(product);
+                                    add = sum;
+
+                                    amount.setText(String.valueOf(k));
 
 
                                     Log.e("TAG", responseData1);

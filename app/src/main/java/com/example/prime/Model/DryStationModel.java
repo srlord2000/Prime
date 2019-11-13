@@ -28,6 +28,11 @@ public class DryStationModel {
         @SerializedName("ipaddress")
         @Expose
         private String ipaddress;
+        @SerializedName("total")
+        @Expose
+        private String total;
+
+
 
         public DryStationModel(String id, String hostId, String stationName, String hostname, String status, String unitId, String unitName, String ipaddress) {
             this.id = id;
@@ -107,4 +112,11 @@ public class DryStationModel {
             this.ipaddress = ipaddress;
         }
 
+        public String getTotal() {
+            return total;
+        }
+
+        public void setTotal(String total) {
+            this.total = total;
+        }
 }

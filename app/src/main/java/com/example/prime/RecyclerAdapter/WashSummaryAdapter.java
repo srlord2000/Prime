@@ -191,16 +191,13 @@ public class WashSummaryAdapter extends RecyclerView.Adapter<WashSummaryAdapter.
                                                 e.printStackTrace();
                                             }
                                             washCountModels.add(washCountModel1);
-
                                         }
-
 
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-
                                     washCountAdapter.setStations(washCountModels);
                                     washCountAdapter.notifyDataSetChanged();
                                     recyclerView.setHasFixedSize(true);
@@ -228,9 +225,6 @@ public class WashSummaryAdapter extends RecyclerView.Adapter<WashSummaryAdapter.
                                     add = sum;
 
                                     amount.setText(String.valueOf(k));
-
-
-
 
                                 }
 

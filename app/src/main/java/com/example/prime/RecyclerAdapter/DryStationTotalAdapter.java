@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.prime.Model.DryStationModel;
 import com.example.prime.Model.WashStationModel;
 import com.example.prime.R;
 
@@ -24,22 +25,22 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 
-public class WashStationTotalAdapter extends RecyclerView.Adapter<WashStationTotalAdapter.MultiViewHolder> {
+public class DryStationTotalAdapter extends RecyclerView.Adapter<DryStationTotalAdapter.MultiViewHolder> {
 
     private Context context;
-    private ArrayList<WashStationModel> stationTotalModels;
+    private ArrayList<DryStationModel> stationTotalModels;
     private ArrayList<Double> integers;
     SharedPreferences prefs ;
     SharedPreferences.Editor editor;
     public static Boolean running;
     public static Thread MyThread;
 
-    public WashStationTotalAdapter(Context context, ArrayList<WashStationModel> stationTotalModels) {
+    public DryStationTotalAdapter(Context context, ArrayList<DryStationModel> stationTotalModels) {
         this.context = context;
         this.stationTotalModels = stationTotalModels;
     }
 
-    public void setStations(ArrayList<WashStationModel> stationTotalModels) {
+    public void setStations(ArrayList<DryStationModel> stationTotalModels) {
         this.stationTotalModels = new ArrayList<>();
         this.stationTotalModels = stationTotalModels;
         //notifyDataSetChanged();
@@ -47,13 +48,13 @@ public class WashStationTotalAdapter extends RecyclerView.Adapter<WashStationTot
 
     @NonNull
     @Override
-    public WashStationTotalAdapter.MultiViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public DryStationTotalAdapter.MultiViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(context).inflate(R.layout.washstationtotallayout, viewGroup, false);
-        return new WashStationTotalAdapter.MultiViewHolder(view);
+        return new DryStationTotalAdapter.MultiViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WashStationTotalAdapter.MultiViewHolder multiViewHolder, int position) {
+    public void onBindViewHolder(@NonNull DryStationTotalAdapter.MultiViewHolder multiViewHolder, int position) {
         multiViewHolder.bind(stationTotalModels.get(position));
     }
 
@@ -74,12 +75,12 @@ public class WashStationTotalAdapter extends RecyclerView.Adapter<WashStationTot
             name = itemView.findViewById(R.id.serName);
         }
 
-        void bind(final WashStationModel stationTotalModel) {
+        void bind(final DryStationModel stationTotalModel) {
             integers = new ArrayList<>();
             prefs = PreferenceManager.getDefaultSharedPreferences( context);
             editor = prefs.edit();
             name.setTag(stationTotalModel.getStationName());
-            res = prefs.getString(name.getTag()+"total","");
+            res = prefs.getString(name.getTag()+"totald","");
             running = true;
             MyThread = new Thread() {//create thread
                 @Override
@@ -93,7 +94,7 @@ public class WashStationTotalAdapter extends RecyclerView.Adapter<WashStationTot
                         } catch (InterruptedException e) {
                             System.out.println("Sleep interrupted");
                         }
-                        String re = prefs.getString(name.getTag()+"total","");
+                        String re = prefs.getString(name.getTag()+"totald","");
                         if(!re.equals(res)){
                             JSONArray jsonArray = null;
                             try {
@@ -169,7 +170,7 @@ public class WashStationTotalAdapter extends RecyclerView.Adapter<WashStationTot
         }
     }
 
-    public ArrayList<WashStationModel> getAll() {
+    public ArrayList<DryStationModel> getAll() {
         return stationTotalModels;
     }
 

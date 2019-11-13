@@ -71,4 +71,11 @@ public class DryCountModel {
         this.groupName = groupName;
     }
 
+    private boolean isChecked = true;
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+
 }

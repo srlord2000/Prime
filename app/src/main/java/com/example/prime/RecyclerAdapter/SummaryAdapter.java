@@ -2,9 +2,7 @@ package com.example.prime.RecyclerAdapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +14,9 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.prime.Model.CardsModel;
 import com.example.prime.Model.DryStationModel;
 import com.example.prime.Model.DrySummaryModel;
-import com.example.prime.Model.ListModel;
-import com.example.prime.Model.ServiceModel;
-import com.example.prime.Model.StationModel;
-import com.example.prime.Model.StationTotalModel;
 import com.example.prime.Model.SummaryModel;
-import com.example.prime.Model.TotalModel;
-import com.example.prime.Model.UnitModel;
 import com.example.prime.Model.WashStationModel;
 import com.example.prime.Model.WashSummaryModel;
 import com.example.prime.Persistent.SharedPrefsCookiePersistor;
@@ -33,22 +24,21 @@ import com.example.prime.R;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 import static com.android.volley.VolleyLog.TAG;
 
@@ -67,10 +57,10 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
     private ArrayList<WashStationModel> washStationModels;
     private ArrayList<DryStationModel> dryStationModels;
     private ArrayList<WashStationModel> stationTotalModels;
-    private ArrayList<TotalModel> totalModel;
+    private ArrayList<DryStationModel> stationTotalModels1;
     ApiClient apiInterface;
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
-    private String id;
+    private String id, res;
     private ArrayList<String> data = new ArrayList<>();
     SharedPreferences prefs ;
     SharedPreferences.Editor editor;
@@ -80,10 +70,11 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
     private ArrayList<String> unitname;
     private String t;
     private String formattedDate;
-    private ArrayList<Integer> integers;
-    private ArrayList<Integer> sums;
+    private ArrayList<Double> integers;
+    private ArrayList<Double> sums;
     private int sum=0;
     private WashStationTotalAdapter washStationTotalAdapter;
+    private DryStationTotalAdapter dryStationTotalAdapter;
 
 //    String GET_JSON_FROM_SERVER_NAME1 = "id";
 //    String GET_JSON_FROM_SERVER_NAME2 = "service_name";
@@ -135,9 +126,9 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
 
     class MultiViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView wash, dry, subtotal1, amount1, subtotal2, amount2;
+        private TextView wash, dry, subtotal1, amount1, subtotal2, amount2, washtotal, drytotal;
         private LinearLayout washLayout, dryLayout;
-        private RecyclerView recyclerView, recyclerView1, recyclerView2, recyclerView3, recyclerView5;
+        private RecyclerView recyclerView, recyclerView1, recyclerView2, recyclerView3, recyclerView5, recyclerView6;
 
         MultiViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -148,12 +139,15 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
             recyclerView2 = itemView.findViewById(R.id.listView2);
             recyclerView3 = itemView.findViewById(R.id.listView3);
             recyclerView5 = itemView.findViewById(R.id.listView5);
+            recyclerView6 = itemView.findViewById(R.id.listView6);
             washLayout = itemView.findViewById(R.id.washLayout);
             dryLayout = itemView.findViewById(R.id.dryLayout);
             subtotal1 = itemView.findViewById(R.id.subTotal1);
             amount1 = itemView.findViewById(R.id.amount1);
             subtotal2 = itemView.findViewById(R.id.subTotal2);
             amount2 = itemView.findViewById(R.id.amount2);
+            washtotal = itemView.findViewById(R.id.washtotal);
+            drytotal = itemView.findViewById(R.id.drytotal);
         }
 
         void bind(final SummaryModel summaryModel) {
@@ -255,18 +249,13 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                 subtotal1.setText("Sub Total");
                 amount1.setText("Amount");
 
-
-
-
-
-
             }else {
                 washLayout.setVisibility(View.GONE);
             }
 
 
             if(summaryModel.getDrySummaryModels().size() > 0){
-                String name = summaryModel.getUnitname()+" Dry";
+                final String name = summaryModel.getUnitname()+" Dry";
                 dry.setText(name);
                 dry.setTag(summaryModel.getUnitid());
                 drySummaryAdapter = new DrySummaryAdapter(context,drySummaryModels);
@@ -285,6 +274,69 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                 dryStationAdapter.notifyDataSetChanged();
                 recyclerView3.setHasFixedSize(true);
 
+                dryStationTotalAdapter = new DryStationTotalAdapter(context,stationTotalModels1);
+                recyclerView6.setLayoutManager(new LinearLayoutManager(context));
+                recyclerView6.setAdapter(dryStationTotalAdapter);
+                stationTotalModels1 = summaryModel.getDryStationModels();
+                dryStationTotalAdapter.setStations(stationTotalModels1);
+                dryStationTotalAdapter.notifyDataSetChanged();
+                recyclerView6.setHasFixedSize(true);
+                Log.e(TAG, "SORTSs!: "+summaryModel.getWashStationModels().size());
+
+                load();
+                running = true;
+                MyThread = new Thread() {//create thread
+                    @Override
+                    public void run() {
+                        int i = 0;
+                        while (running) {
+                            System.out.println("counter: " + i);
+                            i++;
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                System.out.println("Sleep interrupted");
+                            }
+                            for(int j=0;j<summaryModel.getDryStationModels().size();j++){
+                                final String name = summaryModel.getDryStationModels().get(j).getStationName();
+                                retrofit2.Call<ResponseBody> call1 = apiInterface.getTally4("ci_session="+id,t,"0",name,"Dry");
+                                call1.enqueue(new retrofit2.Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                                        try {
+                                            String res = response.body().string();
+                                            if(!prefs.getString(name+"totald","").equals(res)) {
+                                                editor.remove(name + "totald");
+                                                editor.putString(name + "totald", res);
+                                                editor.commit();
+                                                load();
+
+                                            }
+
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                    @Override
+                                    public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                        Log.d(TAG, "onFailuretagtry: ");
+
+                                    }
+                                });
+
+
+
+                            }
+
+                        }
+                        System.out.println("onEnd Thread");
+                    }
+                };
+                MyThread.start();
+
+
+
                 dryLayout.setVisibility(View.VISIBLE);
                 subtotal2.setText("Sub Total");
                 amount2.setText("Amount");
@@ -295,6 +347,22 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
 
 
 
+        }
+        private void load(){
+            integers = new ArrayList<>();
+            integers.clear();
+            for (int i=0;i<summaryModels.get(getAdapterPosition()).getWashStationModels().size();i++) {
+                String tx = stationTotalModels.get(i).getTotal();
+                //double txx = Double.parseDouble(tx);
+                Log.e(TAG, "load: "+tx);
+                //integers.add(txx);
+            }
+            if (integers.size() != 0) {
+                for (int s = 0; s < integers.size(); s++) {
+                    sum += integers.get(s);
+                }
+                drytotal.setText(String.valueOf(sum));
+            }
         }
 
 

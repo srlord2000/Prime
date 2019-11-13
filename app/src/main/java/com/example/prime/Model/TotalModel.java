@@ -6,20 +6,20 @@ import com.google.gson.annotations.SerializedName;
 public class TotalModel {
     @SerializedName("price")
     @Expose
-    private String price;
+    private int price;
 
-    public TotalModel(String price) {
+    public TotalModel(int price) {
         this.price = price;
     }
 
     public TotalModel() {
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 }

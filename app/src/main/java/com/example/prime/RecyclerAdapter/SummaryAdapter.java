@@ -23,6 +23,7 @@ import com.example.prime.Model.ListModel;
 import com.example.prime.Model.ServiceModel;
 import com.example.prime.Model.StationModel;
 import com.example.prime.Model.SummaryModel;
+import com.example.prime.Model.TotalModel;
 import com.example.prime.Model.UnitModel;
 import com.example.prime.Model.WashStationModel;
 import com.example.prime.Model.WashSummaryModel;
@@ -61,6 +62,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
     private ArrayList<DrySummaryModel> drySummaryModels;
     private ArrayList<WashStationModel> washStationModels;
     private ArrayList<DryStationModel> dryStationModels;
+    private ArrayList<TotalModel> totalModels;
     ApiClient apiInterface;
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
     private String id;
@@ -74,6 +76,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
     private String t;
     private String formattedDate;
     private ArrayList<Integer> integers;
+    private int sum=0;
 
 
     String GET_JSON_FROM_SERVER_NAME1 = "id";
@@ -183,8 +186,10 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                 washStationAdapter.setStations(washStationModels);
                 washStationAdapter.notifyDataSetChanged();
                 recyclerView2.setHasFixedSize(true);
+                Log.e(TAG, "SORTSs!: "+summaryModel.getWashStationModels().size());
 
                 for(int i=0;i<summaryModel.getWashStationModels().size();i++){
+                    totalModels = new ArrayList<>();
                     retrofit2.Call<ResponseBody> call = apiInterface.getTally3("ci_session="+id,t,"0",summaryModel.getWashStationModels().get(i).getStationName(),"Wash");
                         call.enqueue(new retrofit2.Callback<ResponseBody>() {
                             @Override
@@ -203,7 +208,15 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                                         integers.add(prod);
                                     }
 
-                                    Log.e(TAG, "SORTSs!: "+integers );
+                                    TotalModel totalModel = new TotalModel();
+                                    for(int j=0; j<integers.size(); j++){
+                                        sum += integers.get(j);
+                                    }
+                                    totalModel.setPrice(sum);
+                                    totalModels.add(totalModel);
+                                    Log.e(TAG, "bind: "+totalModels.size()+" "+totalModels );
+
+                                    Log.e(TAG, "SORTSs!: "+sum );
 
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -217,6 +230,8 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
 
                             }
                         });
+
+
                 }
 
                 washLayout.setVisibility(View.VISIBLE);

@@ -22,6 +22,7 @@ import com.example.prime.Model.DrySummaryModel;
 import com.example.prime.Model.ListModel;
 import com.example.prime.Model.ServiceModel;
 import com.example.prime.Model.StationModel;
+import com.example.prime.Model.StationTotalModel;
 import com.example.prime.Model.SummaryModel;
 import com.example.prime.Model.TotalModel;
 import com.example.prime.Model.UnitModel;
@@ -52,6 +53,9 @@ import retrofit2.Response;
 import static com.android.volley.VolleyLog.TAG;
 
 public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiViewHolder> {
+
+    public static Boolean running;
+    public static Thread MyThread;
     private DrySummaryAdapter drySummaryAdapter;
     private WashSummaryAdapter washSummaryAdapter;
     private DryStationAdapter dryStationAdapter;
@@ -62,7 +66,8 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
     private ArrayList<DrySummaryModel> drySummaryModels;
     private ArrayList<WashStationModel> washStationModels;
     private ArrayList<DryStationModel> dryStationModels;
-    private ArrayList<TotalModel> totalModels;
+    private ArrayList<WashStationModel> stationTotalModels;
+    private ArrayList<TotalModel> totalModel;
     ApiClient apiInterface;
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
     private String id;
@@ -76,27 +81,28 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
     private String t;
     private String formattedDate;
     private ArrayList<Integer> integers;
+    private ArrayList<Integer> sums;
     private int sum=0;
+    private WashStationTotalAdapter washStationTotalAdapter;
 
-
-    String GET_JSON_FROM_SERVER_NAME1 = "id";
-    String GET_JSON_FROM_SERVER_NAME2 = "service_name";
-    String GET_JSON_FROM_SERVER_NAME3 = "service_type";
-    String GET_JSON_FROM_SERVER_NAME4 = "service_level";
-    String GET_JSON_FROM_SERVER_NAME5 = "price";
-    String GET_JSON_FROM_SERVER_NAME6 = "tap_pulse";
-    String GET_JSON_FROM_SERVER_NAME7 = "time_added";
-    String GET_JSON_FROM_SERVER_NAME8 = "unit_name";
-    String GET_JSON_FROM_SERVER_NAME9 = "unit_id";
-
-    String GET_JSON_FROM_SERVER_NAME11 = "id";
-    String GET_JSON_FROM_SERVER_NAME12 = "host_id";
-    String GET_JSON_FROM_SERVER_NAME13 = "station_name";
-    String GET_JSON_FROM_SERVER_NAME14 = "hostname";
-    String GET_JSON_FROM_SERVER_NAME15 = "status";
-    String GET_JSON_FROM_SERVER_NAME16 = "unit_id";
-    String GET_JSON_FROM_SERVER_NAME17 = "unit_name";
-    String GET_JSON_FROM_SERVER_NAME18 = "ipaddress";
+//    String GET_JSON_FROM_SERVER_NAME1 = "id";
+//    String GET_JSON_FROM_SERVER_NAME2 = "service_name";
+//    String GET_JSON_FROM_SERVER_NAME3 = "service_type";
+//    String GET_JSON_FROM_SERVER_NAME4 = "service_level";
+//    String GET_JSON_FROM_SERVER_NAME5 = "price";
+//    String GET_JSON_FROM_SERVER_NAME6 = "tap_pulse";
+//    String GET_JSON_FROM_SERVER_NAME7 = "time_added";
+//    String GET_JSON_FROM_SERVER_NAME8 = "unit_name";
+//    String GET_JSON_FROM_SERVER_NAME9 = "unit_id";
+//
+//    String GET_JSON_FROM_SERVER_NAME11 = "id";
+//    String GET_JSON_FROM_SERVER_NAME12 = "host_id";
+//    String GET_JSON_FROM_SERVER_NAME13 = "station_name";
+//    String GET_JSON_FROM_SERVER_NAME14 = "hostname";
+//    String GET_JSON_FROM_SERVER_NAME15 = "status";
+//    String GET_JSON_FROM_SERVER_NAME16 = "unit_id";
+//    String GET_JSON_FROM_SERVER_NAME17 = "unit_name";
+//    String GET_JSON_FROM_SERVER_NAME18 = "ipaddress";
 
     public SummaryAdapter(Context context, ArrayList<SummaryModel> summaryModels) {
         this.context = context;
@@ -131,7 +137,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
 
         private TextView wash, dry, subtotal1, amount1, subtotal2, amount2;
         private LinearLayout washLayout, dryLayout;
-        private RecyclerView recyclerView, recyclerView1, recyclerView2, recyclerView3;
+        private RecyclerView recyclerView, recyclerView1, recyclerView2, recyclerView3, recyclerView5;
 
         MultiViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -141,6 +147,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
             recyclerView1 = itemView.findViewById(R.id.listView1);
             recyclerView2 = itemView.findViewById(R.id.listView2);
             recyclerView3 = itemView.findViewById(R.id.listView3);
+            recyclerView5 = itemView.findViewById(R.id.listView5);
             washLayout = itemView.findViewById(R.id.washLayout);
             dryLayout = itemView.findViewById(R.id.dryLayout);
             subtotal1 = itemView.findViewById(R.id.subTotal1);
@@ -156,16 +163,14 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
             editor = prefs.edit();
             strings = new ArrayList<>();
             unitname = new ArrayList<>();
+            stationTotalModels = new ArrayList<>();
             washStationModels = new ArrayList<>();
             washSummaryModels = new ArrayList<>();
             dryStationModels = new ArrayList<>();
             drySummaryModels = new ArrayList<>();
-
             sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(context);
             apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
             id = sharedPrefsCookiePersistor.loadAll().get(0).value();
-
-
 
             if(summaryModel.getWashSummaryModels().size() > 0){
                 String name = summaryModel.getUnitname()+" Wash";
@@ -186,53 +191,65 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                 washStationAdapter.setStations(washStationModels);
                 washStationAdapter.notifyDataSetChanged();
                 recyclerView2.setHasFixedSize(true);
+
+                washStationTotalAdapter = new WashStationTotalAdapter(context,stationTotalModels);
+                recyclerView5.setLayoutManager(new LinearLayoutManager(context));
+                recyclerView5.setAdapter(washStationTotalAdapter);
+                stationTotalModels = summaryModel.getWashStationModels();
+                washStationTotalAdapter.setStations(stationTotalModels);
+                washStationTotalAdapter.notifyDataSetChanged();
+                recyclerView5.setHasFixedSize(true);
                 Log.e(TAG, "SORTSs!: "+summaryModel.getWashStationModels().size());
 
-                for(int i=0;i<summaryModel.getWashStationModels().size();i++){
-                    totalModels = new ArrayList<>();
-                    retrofit2.Call<ResponseBody> call = apiInterface.getTally3("ci_session="+id,t,"0",summaryModel.getWashStationModels().get(i).getStationName(),"Wash");
-                        call.enqueue(new retrofit2.Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                                try {
-                                    String res = response.body().string();
-                                    JSONArray jsonArray = new JSONArray(res);
-                                    integers = new ArrayList<>();
-                                    for(int i=0;i<jsonArray.length();i++){
-                                        JSONObject ob = jsonArray.getJSONObject(i);
-                                        int count,price;
-                                        int prod;
-                                        count = ob.getInt("count");
-                                        price = ob.getInt("price");
-                                        prod = count * price;
-                                        integers.add(prod);
-                                    }
-
-                                    TotalModel totalModel = new TotalModel();
-                                    for(int j=0; j<integers.size(); j++){
-                                        sum += integers.get(j);
-                                    }
-                                    totalModel.setPrice(sum);
-                                    totalModels.add(totalModel);
-                                    Log.e(TAG, "bind: "+totalModels.size()+" "+totalModels );
-
-                                    Log.e(TAG, "SORTSs!: "+sum );
-
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                running = true;
+                MyThread = new Thread() {//create thread
+                    @Override
+                    public void run() {
+                        int i = 0;
+                        while (running) {
+                            System.out.println("counter: " + i);
+                            i++;
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                System.out.println("Sleep interrupted");
                             }
-                            @Override
-                            public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
-                                Log.d(TAG, "onFailuretagtry: ");
+
+                            for(int j=0;j<summaryModel.getWashStationModels().size();j++){
+                                final String name = summaryModel.getWashStationModels().get(j).getStationName();
+                                retrofit2.Call<ResponseBody> call = apiInterface.getTally3("ci_session="+id,t,"0",name,"Wash");
+                                call.enqueue(new retrofit2.Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                                        try {
+                                            String res = response.body().string();
+                                            if(!prefs.getString(name+"total","").equals(res)) {
+                                                editor.remove(name + "total");
+                                                editor.putString(name + "total", res);
+                                                editor.commit();
+                                            }
+
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                    @Override
+                                    public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                        Log.d(TAG, "onFailuretagtry: ");
+
+                                    }
+                                });
 
                             }
-                        });
+
+                        }
+                        System.out.println("onEnd Thread");
+                    }
+                };
+                MyThread.start();
 
 
-                }
 
                 washLayout.setVisibility(View.VISIBLE);
                 subtotal1.setText("Sub Total");
@@ -279,6 +296,9 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
 
 
         }
+
+
+
 
     }
 

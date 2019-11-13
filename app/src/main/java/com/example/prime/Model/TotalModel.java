@@ -8,8 +8,13 @@ public class TotalModel {
     @Expose
     private int price;
 
-    public TotalModel(int price) {
+    @SerializedName("count")
+    @Expose
+    private int count;
+
+    public TotalModel(int price, int count) {
         this.price = price;
+        this.count = count;
     }
 
     public TotalModel() {
@@ -21,5 +26,13 @@ public class TotalModel {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

@@ -191,7 +191,6 @@ public class Report extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         summaryAdapter = new SummaryAdapter(mContext, summaryModels);
         recyclerView.setAdapter(summaryAdapter);
-        load();
 
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {

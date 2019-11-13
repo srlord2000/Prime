@@ -193,66 +193,91 @@ public class Report extends Fragment {
         recyclerView.setAdapter(summaryAdapter);
         load();
 
-        System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
-        System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
-        System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
-
-
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions((Activity) mContext,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
 
             return;
         }
     }
 
     private void beginDownload() {
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://192.168.0.100/");
 
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Users"); //Creating a sheet
+        Retrofit retrofit = builder.build();
 
-                Row row = sheet.createRow(1);
+        ApiClient apiClient = retrofit.create(ApiClient.class);
 
-                CellStyle style1 = workbook.createCellStyle();
-                style1.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
-                style1.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        final String url = "http://192.168.0.100/assets/img/refe.doc";
 
-                Font font1 = workbook.createFont();
-                font1.setColor(IndexedColors.BLACK.getIndex());
-                style1.setFont(font1);
+        Call<ResponseBody> call = apiClient.downloadFileWithFixedUrl1(url);
 
-                Cell cell2 = row.createCell(0);
-                cell2.setCellValue("Name");
-                cell2.setCellStyle(style1);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "server contacted and has file");
 
+                    boolean writtenToDisk = writeResponseBodyToDisk(response.body());
 
+                    Log.d(TAG, "file download was a success? " + writtenToDisk);
+                } else {
+                    Log.d(TAG, "server contact failed");
+                }
+            }
 
-
-
-        String fileName = "Reports[Today2].xlsx"; //Name of the file
-
-        String extStorageDirectory = (mContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)).toString();
-        File folder = new File(extStorageDirectory, "Reports");// Name of the folder you want to keep your file in the local storage.
-        folder.mkdir(); //creating the folder
-        File file = new File(folder, fileName);
-        try {
-            file.createNewFile(); // creating the file inside the folder
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-
-        try {
-            FileOutputStream fileOut = new FileOutputStream(file); //Opening the file
-            workbook.write(fileOut); //Writing all your row column inside the file
-            fileOut.close(); //closing the file and done
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e(TAG, "error");
+            }
+        });
+//
+//        Workbook workbook = new XSSFWorkbook();
+//        Sheet sheet = workbook.createSheet("Users"); //Creating a sheet
+//
+//                Row row = sheet.createRow(1);
+//
+//                CellStyle style1 = workbook.createCellStyle();
+//                style1.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
+//                style1.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+//
+//                Font font1 = workbook.createFont();
+//                font1.setColor(IndexedColors.BLACK.getIndex());
+//                style1.setFont(font1);
+//
+//                Cell cell2 = row.createCell(0);
+//                cell2.setCellValue("Name");
+//                cell2.setCellStyle(style1);
+//
+//
+//
+//
+//
+//        String fileName = "Reports[Today2].xlsx"; //Name of the file
+//
+//        String extStorageDirectory = (mContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)).toString();
+//        File folder = new File(extStorageDirectory, "Reports");// Name of the folder you want to keep your file in the local storage.
+//        folder.mkdir(); //creating the folder
+//        File file = new File(folder, fileName);
+//        try {
+//            file.createNewFile(); // creating the file inside the folder
+//        } catch (IOException e1) {
+//            e1.printStackTrace();
+//        }
+//
+//        try {
+//            FileOutputStream fileOut = new FileOutputStream(file); //Opening the file
+//            workbook.write(fileOut); //Writing all your row column inside the file
+//            fileOut.close(); //closing the file and done
+//
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 }
 
 
@@ -452,6 +477,56 @@ public class Report extends Fragment {
 
             }
         });
+    }
+
+    private boolean writeResponseBodyToDisk(ResponseBody body) {
+        try {
+            // todo change the file location/name according to your needs
+            File futureStudioIconFile = new File(mContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + File.separator + "EDIWOWTAEMODILAW.doc");
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(futureStudioIconFile);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                    Log.d(TAG, "file download: " + fileSizeDownloaded + " of " + fileSize);
+                }
+
+                outputStream.flush();
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
     }
 }
 

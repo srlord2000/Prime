@@ -17,6 +17,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
 public interface ApiClient {
@@ -182,8 +183,12 @@ public interface ApiClient {
         @POST("stations/start")
         Call<ResponseBody> postStationStart(@Header("Cookie")String token, @Body RequestBody body);
 
-        @GET("/assets/img/refe.doc")
+        @Streaming
+        @GET("assets/img/refe.doc")
         Call<ResponseBody> downloadFileWithFixedUrl();
+
+        @GET
+        Call<ResponseBody> downloadFileWithFixedUrl1(@Url String url);
 
 
 }

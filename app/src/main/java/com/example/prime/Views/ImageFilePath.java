@@ -12,7 +12,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
 @SuppressLint("NewApi")
-@TargetApi(Build.VERSION_CODES.M)
+@TargetApi(Build.VERSION_CODES.KITKAT)
 public class ImageFilePath {
 
     /**

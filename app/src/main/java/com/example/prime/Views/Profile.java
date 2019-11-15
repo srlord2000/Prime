@@ -700,7 +700,6 @@ public class Profile extends Fragment {
 
 
             String realPath = ImageFilePath.getPath(mContext, data.getData());
-//                realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
 
             Log.i(TAG, "onActivityResult: file path : " + realPath);
             try {

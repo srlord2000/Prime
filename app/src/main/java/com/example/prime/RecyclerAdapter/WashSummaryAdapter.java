@@ -117,10 +117,10 @@ public class WashSummaryAdapter extends RecyclerView.Adapter<WashSummaryAdapter.
             apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
             id = sharedPrefsCookiePersistor.loadAll().get(0).value();
             name.setText(washSummaryModel.getServiceName());
+            load();
             if (name.getText().toString().equals("")){
                 name.setVisibility(View.GONE);
             }
-            load();
             running = true;
             MyThread = new Thread() {//create thread
                 @Override

@@ -1,5 +1,6 @@
 package com.example.prime.RecyclerAdapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -174,13 +176,14 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                 String name = summaryModel.getUnitname()+" Wash";
                 wash.setText(name);
                 wash.setTag(summaryModel.getUnitid());
+                washStationModels = new ArrayList<>();
                 washSummaryAdapter = new WashSummaryAdapter(context,washSummaryModels);
+                washSummaryModels = summaryModel.getWashSummaryModels();
                 recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                 recyclerView.setAdapter(washSummaryAdapter);
-                washSummaryModels = summaryModel.getWashSummaryModels();
+                recyclerView.setHasFixedSize(true);
                 washSummaryAdapter.setStations(washSummaryModels);
                 washSummaryAdapter.notifyDataSetChanged();
-                recyclerView.setHasFixedSize(true);
 
                 washStationAdapter = new WashStationAdapter(context,washStationModels);
                 recyclerView2.setLayoutManager(new LinearLayoutManager(context));
@@ -199,6 +202,53 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                 recyclerView5.setHasFixedSize(true);
                 Log.e(TAG, "SORTSs!: "+summaryModel.getWashStationModels().size());
 
+                retrofit2.Call<ResponseBody> call1 = apiInterface.getTotal("ci_session="+id,t,"0",summaryModel.getUnitid(),"Wash");
+                call1.enqueue(new retrofit2.Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                        try {
+                            String res = response.body().string();
+                            sums = new ArrayList<>();
+                            JSONArray array = new JSONArray(res);
+                            for (int j = 0; j < array.length(); j++) {
+                                JSONObject object = array.getJSONObject(j);
+                                int count = object.getInt("count");
+                                int price = object.getInt("price");
+                                double prod = price * count;
+                                sums.add(prod);
+                            }
+                            Log.e(TAG, "Add11: " + sums);
+                            sum1 = 0;
+                            for (int s = 0; s < sums.size(); s++) {
+                                sum1 += sums.get(s);
+                            }
+                            Log.e(TAG, "ADDS11: " + sum1);
+
+                            DecimalFormat df = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+                            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+                            dfs.setCurrencySymbol("");
+                            dfs.setMonetaryDecimalSeparator('.');
+                            dfs.setGroupingSeparator(',');
+                            df.setDecimalFormatSymbols(dfs);
+                            String k = df.format(sum1);
+
+                            washtotal.setText(k);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    @Override
+                    public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                        Log.d(TAG, "onFailuretagtry: ");
+
+                    }
+                });
+
+
                 running = true;
                 MyThread = new Thread() {//create thread
                     @Override
@@ -208,7 +258,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                             System.out.println("counter: " + i);
                             i++;
                             try {
-                                Thread.sleep(1000);
+                                Thread.sleep(500);
                             } catch (InterruptedException e) {
                                 System.out.println("Sleep interrupted");
                             }
@@ -239,7 +289,6 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                                     }
                                 });
                             }
-
                             retrofit2.Call<ResponseBody> call1 = apiInterface.getTotal("ci_session="+id,t,"0",summaryModel.getUnitid(),"Wash");
                             call1.enqueue(new retrofit2.Callback<ResponseBody>() {
                                 @Override
@@ -333,6 +382,50 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                 dryStationTotalAdapter.notifyDataSetChanged();
                 recyclerView6.setHasFixedSize(true);
                 Log.e(TAG, "SORTSs!: "+summaryModel.getWashStationModels().size());
+
+                retrofit2.Call<ResponseBody> call1 = apiInterface.getTotal("ci_session="+id,t,"0",summaryModel.getUnitid(),"Dry");
+                call1.enqueue(new retrofit2.Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                        try {
+                            String res = response.body().string();
+                            integers = new ArrayList<>();
+                            JSONArray array = new JSONArray(res);
+                            for (int j = 0; j < array.length(); j++) {
+                                JSONObject object = array.getJSONObject(j);
+                                int count = object.getInt("count");
+                                int price = object.getInt("price");
+                                double prod = price * count;
+                                integers.add(prod);
+                            }
+                            Log.e(TAG, "Add11: " + integers);
+                            sum = 0;
+                            for (int s = 0; s < integers.size(); s++) {
+                                sum += integers.get(s);
+                            }
+                            Log.e(TAG, "ADDS11: " + sum);
+                            DecimalFormat df = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+                            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+                            dfs.setCurrencySymbol("");
+                            dfs.setMonetaryDecimalSeparator('.');
+                            dfs.setGroupingSeparator(',');
+                            df.setDecimalFormatSymbols(dfs);
+                            String k = df.format(sum);
+                            drytotal.setText(k);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    @Override
+                    public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                        Log.d(TAG, "onFailuretagtry: ");
+
+                    }
+                });
 
                 running = true;
                 MyThread = new Thread() {//create thread

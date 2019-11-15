@@ -160,6 +160,10 @@ public interface ApiClient {
         @POST("upload/logo")
         Call<ResponseBody> uploadFile(@Header("Cookie") String token, @Part MultipartBody.Part file);
 
+        @Multipart
+        @POST("upload/logo")
+        Call<ResponseBody> uploadImage(@Header("Cookie") String token, @Part MultipartBody.Part file, @Part("userfile") RequestBody requestBody);
+
 
         @Headers("Content-Type: application/json")
         @POST("info/edit/shop")

@@ -1,11 +1,13 @@
 package com.example.prime.Views;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,6 +36,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -168,6 +171,15 @@ public class Profile extends Fragment {
             }
         };
         MyThread.start();
+
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions((Activity) mContext,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+
+            return;
+        }
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -519,6 +531,8 @@ public class Profile extends Fragment {
         }
     }
 
+
+
     private void data(){
         sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(mContext);
         apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
@@ -653,6 +667,7 @@ public class Profile extends Fragment {
 //            }
 //        }
 
+
 //        try {
 //            // When an Image is picked
 //            if (requestCode == 0 && resultCode == RESULT_OK && null != data) {
@@ -701,14 +716,25 @@ public class Profile extends Fragment {
 
             realpath = ImageFilePath.getPath(mContext, data.getData());
 
-            Log.i(TAG, "onActivityResult: file path : " + realpath);
+//            Log.i(TAG, "onActivityResult: file path : " + realpath);
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), uri);
                 // Log.d(TAG, String.valueOf(bitmap));
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = mContext.getContentResolver().query(uri,filePathColumn, null, null, null);
+                assert cursor != null;
+                cursor.moveToFirst();
 
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                mediaPath = realpath;
+                Log.i(TAG, "onActivityResult: file path : " + mediaPath);
+                // Set the Image in ImageView for Previewing the Media
+                cursor.close();
 
-                imageView.setImageBitmap(bitmap);
-                imageView.setVisibility(View.VISIBLE);
+                uploadToServer(mediaPath);
+
+//                imageView.setImageBitmap(bitmap);
+//                imageView.setVisibility(View.VISIBLE);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -729,7 +755,7 @@ public class Profile extends Fragment {
         MultipartBody.Part filePart = MultipartBody.Part.createFormData("userfile", file.getName(), RequestBody.create(file,MediaType.parse("image/*")));
         RequestBody filename = RequestBody.create( file.getName(),MediaType.parse("text/plain"));
 
-        retrofit2.Call<ResponseBody> call = apiInterface.uploadFile("ci_session=" + id, filePart);
+        retrofit2.Call<ResponseBody> call = apiInterface.uploadFile("ci_session="+id, filePart);
         call.enqueue(new retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
@@ -743,5 +769,32 @@ public class Profile extends Fragment {
             }
         });
     }
+
+
+    private void uploadToServer(String filePath) {
+        //Create a file object using file path
+        File file = new File(filePath);
+        // Create a request body with file and image media type
+        RequestBody fileReqBody = RequestBody.create(MediaType.parse("image/*"), file);
+        // Create MultipartBody.Part using file request-body,file name and part name
+        MultipartBody.Part part = MultipartBody.Part.createFormData("userfile", file.getName(), fileReqBody);
+        //Create request body with text description and text media type
+        RequestBody description = RequestBody.create("image-type",MediaType.parse("text/plain"));
+        //
+        retrofit2.Call<ResponseBody> call = apiInterface.uploadImage("ci_session="+id, part,description);
+        call.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                Log.e(TAG, "onResponseuploads: "+response.body() );
+
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
+                Log.e(TAG, "onResponseuploads: "+t );
+            }
+        });
+    }
+
 
 }

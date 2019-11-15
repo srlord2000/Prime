@@ -37,17 +37,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
-import com.bumptech.glide.request.transition.Transition;
 import com.example.prime.Adapter.SpinnerAdapters;
 import com.example.prime.Model.ServerResponseModel;
 import com.example.prime.Model.SpinnerModel;
@@ -664,46 +653,69 @@ public class Profile extends Fragment {
 //            }
 //        }
 
-        try {
-            // When an Image is picked
-            if (requestCode == 0 && resultCode == RESULT_OK && null != data) {
+//        try {
+//            // When an Image is picked
+//            if (requestCode == 0 && resultCode == RESULT_OK && null != data) {
+//
+//                // Get the Image from data
+//                Uri selectedImage = data.getData();
+//                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//
+//                Cursor cursor = mContext.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+//                assert cursor != null;
+//                cursor.moveToFirst();
+//
+//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                mediaPath = cursor.getString(columnIndex);
+//                // Set the Image in ImageView for Previewing the Media
+//                cursor.close();
+//
+//            } // When an Video is picked
+//            else if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
+//
+//                // Get the Video from data
+//                Uri selectedVideo = data.getData();
+//                String[] filePathColumn = {MediaStore.Video.Media.DATA};
+//
+//                Cursor cursor = mContext.getContentResolver().query(selectedVideo, filePathColumn, null, null, null);
+//                assert cursor != null;
+//                cursor.moveToFirst();
+//
+//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//
+//                mediaPath1 = cursor.getString(columnIndex);
+//
+//
+//                cursor.close();
+//
+//            } else {
+//                Toast.makeText(mContext, "You haven't picked Image/Video", Toast.LENGTH_LONG).show();
+//            }
+//        } catch (Exception e) {
+//            Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_LONG).show();
+//        }
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
-                // Get the Image from data
-                Uri selectedImage = data.getData();
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-                Cursor cursor = mContext.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                assert cursor != null;
-                cursor.moveToFirst();
-
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                mediaPath = cursor.getString(columnIndex);
-                // Set the Image in ImageView for Previewing the Media
-                cursor.close();
-
-            } // When an Video is picked
-            else if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
-
-                // Get the Video from data
-                Uri selectedVideo = data.getData();
-                String[] filePathColumn = {MediaStore.Video.Media.DATA};
-
-                Cursor cursor = mContext.getContentResolver().query(selectedVideo, filePathColumn, null, null, null);
-                assert cursor != null;
-                cursor.moveToFirst();
-
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-
-                mediaPath1 = cursor.getString(columnIndex);
+            Uri uri = data.getData();
 
 
-                cursor.close();
+            String realPath = ImageFilePath.getPath(mContext, data.getData());
+//                realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
 
-            } else {
-                Toast.makeText(mContext, "You haven't picked Image/Video", Toast.LENGTH_LONG).show();
+            Log.i(TAG, "onActivityResult: file path : " + realPath);
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), uri);
+                // Log.d(TAG, String.valueOf(bitmap));
+
+
+                imageView.setImageBitmap(bitmap);
+                imageView.setVisibility(View.VISIBLE);
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(mContext, "Something Went Wrong", Toast.LENGTH_SHORT).show();
         }
     }
 

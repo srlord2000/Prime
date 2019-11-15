@@ -152,7 +152,6 @@ public class Report extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
-
         dateButton = view.findViewById(R.id.dateReport);
         downloadButton = view.findViewById(R.id.btnDownload);
 
@@ -163,7 +162,7 @@ public class Report extends Fragment {
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        dateButton.setOnClickListener(new View.OnClickListener() {
+        dateButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 StartTime.show();
@@ -176,7 +175,6 @@ public class Report extends Fragment {
                 beginDownload();
             }
         });
-
 
         prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         editor = prefs.edit();
@@ -241,7 +239,10 @@ public class Report extends Fragment {
 //
 //                CellStyle style1 = workbook.createCellStyle();
 //                style1.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
-//                style1.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+// .
+//
+//
+// .style1.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 //
 //                Font font1 = workbook.createFont();
 //                font1.setColor(IndexedColors.BLACK.getIndex());

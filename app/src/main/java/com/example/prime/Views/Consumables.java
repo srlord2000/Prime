@@ -82,7 +82,6 @@ public class Consumables extends Fragment{
         mContext = container.getContext();
         return inflater.inflate(R.layout.views_consumable, container, false);
 
-
     }
 
     @Override
@@ -183,7 +182,7 @@ public class Consumables extends Fragment{
         });
 
         running = true;
-        MyThread = new Thread() {//create thread
+        MyThread = new Thread() { //create thread
             @Override
             public void run() {
                 int i = 0;

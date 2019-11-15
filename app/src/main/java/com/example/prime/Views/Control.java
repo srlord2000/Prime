@@ -75,8 +75,6 @@ public class Control extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContext = container.getContext();
         return inflater.inflate(R.layout.views_control, container, false);
-
-
     }
 
     @Override

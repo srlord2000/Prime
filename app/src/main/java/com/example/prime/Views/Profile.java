@@ -89,7 +89,7 @@ import static com.android.volley.VolleyLog.TAG;
 public class Profile extends Fragment {
 
     private long timestamp;
-    final private int PICK_IMAGE_REQUEST = 1;
+    final private int PICK_IMAGE_REQUEST =0;
     public static Boolean running, running1;
     private Button btnEdit, btnServerTimeEdit,eLogo,add;
     public static Thread MyThread, MyThread1;
@@ -100,7 +100,7 @@ public class Profile extends Fragment {
     private String TAG="Profile.java";
     private ImageView imageView, imageView1;
     private TextView shopname,branchname,date,time,timezone,auto;
-    String mediaPath, mediaPath1;
+    String mediaPath, mediaPath1,realpath;
 
     private Context mContext;
 
@@ -699,9 +699,9 @@ public class Profile extends Fragment {
             Uri uri = data.getData();
 
 
-            String realPath = ImageFilePath.getPath(mContext, data.getData());
+            realpath = ImageFilePath.getPath(mContext, data.getData());
 
-            Log.i(TAG, "onActivityResult: file path : " + realPath);
+            Log.i(TAG, "onActivityResult: file path : " + realpath);
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), uri);
                 // Log.d(TAG, String.valueOf(bitmap));

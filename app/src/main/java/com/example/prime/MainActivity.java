@@ -10,6 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -21,6 +24,7 @@ import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -47,6 +51,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -84,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-
+    public static Boolean running, running1;
+    public static Thread MyThread, MyThread1;
     private Button btn,o,forgot;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private String TAG;
@@ -94,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
     private String id;
     private EditText username,password;
+    private ImageView imageView;
     private long date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         forgot = findViewById(R.id.btnforgot);
         username = findViewById(R.id.userName);
         password = findViewById(R.id.password);
+        imageView = findViewById(R.id.imgView_logo);
         List<Cookie> list=sharedPrefsCookiePersistor.loadAll();
         for(int i = 0; i<list.size();i++){
             Log.e(TAG, "onCreate: "+new Date(list.get(i).expiresAt()));
@@ -119,6 +127,30 @@ public class MainActivity extends AppCompatActivity {
             sharedPrefsCookiePersistor.clear();
         }
 
+        running = true;
+        MyThread = new Thread() {//create thread
+            @Override
+            public void run() {
+                int i=0;
+                while(running){
+                    System.out.println("counter: "+i);
+                    i++;
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        //System.out.println("Sleep interrupted");
+                    }
+                    new MainActivity.DownloadImageTask(imageView)
+                            .execute("http://192.168.0.100/assets/img/logo2.png");
+                    //Log.e(TAG, "onViewCreated: "+timestamp );
+
+
+
+                }
+                System.out.println("onEnd Thread");
+            }
+        };
+        MyThread.start();
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,6 +224,31 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
+
     private void Load(){
         String user="admin",pass="secret";
         String postData = null;
@@ -234,6 +291,33 @@ public class MainActivity extends AppCompatActivity {
     public void Rellay(){
         rellay1 =  findViewById(R.id.rellay1);
         rellay2 =  findViewById(R.id.rellay2);
+        imageView = findViewById(R.id.imgView_logo);
+        new MainActivity.DownloadImageTask(imageView)
+                .execute("http://192.168.0.100/assets/img/logo2.png");
+        running = true;
+        MyThread = new Thread() {//create thread
+            @Override
+            public void run() {
+                int i=0;
+                while(running){
+                    System.out.println("counter: "+i);
+                    i++;
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        //System.out.println("Sleep interrupted");
+                    }
+                    new MainActivity.DownloadImageTask(imageView)
+                            .execute("http://192.168.0.100/assets/img/logo2.png");
+                    //Log.e(TAG, "onViewCreated: "+timestamp );
+
+
+
+                }
+                System.out.println("onEnd Thread");
+            }
+        };
+        MyThread.start();
         handler.postDelayed(runnable, 2000); //2000 is the timeout for the splash
     }
 

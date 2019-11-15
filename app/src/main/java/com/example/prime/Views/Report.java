@@ -6,10 +6,13 @@ import android.app.DatePickerDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.camera2.params.BlackLevelPattern;
 import android.net.Uri;
 import android.os.Build;
@@ -21,9 +24,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
@@ -49,7 +54,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Color;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -69,11 +73,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
@@ -155,18 +163,111 @@ public class Report extends Fragment {
         dateButton = view.findViewById(R.id.dateReport);
         downloadButton = view.findViewById(R.id.btnDownload);
 
-        final DatePickerDialog StartTime = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-            }
-
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
         dateButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StartTime.show();
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(mContext);
+                View mView = getLayoutInflater().inflate(R.layout.reportpickdate, null);
+                Button close = mView.findViewById(R.id.dialog_close);
+                Button submit = mView.findViewById(R.id.dialog_submit);
+                Button sync = mView.findViewById(R.id.dialog_sync);
+                final EditText to = mView.findViewById(R.id.setTo);
+                final EditText from = mView.findViewById(R.id.setFrom);
+                to.setFocusable(false);
+                to.setKeyListener(null);
+                from.setFocusable(false);
+                from.setKeyListener(null);
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+                if (dialog.getWindow() != null){
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.show();
+                }
+
+                final SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                from.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!from.getText().toString().isEmpty()) {
+                            Date d = null;
+                            Calendar cal = Calendar.getInstance();
+                            String curtime = from.getText().toString();
+                            try {
+                                d = sdf3.parse(curtime);
+                                cal.setTime(sdf3.parse(curtime));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            int mYear,mMonth,mDay;
+                            mYear = cal.get(Calendar.YEAR);
+                            mMonth = cal.get(Calendar.MONTH);
+                            mDay = cal.get(Calendar.DAY_OF_MONTH);
+                            DatePickerDialog mDate;
+                            mDate = new DatePickerDialog(mContext, R.style.DatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker datePicker, int mYear1, int mMonth1, int mDay1) {
+                                    String dates;
+                                    Calendar myCalendar = Calendar.getInstance();
+                                    myCalendar.set(Calendar.YEAR, mYear1);
+                                    myCalendar.set(Calendar.MONTH, mMonth1);
+                                    myCalendar.set(Calendar.DAY_OF_MONTH, mDay1);
+                                    dates = sdf3.format(myCalendar.getTime());
+                                    from.setText(dates);
+                                }
+                            }, mYear, mMonth, mDay);
+                            mDate.setTitle("Select Date");
+                            mDate.show();
+                            mDate.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                            mDate.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+                            mDate.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.TRANSPARENT);
+                            mDate.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundColor(Color.TRANSPARENT);
+                        }
+                    }
+                });
+
+                to.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!to.getText().toString().isEmpty()) {
+                            Date d = null;
+                            Calendar cal = Calendar.getInstance();
+                            String curtime = to.getText().toString();
+                            try {
+                                d = sdf3.parse(curtime);
+                                cal.setTime(sdf3.parse(curtime));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            int mYear,mMonth,mDay;
+                            mYear = cal.get(Calendar.YEAR);
+                            mMonth = cal.get(Calendar.MONTH);
+                            mDay = cal.get(Calendar.DAY_OF_MONTH);
+                            DatePickerDialog mDate;
+                            mDate = new DatePickerDialog(mContext, R.style.DatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker datePicker, int mYear1, int mMonth1, int mDay1) {
+                                    String dates;
+                                    Calendar myCalendar = Calendar.getInstance();
+                                    myCalendar.set(Calendar.YEAR, mYear1);
+                                    myCalendar.set(Calendar.MONTH, mMonth1);
+                                    myCalendar.set(Calendar.DAY_OF_MONTH, mDay1);
+                                    dates = sdf3.format(myCalendar.getTime());
+                                    to.setText(dates);
+                                }
+                            }, mYear, mMonth, mDay);
+                            mDate.setTitle("Select Date");
+                            mDate.show();
+                            mDate.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                            mDate.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+                            mDate.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(Color.TRANSPARENT);
+                            mDate.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundColor(Color.TRANSPARENT);
+                        }
+                    }
+                });
+
             }
         });
 

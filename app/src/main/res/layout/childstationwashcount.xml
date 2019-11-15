@@ -13,7 +13,6 @@
             android:layout_width="90dp"
             android:id="@+id/serName"
             android:layout_height="wrap_content"
-            android:text="Service"
             android:textColor="@color/black"
             android:layout_weight="1"
             android:paddingEnd="5dp"

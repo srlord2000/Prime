@@ -3,95 +3,119 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:background="@color/transparent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/circleddialog">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/robotoregular"
-            android:text="Date From:"
-            android:textColor="@color/black"
-            android:textSize="20sp">
-        </TextView>
-
-        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxStrokeWidth="10dp"
-            android:theme="@style/EditTextTheme"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            >
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Date"
-                android:id="@+id/setFrom"
-                android:inputType="text"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/opensansregular"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:textSize="15sp"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/robotoregular"
-            android:text="Date To:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:text="SET DATE"
             android:textColor="@color/black"
-            android:textSize="20sp">
-        </TextView>
+            android:background="@drawable/circleddialog"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:id="@+id/name"
+            />
 
-        <com.google.android.material.textfield.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxStrokeWidth="10dp"
-            android:theme="@style/EditTextTheme"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            >
-            <com.google.android.material.textfield.TextInputEditText
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/robotoregular"
+                android:text="Date From:"
+                android:textColor="@color/black"
+                android:textSize="20sp">
+            </TextView>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Date"
-                android:id="@+id/setTo"
-                android:inputType="text"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/opensansregular"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:textSize="15sp"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                app:errorEnabled="true"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeWidth="10dp"
+                android:theme="@style/EditTextTheme"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Date"
+                    android:id="@+id/setFrom"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/opensansregular"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="2019-12-12"
+                    android:textSize="15sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/robotoregular"
+                android:text="Date To:"
+                android:textColor="@color/black"
+                android:textSize="20sp">
+            </TextView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorEnabled="true"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeWidth="10dp"
+                android:theme="@style/EditTextTheme"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Date"
+                    android:id="@+id/setTo"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/opensansregular"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="2019-12-12"
+                    android:textSize="15sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 

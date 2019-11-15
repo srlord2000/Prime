@@ -14,8 +14,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:layout_weight="1"
-            android:text="10,000.00"
             android:paddingStart="5dp"
+            android:paddingEnd="0dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             />

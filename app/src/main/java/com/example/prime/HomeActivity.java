@@ -2,6 +2,9 @@ package com.example.prime;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.example.prime.Fragment.HomeFragment;
@@ -19,8 +22,15 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.prime.RecyclerAdapter.DryStationTotalAdapter;
 import com.example.prime.RecyclerAdapter.DrySummaryAdapter;
+import com.example.prime.RecyclerAdapter.SummaryAdapter;
+import com.example.prime.RecyclerAdapter.WashCountAdapter;
+import com.example.prime.RecyclerAdapter.WashStationAdapter;
+import com.example.prime.RecyclerAdapter.WashStationCountAdapter;
+import com.example.prime.RecyclerAdapter.WashStationTotalAdapter;
 import com.example.prime.RecyclerAdapter.WashSummaryAdapter;
+import com.example.prime.RecyclerAdapter.WasherAdapter;
 import com.example.prime.Views.Card;
 import com.example.prime.Views.Consumables;
 import com.example.prime.Views.Control;
@@ -43,12 +53,19 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
 import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+
+import java.io.InputStream;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
     SharedPreferences prefs ;
     SharedPreferences.Editor editor;
+    public static Boolean running, running1;
+    public static Thread MyThread, MyThread1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +85,30 @@ public class HomeActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        View hView =  navigationView.getHeaderView(0);
+        final ImageView imageView = (ImageView) hView.findViewById(R.id.imageView);
+        running = true;
+        MyThread = new Thread() {//create thread
+            @Override
+            public void run() {
+                int i=0;
+                while(running){
+//                    System.out.println("counter: "+i);
+                    i++;
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        //System.out.println("Sleep interrupted");
+                    }
+                    new HomeActivity.DownloadImageTask(imageView)
+                            .execute("http://192.168.0.100/assets/img/logo2.png");
+                    //Log.e(TAG, "onViewCreated: "+timestamp );
+
+                }
+//                System.out.println("onEnd Thread");
+            }
+        };
+        MyThread.start();
 
         navigationView.setCheckedItem(R.id.nav_monitoring);
         Fragment fragment = new HomeFragment();
@@ -87,6 +128,31 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -98,6 +164,30 @@ public class HomeActivity extends AppCompatActivity
                 Profile.MyThread.interrupt();
                 Profile.running = false;
             }
+            if(WashSummaryAdapter.MyThread != null){
+                WashSummaryAdapter.MyThread.interrupt();
+                WashSummaryAdapter.running = false;
+            }
+            if(DrySummaryAdapter.MyThread != null){
+                DrySummaryAdapter.MyThread.interrupt();
+                DrySummaryAdapter.running = false;
+            }
+            if(WashStationTotalAdapter.MyThread != null){
+                WashStationTotalAdapter.MyThread.interrupt();
+                WashStationTotalAdapter.running = false;
+            }
+            if(DryStationTotalAdapter.MyThread != null){
+                DryStationTotalAdapter.MyThread.interrupt();
+                DryStationTotalAdapter.running = false;
+            }
+            if(SummaryAdapter.MyThread != null){
+                SummaryAdapter.MyThread.interrupt();
+                SummaryAdapter.running = false;
+            }
+            if(Summary.MyThread != null) {
+                Summary.MyThread.interrupt();
+                Summary.running = false;
+            }
             if(List.MyThread != null) {
                 List.MyThread.interrupt();
                 List.running = false;
@@ -105,10 +195,6 @@ public class HomeActivity extends AppCompatActivity
             if(Control.MyThread != null) {
                 Control.MyThread.interrupt();
                 Control.running = false;
-            }
-            if(Inventory.MyThread != null) {
-                Inventory.MyThread.interrupt();
-                Inventory.running = false;
             }
             if(Services.MyThread != null) {
                 Services.MyThread.interrupt();
@@ -134,7 +220,7 @@ public class HomeActivity extends AppCompatActivity
                 Station.MyThread.interrupt();
                 Station.running = false;
             }
-            if(Preset.MyThread != null) {
+            if(Preset.MyThread != null ) {
                 Preset.MyThread.interrupt();
                 Preset.running = false;
             }
@@ -190,6 +276,18 @@ public class HomeActivity extends AppCompatActivity
                         DrySummaryAdapter.MyThread.interrupt();
                         DrySummaryAdapter.running = false;
                     }
+                    if(WashStationTotalAdapter.MyThread != null){
+                        WashStationTotalAdapter.MyThread.interrupt();
+                        WashStationTotalAdapter.running = false;
+                    }
+                    if(DryStationTotalAdapter.MyThread != null){
+                        DryStationTotalAdapter.MyThread.interrupt();
+                        DryStationTotalAdapter.running = false;
+                    }
+                    if(SummaryAdapter.MyThread != null){
+                        SummaryAdapter.MyThread.interrupt();
+                        SummaryAdapter.running = false;
+                    }
                     if(Summary.MyThread != null) {
                         Summary.MyThread.interrupt();
                         Summary.running = false;
@@ -238,9 +336,9 @@ public class HomeActivity extends AppCompatActivity
                     displaySelectedFragment(fragment);
 
                 } else if (id == R.id.nav_reports) {
-                    if(Email.MyThread != null) {
-                        Email.MyThread.interrupt();
-                        Email.running = false;
+                    if(Profile.MyThread != null) {
+                        Profile.MyThread.interrupt();
+                        Profile.running = false;
                     }
                     if(WashSummaryAdapter.MyThread != null){
                         WashSummaryAdapter.MyThread.interrupt();
@@ -249,6 +347,18 @@ public class HomeActivity extends AppCompatActivity
                     if(DrySummaryAdapter.MyThread != null){
                         DrySummaryAdapter.MyThread.interrupt();
                         DrySummaryAdapter.running = false;
+                    }
+                    if(WashStationTotalAdapter.MyThread != null){
+                        WashStationTotalAdapter.MyThread.interrupt();
+                        WashStationTotalAdapter.running = false;
+                    }
+                    if(DryStationTotalAdapter.MyThread != null){
+                        DryStationTotalAdapter.MyThread.interrupt();
+                        DryStationTotalAdapter.running = false;
+                    }
+                    if(SummaryAdapter.MyThread != null){
+                        SummaryAdapter.MyThread.interrupt();
+                        SummaryAdapter.running = false;
                     }
                     if(Summary.MyThread != null) {
                         Summary.MyThread.interrupt();
@@ -266,10 +376,6 @@ public class HomeActivity extends AppCompatActivity
                         Services.MyThread.interrupt();
                         Services.running = false;
                     }
-                    if(Profile.MyThread != null) {
-                        Profile.MyThread.interrupt();
-                        Profile.running = false;
-                    }
                     if(Inventory.MyThread != null) {
                         Inventory.MyThread.interrupt();
                         Inventory.running = false;
@@ -277,6 +383,10 @@ public class HomeActivity extends AppCompatActivity
                     if(Consumables.MyThread != null) {
                         Consumables.MyThread.interrupt();
                         Consumables.running = false;
+                    }
+                    if(Email.MyThread != null) {
+                        Email.MyThread.interrupt();
+                        Email.running = false;
                     }
                     if(Card.MyThread != null) {
                         Card.MyThread.interrupt();
@@ -286,7 +396,7 @@ public class HomeActivity extends AppCompatActivity
                         Station.MyThread.interrupt();
                         Station.running = false;
                     }
-                    if(Preset.MyThread != null) {
+                    if(Preset.MyThread != null ) {
                         Preset.MyThread.interrupt();
                         Preset.running = false;
                     }
@@ -298,21 +408,33 @@ public class HomeActivity extends AppCompatActivity
                     displaySelectedFragment(fragment);
 
                 } else if (id == R.id.nav_stations) {
-                    if(Email.MyThread != null) {
-                        Email.MyThread.interrupt();
-                        Email.running = false;
+                    if(Profile.MyThread != null) {
+                        Profile.MyThread.interrupt();
+                        Profile.running = false;
                     }
-                    if(Summary.MyThread != null) {
-                        Summary.MyThread.interrupt();
-                        Summary.running = false;
+                    if(WashSummaryAdapter.MyThread != null){
+                        WashSummaryAdapter.MyThread.interrupt();
+                        WashSummaryAdapter.running = false;
                     }
                     if(DrySummaryAdapter.MyThread != null){
                         DrySummaryAdapter.MyThread.interrupt();
                         DrySummaryAdapter.running = false;
                     }
-                    if(WashSummaryAdapter.MyThread != null){
-                        WashSummaryAdapter.MyThread.interrupt();
-                        WashSummaryAdapter.running = false;
+                    if(WashStationTotalAdapter.MyThread != null){
+                        WashStationTotalAdapter.MyThread.interrupt();
+                        WashStationTotalAdapter.running = false;
+                    }
+                    if(DryStationTotalAdapter.MyThread != null){
+                        DryStationTotalAdapter.MyThread.interrupt();
+                        DryStationTotalAdapter.running = false;
+                    }
+                    if(SummaryAdapter.MyThread != null){
+                        SummaryAdapter.MyThread.interrupt();
+                        SummaryAdapter.running = false;
+                    }
+                    if(Summary.MyThread != null) {
+                        Summary.MyThread.interrupt();
+                        Summary.running = false;
                     }
                     if(List.MyThread != null) {
                         List.MyThread.interrupt();
@@ -334,9 +456,9 @@ public class HomeActivity extends AppCompatActivity
                         Consumables.MyThread.interrupt();
                         Consumables.running = false;
                     }
-                    if(Profile.MyThread != null) {
-                        Profile.MyThread.interrupt();
-                        Profile.running = false;
+                    if(Email.MyThread != null) {
+                        Email.MyThread.interrupt();
+                        Email.running = false;
                     }
                     if(Card.MyThread != null) {
                         Card.MyThread.interrupt();
@@ -346,7 +468,7 @@ public class HomeActivity extends AppCompatActivity
                         Station.MyThread.interrupt();
                         Station.running = false;
                     }
-                    if(Preset.MyThread != null) {
+                    if(Preset.MyThread != null ) {
                         Preset.MyThread.interrupt();
                         Preset.running = false;
                     }
@@ -358,21 +480,33 @@ public class HomeActivity extends AppCompatActivity
                     displaySelectedFragment(fragment);
 
                 } else if (id == R.id.nav_inventory) {
-                    if(Email.MyThread != null) {
-                        Email.MyThread.interrupt();
-                        Email.running = false;
+                    if(Profile.MyThread != null) {
+                        Profile.MyThread.interrupt();
+                        Profile.running = false;
+                    }
+                    if(WashSummaryAdapter.MyThread != null){
+                        WashSummaryAdapter.MyThread.interrupt();
+                        WashSummaryAdapter.running = false;
                     }
                     if(DrySummaryAdapter.MyThread != null){
                         DrySummaryAdapter.MyThread.interrupt();
                         DrySummaryAdapter.running = false;
                     }
+                    if(WashStationTotalAdapter.MyThread != null){
+                        WashStationTotalAdapter.MyThread.interrupt();
+                        WashStationTotalAdapter.running = false;
+                    }
+                    if(DryStationTotalAdapter.MyThread != null){
+                        DryStationTotalAdapter.MyThread.interrupt();
+                        DryStationTotalAdapter.running = false;
+                    }
+                    if(SummaryAdapter.MyThread != null){
+                        SummaryAdapter.MyThread.interrupt();
+                        SummaryAdapter.running = false;
+                    }
                     if(Summary.MyThread != null) {
                         Summary.MyThread.interrupt();
                         Summary.running = false;
-                    }
-                    if(WashSummaryAdapter.MyThread != null){
-                        WashSummaryAdapter.MyThread.interrupt();
-                        WashSummaryAdapter.running = false;
                     }
                     if(List.MyThread != null) {
                         List.MyThread.interrupt();
@@ -394,9 +528,9 @@ public class HomeActivity extends AppCompatActivity
                         Consumables.MyThread.interrupt();
                         Consumables.running = false;
                     }
-                    if(Profile.MyThread != null) {
-                        Profile.MyThread.interrupt();
-                        Profile.running = false;
+                    if(Email.MyThread != null) {
+                        Email.MyThread.interrupt();
+                        Email.running = false;
                     }
                     if(Card.MyThread != null) {
                         Card.MyThread.interrupt();
@@ -406,7 +540,7 @@ public class HomeActivity extends AppCompatActivity
                         Station.MyThread.interrupt();
                         Station.running = false;
                     }
-                    if(Preset.MyThread != null) {
+                    if(Preset.MyThread != null ) {
                         Preset.MyThread.interrupt();
                         Preset.running = false;
                     }
@@ -419,25 +553,33 @@ public class HomeActivity extends AppCompatActivity
 
                 } else if (id == R.id.nav_settings) {
                     if (prefs.getString("level", "").equals("1")) {
-                        if(Email.MyThread != null) {
-                            Email.MyThread.interrupt();
-                            Email.running = false;
+                        if(Profile.MyThread != null) {
+                            Profile.MyThread.interrupt();
+                            Profile.running = false;
+                        }
+                        if(WashSummaryAdapter.MyThread != null){
+                            WashSummaryAdapter.MyThread.interrupt();
+                            WashSummaryAdapter.running = false;
                         }
                         if(DrySummaryAdapter.MyThread != null){
                             DrySummaryAdapter.MyThread.interrupt();
                             DrySummaryAdapter.running = false;
                         }
+                        if(WashStationTotalAdapter.MyThread != null){
+                            WashStationTotalAdapter.MyThread.interrupt();
+                            WashStationTotalAdapter.running = false;
+                        }
+                        if(DryStationTotalAdapter.MyThread != null){
+                            DryStationTotalAdapter.MyThread.interrupt();
+                            DryStationTotalAdapter.running = false;
+                        }
+                        if(SummaryAdapter.MyThread != null){
+                            SummaryAdapter.MyThread.interrupt();
+                            SummaryAdapter.running = false;
+                        }
                         if(Summary.MyThread != null) {
                             Summary.MyThread.interrupt();
                             Summary.running = false;
-                        }
-                        if(Services.MyThread != null) {
-                            Services.MyThread.interrupt();
-                            Services.running = false;
-                        }
-                        if(WashSummaryAdapter.MyThread != null){
-                            WashSummaryAdapter.MyThread.interrupt();
-                            WashSummaryAdapter.running = false;
                         }
                         if(List.MyThread != null) {
                             List.MyThread.interrupt();
@@ -447,6 +589,10 @@ public class HomeActivity extends AppCompatActivity
                             Control.MyThread.interrupt();
                             Control.running = false;
                         }
+                        if(Services.MyThread != null) {
+                            Services.MyThread.interrupt();
+                            Services.running = false;
+                        }
                         if(Inventory.MyThread != null) {
                             Inventory.MyThread.interrupt();
                             Inventory.running = false;
@@ -455,25 +601,25 @@ public class HomeActivity extends AppCompatActivity
                             Consumables.MyThread.interrupt();
                             Consumables.running = false;
                         }
-                        if(Station.MyThread != null) {
-                            Station.MyThread.interrupt();
-                            Station.running = false;
+                        if(Email.MyThread != null) {
+                            Email.MyThread.interrupt();
+                            Email.running = false;
                         }
                         if(Card.MyThread != null) {
                             Card.MyThread.interrupt();
                             Card.running = false;
                         }
-                        if(Preset.MyThread != null) {
+                        if(Station.MyThread != null) {
+                            Station.MyThread.interrupt();
+                            Station.running = false;
+                        }
+                        if(Preset.MyThread != null ) {
                             Preset.MyThread.interrupt();
                             Preset.running = false;
                         }
                         if(Preset.MyThread1 != null) {
                             Preset.MyThread1.interrupt();
                             Preset.running1 = false;
-                        }
-                        if(Profile.MyThread != null) {
-                            Profile.MyThread.interrupt();
-                            Profile.running = false;
                         }
                         fragment = new SettingsFragment();
                         displaySelectedFragment(fragment);
@@ -483,31 +629,103 @@ public class HomeActivity extends AppCompatActivity
                             Profile.MyThread.interrupt();
                             Profile.running = false;
                         }
+                        if(WashSummaryAdapter.MyThread != null){
+                            WashSummaryAdapter.MyThread.interrupt();
+                            WashSummaryAdapter.running = false;
+                        }
+                        if(DrySummaryAdapter.MyThread != null){
+                            DrySummaryAdapter.MyThread.interrupt();
+                            DrySummaryAdapter.running = false;
+                        }
+                        if(WashStationTotalAdapter.MyThread != null){
+                            WashStationTotalAdapter.MyThread.interrupt();
+                            WashStationTotalAdapter.running = false;
+                        }
+                        if(DryStationTotalAdapter.MyThread != null){
+                            DryStationTotalAdapter.MyThread.interrupt();
+                            DryStationTotalAdapter.running = false;
+                        }
+                        if(SummaryAdapter.MyThread != null){
+                            SummaryAdapter.MyThread.interrupt();
+                            SummaryAdapter.running = false;
+                        }
+                        if(Summary.MyThread != null) {
+                            Summary.MyThread.interrupt();
+                            Summary.running = false;
+                        }
+                        if(List.MyThread != null) {
+                            List.MyThread.interrupt();
+                            List.running = false;
+                        }
+                        if(Control.MyThread != null) {
+                            Control.MyThread.interrupt();
+                            Control.running = false;
+                        }
+                        if(Services.MyThread != null) {
+                            Services.MyThread.interrupt();
+                            Services.running = false;
+                        }
+                        if(Inventory.MyThread != null) {
+                            Inventory.MyThread.interrupt();
+                            Inventory.running = false;
+                        }
+                        if(Consumables.MyThread != null) {
+                            Consumables.MyThread.interrupt();
+                            Consumables.running = false;
+                        }
+                        if(Email.MyThread != null) {
+                            Email.MyThread.interrupt();
+                            Email.running = false;
+                        }
+                        if(Card.MyThread != null) {
+                            Card.MyThread.interrupt();
+                            Card.running = false;
+                        }
+                        if(Station.MyThread != null) {
+                            Station.MyThread.interrupt();
+                            Station.running = false;
+                        }
+                        if(Preset.MyThread != null ) {
+                            Preset.MyThread.interrupt();
+                            Preset.running = false;
+                        }
+                        if(Preset.MyThread1 != null) {
+                            Preset.MyThread1.interrupt();
+                            Preset.running1 = false;
+                        }
                         fragment = new StaffSettingsFragment();
                         displaySelectedFragment(fragment);
 
                     }
 
                 } else if (id == R.id.nav_logout) {
-                    if(Inventory.MyThread != null) {
-                        Inventory.MyThread.interrupt();
-                        Inventory.running = false;
-                    }
-                    if(DrySummaryAdapter.MyThread != null){
-                        DrySummaryAdapter.MyThread.interrupt();
-                        DrySummaryAdapter.running = false;
-                    }
-                    if(Summary.MyThread != null) {
-                        Summary.MyThread.interrupt();
-                        Summary.running = false;
+                    if(Profile.MyThread != null) {
+                        Profile.MyThread.interrupt();
+                        Profile.running = false;
                     }
                     if(WashSummaryAdapter.MyThread != null){
                         WashSummaryAdapter.MyThread.interrupt();
                         WashSummaryAdapter.running = false;
                     }
-                    if(Services.MyThread != null) {
-                        Services.MyThread.interrupt();
-                        Services.running = false;
+                    if(DrySummaryAdapter.MyThread != null){
+                        DrySummaryAdapter.MyThread.interrupt();
+                        DrySummaryAdapter.running = false;
+                    }
+                    if(WashStationTotalAdapter.MyThread != null){
+                        WashStationTotalAdapter.MyThread.interrupt();
+                        WashStationTotalAdapter.running = false;
+                    }
+                    if(DryStationTotalAdapter.MyThread != null){
+                        DryStationTotalAdapter.MyThread.interrupt();
+                        DryStationTotalAdapter.running = false;
+                    }
+                    if(SummaryAdapter.MyThread != null){
+                        SummaryAdapter.MyThread.interrupt();
+                        SummaryAdapter.running = false;
+                    }
+                    if(Summary.MyThread != null) {
+                        Summary.MyThread.interrupt();
+                        Summary.running = false;
                     }
                     if(List.MyThread != null) {
                         List.MyThread.interrupt();
@@ -517,6 +735,14 @@ public class HomeActivity extends AppCompatActivity
                         Control.MyThread.interrupt();
                         Control.running = false;
                     }
+                    if(Services.MyThread != null) {
+                        Services.MyThread.interrupt();
+                        Services.running = false;
+                    }
+                    if(Inventory.MyThread != null) {
+                        Inventory.MyThread.interrupt();
+                        Inventory.running = false;
+                    }
                     if(Consumables.MyThread != null) {
                         Consumables.MyThread.interrupt();
                         Consumables.running = false;
@@ -524,10 +750,6 @@ public class HomeActivity extends AppCompatActivity
                     if(Email.MyThread != null) {
                         Email.MyThread.interrupt();
                         Email.running = false;
-                    }
-                    if(Profile.MyThread != null) {
-                        Profile.MyThread.interrupt();
-                        Profile.running = false;
                     }
                     if(Card.MyThread != null) {
                         Card.MyThread.interrupt();
@@ -537,7 +759,7 @@ public class HomeActivity extends AppCompatActivity
                         Station.MyThread.interrupt();
                         Station.running = false;
                     }
-                    if(Preset.MyThread != null) {
+                    if(Preset.MyThread != null ) {
                         Preset.MyThread.interrupt();
                         Preset.running = false;
                     }

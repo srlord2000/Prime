@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.prime.Model.DryStationModel;
 import com.example.prime.Model.WashStationModel;
 import com.example.prime.R;
 
@@ -107,7 +108,6 @@ public class WashStationTotalAdapter extends RecyclerView.Adapter<WashStationTot
                                     count = object.getInt("count");
                                     prod = price * count;
                                     integers.add(prod);
-                                    Log.e("", "bind: " + res + " " + count + " " + price);
                                 }
                                 sum = 0;
                                 for (int j = 0; j < integers.size(); j++) {
@@ -162,6 +162,7 @@ public class WashStationTotalAdapter extends RecyclerView.Adapter<WashStationTot
                 String k = df.format(sum);
 
                 name.setText(k);
+                stationTotalModel.setTotal(k);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -173,5 +174,13 @@ public class WashStationTotalAdapter extends RecyclerView.Adapter<WashStationTot
         return stationTotalModels;
     }
 
-
+    public ArrayList<WashStationModel> getSelected() {
+        ArrayList<WashStationModel> selected = new ArrayList<>();
+        for (int i = 0; i < stationTotalModels.size(); i++) {
+            if (stationTotalModels.get(i).isChecked()) {
+                selected.add(stationTotalModels.get(i));
+            }
+        }
+        return selected;
+    }
 }

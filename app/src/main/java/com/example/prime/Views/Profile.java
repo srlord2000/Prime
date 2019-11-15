@@ -6,11 +6,15 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 
@@ -30,24 +34,41 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.prime.Adapter.SpinnerAdapters;
+import com.example.prime.Model.ServerResponseModel;
 import com.example.prime.Model.SpinnerModel;
 import com.example.prime.Model.StringModel;
 import com.example.prime.Persistent.SharedPrefsCookiePersistor;
 import com.example.prime.R;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
@@ -64,28 +85,33 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.app.Activity.RESULT_OK;
 import static com.android.volley.VolleyLog.TAG;
 
 public class Profile extends Fragment {
 
     private long timestamp;
     final private int PICK_IMAGE_REQUEST = 1;
-    public static Boolean running;
-    private Button btnEdit, btnServerTimeEdit,eLogo;
-    public static Thread MyThread;
+    public static Boolean running, running1;
+    private Button btnEdit, btnServerTimeEdit,eLogo,add;
+    public static Thread MyThread, MyThread1;
     ApiClient apiInterface;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
     private String id;
     private String TAG="Profile.java";
-    private ImageView imageView;
+    private ImageView imageView, imageView1;
     private TextView shopname,branchname,date,time,timezone,auto;
+    String mediaPath, mediaPath1;
 
     private Context mContext;
 
@@ -112,6 +138,7 @@ public class Profile extends Fragment {
     public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
 
         imageView = view.findViewById(R.id.logo);
+        imageView1 = view.findViewById(R.id.logo1);
         eLogo = view.findViewById(R.id.editLogo);
         shopname = view.findViewById(R.id.shopName);
         btnEdit = view.findViewById(R.id.editAccount);
@@ -120,6 +147,7 @@ public class Profile extends Fragment {
         time = view.findViewById(R.id.serverTime);
         date = view.findViewById(R.id.serverDate);
         timezone = view.findViewById(R.id.serverTimeZone);
+        add = view.findViewById(R.id.editAdditional);
         auto = view.findViewById(R.id.autoShutdown);
         auto.setText("DISABLED");
         sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(mContext);
@@ -137,26 +165,27 @@ public class Profile extends Fragment {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
-                        System.out.println("Sleep interrupted");
+                        //System.out.println("Sleep interrupted");
                     }
                     time();
-                    Log.e(TAG, "onViewCreated: "+timestamp );
-                    ((Activity)view.getContext()).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Picasso.get().load("http://192.168.0.100/assets/img/logo1.png").into(imageView);
-                        }
-                    });
+                    new DownloadImageTask((ImageView) view.findViewById(R.id.logo))
+                            .execute("http://192.168.0.100/assets/img/logo2.png");
+                    //Log.e(TAG, "onViewCreated: "+timestamp );
+
 
 
                 }
                 System.out.println("onEnd Thread");
             }
         };
-
-
         MyThread.start();
 
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadFile();
+            }
+        });
 
         eLogo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,7 +253,7 @@ public class Profile extends Fragment {
 //                                    R.string.success_msg,
 //                                    Toast.LENGTH_SHORT).show();
 //                            dialog.dismiss();
-                            Log.e(TAG, "onClick: "+obj );
+                            //Log.e(TAG, "onClick: "+obj );
                             RequestBody body = RequestBody.create(String.valueOf(obj),JSON);
                             retrofit2.Call<ResponseBody> call = apiInterface.postShop("ci_session="+id,body);
                             call.enqueue(new  retrofit2.Callback<ResponseBody>() {
@@ -234,7 +263,7 @@ public class Profile extends Fragment {
                                     try {
                                         if(response.body()!= null) {
                                             String res = response.body().string();
-                                            Log.e(TAG, "onResponse: "+res );
+                                            //Log.e(TAG, "onResponse: "+res );
                                             data();
                                             dialog.dismiss();
                                         }
@@ -244,7 +273,7 @@ public class Profile extends Fragment {
                                 }
                                 @Override
                                 public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
-                                    Log.d(TAG, "onFailure: ");
+                                    //Log.d(TAG, "onFailure: ");
                                 }
                             });
 
@@ -318,7 +347,7 @@ public class Profile extends Fragment {
                             }
                             @Override
                             public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
-                                Log.d(TAG, "onFailure: ");
+                                //Log.d(TAG, "onFailure: ");
 
                             }
                         });
@@ -451,7 +480,7 @@ public class Profile extends Fragment {
                        call.enqueue(new  retrofit2.Callback<ResponseBody>() {
                            @Override
                            public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
-                               Log.e(TAG, "onResponse: "+response );
+                               //Log.e(TAG, "onResponse: "+response );
 //                               try {
 //                                   if(response.body()!= null) {
 //                                       String res = response.body().string();
@@ -476,6 +505,31 @@ public class Profile extends Fragment {
 
     }
 
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
+
     private void data(){
         sharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(mContext);
         apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
@@ -485,7 +539,7 @@ public class Profile extends Fragment {
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse( retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.e(TAG, "onResponse: "+response );
+                //Log.e(TAG, "onResponse: "+response );
                 try {
 
                     if(response.body()!= null) {
@@ -524,7 +578,7 @@ public class Profile extends Fragment {
             call.enqueue(new retrofit2.Callback<ResponseBody>() {
                 @Override
                 public void onResponse(retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
-                    Log.e(TAG, "onResponse: " + response);
+                    //Log.e(TAG, "onResponse: " + response);
                     try {
                         if (response.body() != null) {
                             String res = response.body().string();
@@ -575,28 +629,108 @@ public class Profile extends Fragment {
     }
 
     public void chooseImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, 0);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
+//        if (requestCode == 0 && resultCode == RESULT_OK && null != data) {
+//
+//            Uri uri = data.getData();
+//
+//            try {
+////                Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), uri);
+////                Uri selectedImage = data.getData();
+////                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+////
+////                Cursor cursor = mContext.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+////                assert cursor != null;
+////                cursor.moveToFirst();
+////
+////                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+////                mediaPath = cursor.getString(columnIndex);
+////                // Set the Image in ImageView for Previewing the Media
+////                Log.e(TAG, "onActivityResult: "+mediaPath );
+////                cursor.close();
+////                Log.d(TAG, String.valueOf(bitmap));
+////                imageView.setImageBitmap(bitmap);
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
-            Uri uri = data.getData();
+        try {
+            // When an Image is picked
+            if (requestCode == 0 && resultCode == RESULT_OK && null != data) {
 
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), uri);
-                Log.d(TAG, String.valueOf(bitmap));
-                imageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
+                // Get the Image from data
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                Cursor cursor = mContext.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                assert cursor != null;
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                mediaPath = cursor.getString(columnIndex);
+                // Set the Image in ImageView for Previewing the Media
+                cursor.close();
+
+            } // When an Video is picked
+            else if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
+
+                // Get the Video from data
+                Uri selectedVideo = data.getData();
+                String[] filePathColumn = {MediaStore.Video.Media.DATA};
+
+                Cursor cursor = mContext.getContentResolver().query(selectedVideo, filePathColumn, null, null, null);
+                assert cursor != null;
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+
+                mediaPath1 = cursor.getString(columnIndex);
+
+
+                cursor.close();
+
+            } else {
+                Toast.makeText(mContext, "You haven't picked Image/Video", Toast.LENGTH_LONG).show();
             }
+        } catch (Exception e) {
+            Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void uploadFile() {
+
+
+        // Map is used to multipart the file using okhttp3.RequestBody
+        File file = new File(mediaPath);
+
+        // Parsing any Media type file
+        RequestBody requestBody = RequestBody.create(file,MediaType.parse("*/*"));
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("userfile", file.getName(), RequestBody.create(file,MediaType.parse("image/*")));
+        RequestBody filename = RequestBody.create( file.getName(),MediaType.parse("text/plain"));
+
+        retrofit2.Call<ResponseBody> call = apiInterface.uploadFile("ci_session=" + id, filePart);
+        call.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                Log.e(TAG, "onResponse: "+response.body() );
+
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 
 }

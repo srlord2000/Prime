@@ -24,6 +24,10 @@ import com.example.prime.R;
 import com.example.prime.Retrofit.ApiClient;
 import com.example.prime.Retrofit.ApiClientBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -72,7 +76,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
     private String formattedDate;
     private ArrayList<Double> integers;
     private ArrayList<Double> sums;
-    private int sum=0;
+    private int sum=0,sum1=0;
     private WashStationTotalAdapter washStationTotalAdapter;
     private DryStationTotalAdapter dryStationTotalAdapter;
 
@@ -234,8 +238,55 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
 
                                     }
                                 });
-
                             }
+
+                            retrofit2.Call<ResponseBody> call1 = apiInterface.getTotal("ci_session="+id,t,"0",summaryModel.getUnitid(),"Wash");
+                            call1.enqueue(new retrofit2.Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                                    try {
+                                        String res = response.body().string();
+                                        sums = new ArrayList<>();
+                                        JSONArray array = new JSONArray(res);
+                                        for (int j = 0; j < array.length(); j++) {
+                                            JSONObject object = array.getJSONObject(j);
+                                            int count = object.getInt("count");
+                                            int price = object.getInt("price");
+                                            double prod = price * count;
+                                            sums.add(prod);
+                                        }
+                                        Log.e(TAG, "Add11: " + sums);
+                                        sum1 = 0;
+                                        for (int s = 0; s < sums.size(); s++) {
+                                            sum1 += sums.get(s);
+                                        }
+                                        Log.e(TAG, "ADDS11: " + sum1);
+
+                                        DecimalFormat df = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+                                        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+                                        dfs.setCurrencySymbol("");
+                                        dfs.setMonetaryDecimalSeparator('.');
+                                        dfs.setGroupingSeparator(',');
+                                        df.setDecimalFormatSymbols(dfs);
+                                        String k = df.format(sum1);
+
+                                        washtotal.setText(k);
+
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                                @Override
+                                public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                    Log.d(TAG, "onFailuretagtry: ");
+
+                                }
+                            });
+
+
 
                         }
                         System.out.println("onEnd Thread");
@@ -283,7 +334,6 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                 recyclerView6.setHasFixedSize(true);
                 Log.e(TAG, "SORTSs!: "+summaryModel.getWashStationModels().size());
 
-                load();
                 running = true;
                 MyThread = new Thread() {//create thread
                     @Override
@@ -309,8 +359,6 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                                                 editor.remove(name + "totald");
                                                 editor.putString(name + "totald", res);
                                                 editor.commit();
-                                                load();
-
                                             }
 
                                         } catch (IOException e) {
@@ -324,11 +372,76 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
 
                                     }
                                 });
-
-
-
                             }
 
+//                            retrofit2.Call<ResponseBody> call1 = apiInterface.getTotal("ci_session="+id,t,"0",summaryModel.getUnitid(),"Dry");
+//                            call1.enqueue(new retrofit2.Callback<ResponseBody>() {
+//                                @Override
+//                                public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+//                                    try {
+//                                        String res = response.body().string();
+//                                        if(!prefs.getString(name+"totald","").equals(res)) {
+//                                            editor.remove(name + "totald");
+//                                            editor.putString(name + "totald", res);
+//                                            editor.commit();
+//                                        }
+//
+//                                    } catch (IOException e) {
+//                                        e.printStackTrace();
+//                                    }
+//
+//                                }
+//                                @Override
+//                                public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+//                                    Log.d(TAG, "onFailuretagtry: ");
+//
+//                                }
+//                            });
+//
+
+                            retrofit2.Call<ResponseBody> call1 = apiInterface.getTotal("ci_session="+id,t,"0",summaryModel.getUnitid(),"Dry");
+                            call1.enqueue(new retrofit2.Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                                    try {
+                                        String res = response.body().string();
+                                        integers = new ArrayList<>();
+                                        JSONArray array = new JSONArray(res);
+                                        for (int j = 0; j < array.length(); j++) {
+                                            JSONObject object = array.getJSONObject(j);
+                                            int count = object.getInt("count");
+                                            int price = object.getInt("price");
+                                            double prod = price * count;
+                                            integers.add(prod);
+                                        }
+                                        Log.e(TAG, "Add11: " + integers);
+                                        sum = 0;
+                                        for (int s = 0; s < integers.size(); s++) {
+                                            sum += integers.get(s);
+                                        }
+                                        Log.e(TAG, "ADDS11: " + sum);
+                                        DecimalFormat df = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+                                        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+                                        dfs.setCurrencySymbol("");
+                                        dfs.setMonetaryDecimalSeparator('.');
+                                        dfs.setGroupingSeparator(',');
+                                        df.setDecimalFormatSymbols(dfs);
+                                        String k = df.format(sum);
+                                        drytotal.setText(k);
+
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                                @Override
+                                public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                                    Log.d(TAG, "onFailuretagtry: ");
+
+                                }
+                            });
                         }
                         System.out.println("onEnd Thread");
                     }
@@ -348,24 +461,6 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
 
 
         }
-        private void load(){
-            integers = new ArrayList<>();
-            integers.clear();
-            for (int i=0;i<summaryModels.get(getAdapterPosition()).getWashStationModels().size();i++) {
-                String tx = stationTotalModels.get(i).getTotal();
-                //double txx = Double.parseDouble(tx);
-                Log.e(TAG, "load: "+tx);
-                //integers.add(txx);
-            }
-            if (integers.size() != 0) {
-                for (int s = 0; s < integers.size(); s++) {
-                    sum += integers.get(s);
-                }
-                drytotal.setText(String.valueOf(sum));
-            }
-        }
-
-
 
 
     }

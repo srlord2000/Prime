@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -42,14 +43,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
+
+import static com.android.volley.VolleyLog.TAG;
 
 public class Summary extends Fragment {
 
@@ -89,12 +98,17 @@ public class Summary extends Fragment {
 
     private HashSet<String> hashSet;
     private HashSet<String> hashSet1;
+    private String t;
+    private String formattedDate;
+    private ArrayList<Double> sums;
+    private int sum=0,sum1=0;
     ApiClient apiInterface;
     public static SharedPrefsCookiePersistor sharedPrefsCookiePersistor;
     private String id;
     private String TAG="Summary.java";
     private Context mContext;
     private Button send, notif;
+    private TextView total;
     private SummaryAdapter summaryAdapter;
     private retrofit2.Call<ResponseBody> call;
     SharedPreferences prefs ;
@@ -138,6 +152,8 @@ public class Summary extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        setdate();
+        date();
         prefs = PreferenceManager.getDefaultSharedPreferences( mContext);
         editor = prefs.edit();
         strings = new ArrayList<>();
@@ -147,38 +163,89 @@ public class Summary extends Fragment {
         apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
         id = sharedPrefsCookiePersistor.loadAll().get(0).value();
         send = view.findViewById(R.id.send);
+        total = view.findViewById(R.id.overAll);
         recyclerView = view.findViewById(R.id.listView);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         summaryAdapter = new SummaryAdapter(mContext, summaryModels);
         recyclerView.setAdapter(summaryAdapter);
-
+        total();
         load();
-//        running = true;
-//        MyThread = new Thread() {//create thread
-//            @Override
-//            public void run() {
-//                int i = 0;
-//                while (running) {
-//                    System.out.println("counter: " + i);
-//                    i++;
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException e) {
-//                        System.out.println("Sleep interrupted");
-//                    }
-//                    load();
-//
-//                }
-//                System.out.println("onEnd Thread");
-//            }
-//        };
-//        MyThread.start();
+        running = true;
+        MyThread = new Thread() {//create thread
+            @Override
+            public void run() {
+                int i = 0;
+                while (running) {
+                    System.out.println("counter: " + i);
+                    i++;
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        System.out.println("Sleep interrupted");
+                    }
+                    total();
+
+                }
+                System.out.println("onEnd Thread");
+            }
+        };
+        MyThread.start();
 
         //data();
 
 
 
     }
+
+    private void total(){
+        retrofit2.Call<ResponseBody> call1 = apiInterface.getOverAll("ci_session="+id,t,"0");
+        call1.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse( retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                try {
+                    String res = response.body().string();
+                    sums = new ArrayList<>();
+                    JSONArray array = new JSONArray(res);
+                    for (int j = 0; j < array.length(); j++) {
+                        JSONObject object = array.getJSONObject(j);
+                        int count = object.getInt("count");
+                        int price = object.getInt("price");
+                        double prod = price * count;
+                        sums.add(prod);
+                    }
+                    Log.e(TAG, "Add11: " + sums);
+                    sum1 = 0;
+                    for (int s = 0; s < sums.size(); s++) {
+                        sum1 += sums.get(s);
+                    }
+                    Log.e(TAG, "ADDS11: " + sum1);
+
+                    DecimalFormat df = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+                    DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+                    dfs.setCurrencySymbol("");
+                    dfs.setMonetaryDecimalSeparator('.');
+                    dfs.setGroupingSeparator(',');
+                    df.setDecimalFormatSymbols(dfs);
+                    String k = df.format(sum1);
+
+                    total.setText(k);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            @Override
+            public void onFailure( retrofit2.Call<ResponseBody> call, Throwable t) {
+                Log.d(TAG, "onFailuretagtry: ");
+
+            }
+        });
+
+    }
+
     private void load(){
         retrofit2.Call<ResponseBody> call = apiInterface.getUnits2("ci_session="+id);
         call.enqueue(new  retrofit2.Callback<ResponseBody>() {
@@ -539,4 +606,25 @@ public class Summary extends Fragment {
 //
 //
 //    }
+
+    private void setdate(){
+        final SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        String from = sdf1.format(today);
+        long unix1 = today.getTime()/1000;
+        String f = String.valueOf(unix1);
+
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        Date tomorrow = calendar.getTime();
+        String to = sdf1.format(tomorrow);
+        long unix = tomorrow.getTime()/1000;
+        t = String.valueOf(unix);
+    }
+
+    private void date(){
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        formattedDate = df.format(c);
+    }
 }

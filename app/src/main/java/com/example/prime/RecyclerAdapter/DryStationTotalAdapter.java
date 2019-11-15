@@ -49,7 +49,7 @@ public class DryStationTotalAdapter extends RecyclerView.Adapter<DryStationTotal
     @NonNull
     @Override
     public DryStationTotalAdapter.MultiViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.washstationtotallayout, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.drystationtotallayout, viewGroup, false);
         return new DryStationTotalAdapter.MultiViewHolder(view);
     }
 
@@ -163,6 +163,7 @@ public class DryStationTotalAdapter extends RecyclerView.Adapter<DryStationTotal
                 String k = df.format(sum);
 
                 name.setText(k);
+                stationTotalModel.setTotal(k);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -174,5 +175,13 @@ public class DryStationTotalAdapter extends RecyclerView.Adapter<DryStationTotal
         return stationTotalModels;
     }
 
-
+    public ArrayList<DryStationModel> getSelected() {
+        ArrayList<DryStationModel> selected = new ArrayList<>();
+        for (int i = 0; i < stationTotalModels.size(); i++) {
+            if (stationTotalModels.get(i).isChecked()) {
+                selected.add(stationTotalModels.get(i));
+            }
+        }
+        return selected;
+    }
 }

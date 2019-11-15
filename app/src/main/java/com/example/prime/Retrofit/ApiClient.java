@@ -1,21 +1,26 @@
 package com.example.prime.Retrofit;
 
 import com.example.prime.Model.MyModel;
+import com.example.prime.Model.ServerResponseModel;
 import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
@@ -136,6 +141,12 @@ public interface ApiClient {
         @GET("tally/sortstation")
         Call<ResponseBody> getTally4(@Header("Cookie") String token, @Query("to") String to, @Query("from") String from, @Query("sort") String sort, @Query("name") String name);
 
+        @GET("tally/sortid")
+        Call<ResponseBody> getTotal(@Header("Cookie") String token, @Query("to") String to, @Query("from") String from, @Query("sort") String sort, @Query("name") String name);
+
+        @GET("tally/show")
+        Call<ResponseBody> getOverAll(@Header("Cookie") String token, @Query("to") String to, @Query("from") String from);
+
         @GET("timectl/sync/http")
         Call<ResponseBody> getSync(@Header("Cookie") String token);
 
@@ -144,6 +155,10 @@ public interface ApiClient {
 
         @GET("/tally/breakdown")
         Call<ResponseBody> getList(@Header("Cookie") String token, @Query("to") String to, @Query("from") String from );
+
+        @Multipart
+        @POST("upload/logo")
+        Call<ResponseBody> uploadFile(@Header("Cookie") String token, @Part MultipartBody.Part file);
 
 
         @Headers("Content-Type: application/json")
@@ -191,6 +206,7 @@ public interface ApiClient {
         Call<ResponseBody> downloadFileWithFixedUrl();
 
         @GET
+        @Streaming
         Call<ResponseBody> downloadFileWithFixedUrl1(@Url String url);
 
 

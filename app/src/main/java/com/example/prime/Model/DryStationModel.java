@@ -119,4 +119,14 @@ public class DryStationModel {
         public void setTotal(String total) {
             this.total = total;
         }
+
+    private boolean isChecked = true;
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
 }

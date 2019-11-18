@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -17,6 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.prime.Adapter.PageAdapter;
 import com.example.prime.R;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 
 public class HomeFragment extends Fragment {
@@ -29,7 +31,11 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void onViewCreated (@NonNull View view, Bundle savedInstanceState){
-            getActivity().setTitle("Monitoring");
+            getActivity().setTitle("");
+            AppBarLayout toolbar = (AppBarLayout) getActivity().findViewById(R.id.appbar);
+            TextView textToolHeader = (TextView) toolbar.findViewById(R.id.toolbar_title);
+            textToolHeader.setText("MONITORING");
+
             TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
             tabLayout.addTab(tabLayout.newTab().setText("Summary"));
             tabLayout.addTab(tabLayout.newTab().setText("List"));

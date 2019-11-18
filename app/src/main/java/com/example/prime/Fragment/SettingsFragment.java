@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.prime.Adapter.ReportPageAdapter;
 import com.example.prime.Adapter.SettingsPageAdapter;
 import com.example.prime.R;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 
 public class SettingsFragment extends Fragment {
@@ -26,7 +28,10 @@ public class SettingsFragment extends Fragment {
 
     @Override
     public void onViewCreated (@NonNull View view, Bundle savedInstanceState){
-        getActivity().setTitle("Settings");
+        getActivity().setTitle("");
+        AppBarLayout toolbar = (AppBarLayout) getActivity().findViewById(R.id.appbar);
+        TextView textToolHeader = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        textToolHeader.setText("SETTINGS");
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Profile"));
         tabLayout.addTab(tabLayout.newTab().setText("Account"));

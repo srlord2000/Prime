@@ -62,8 +62,8 @@ import static com.android.volley.VolleyLog.TAG;
 
 public class Summary extends Fragment {
 
-    public static Boolean running;
-    public static Thread MyThread;
+    public static Boolean running, running1;
+    public static Thread MyThread, MyThread1;
     private ArrayList<SummaryModel> summaryModels;
     private ArrayList<DrySummaryModel> drySummaryModels = new ArrayList<>();
     private ArrayList<WashSummaryModel> washSummaryModels = new ArrayList<>();
@@ -185,6 +185,7 @@ public class Summary extends Fragment {
                     }
                     total();
 
+
                 }
                 System.out.println("onEnd Thread");
             }
@@ -275,7 +276,7 @@ public class Summary extends Fragment {
                                     Log.e(TAG, "onResponse: "+res );
                                     editor.putString(unit_id+"sd", res);
                                     editor.commit();
-                                    load1();
+
 
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -317,6 +318,7 @@ public class Summary extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                load1();
             }
 
             @Override

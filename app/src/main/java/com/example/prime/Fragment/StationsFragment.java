@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,7 @@ import com.example.prime.Adapter.PageAdapter;
 import com.example.prime.Adapter.StationPageAdapter;
 import com.example.prime.R;
 import com.example.prime.Views.Station;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 
 public class StationsFragment extends Fragment {
@@ -27,7 +29,10 @@ public class StationsFragment extends Fragment {
 
     @Override
     public void onViewCreated (@NonNull View view, Bundle savedInstanceState){
-        getActivity().setTitle("Stations");
+        getActivity().setTitle("");
+        AppBarLayout toolbar = (AppBarLayout) getActivity().findViewById(R.id.appbar);
+        TextView textToolHeader = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        textToolHeader.setText("STATIONS");
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Stations"));
         tabLayout.addTab(tabLayout.newTab().setText("Presets"));

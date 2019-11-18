@@ -117,10 +117,10 @@ public class WashSummaryAdapter extends RecyclerView.Adapter<WashSummaryAdapter.
             apiInterface = ApiClientBuilder.getClient().create(ApiClient.class);
             id = sharedPrefsCookiePersistor.loadAll().get(0).value();
             name.setText(washSummaryModel.getServiceName());
-            load();
             if (name.getText().toString().equals("")){
                 name.setVisibility(View.GONE);
             }
+            load();
             running = true;
             MyThread = new Thread() {//create thread
                 @Override
@@ -160,6 +160,7 @@ public class WashSummaryAdapter extends RecyclerView.Adapter<WashSummaryAdapter.
                         Log.e(TAG, "onResponse: "+responseData );
 
                         for (int i=0; i<jsonArray.length();i++){
+
                             final JSONObject jsonObject= jsonArray.getJSONObject(i);
                             String name1 = jsonObject.getString("unit_id");
                             retrofit2.Call<ResponseBody> call1 = apiInterface.getTally("ci_session="+id,t,"0",name1,name.getTag().toString());
@@ -178,6 +179,8 @@ public class WashSummaryAdapter extends RecyclerView.Adapter<WashSummaryAdapter.
                                             washCountAdapter = new WashStationCountAdapter(context,washCountModels);
                                             recyclerView.setLayoutManager(new LinearLayoutManager(context));
                                             recyclerView.setAdapter(washCountAdapter);
+                                            recyclerView.setItemViewCacheSize(20);
+                                            recyclerView.setHasFixedSize(true);
                                             JSONObject jsonObject1= jsonArray1.getJSONObject(j);
                                             WashCountModel washCountModel1 = new WashCountModel();
                                             try {
@@ -193,14 +196,12 @@ public class WashSummaryAdapter extends RecyclerView.Adapter<WashSummaryAdapter.
                                             washCountModels.add(washCountModel1);
                                         }
 
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    } catch (IOException e) {
+                                    } catch (JSONException | IOException e) {
                                         e.printStackTrace();
                                     }
                                     washCountAdapter.setStations(washCountModels);
                                     washCountAdapter.notifyDataSetChanged();
-                                    recyclerView.setHasFixedSize(true);
+
                                     addd = new ArrayList<>();
                                     for(int i=0;i<washCountAdapter.getSelected().size();i++)
                                     {
@@ -224,7 +225,7 @@ public class WashSummaryAdapter extends RecyclerView.Adapter<WashSummaryAdapter.
                                     String k = df.format(product);
                                     add = sum;
 
-                                    amount.setText(String.valueOf(k));
+                                    amount.setText(k);
 
                                 }
 
@@ -234,6 +235,7 @@ public class WashSummaryAdapter extends RecyclerView.Adapter<WashSummaryAdapter.
                                 }
                             });
 
+
                         }
 
                     } catch (JSONException e) {
@@ -242,6 +244,7 @@ public class WashSummaryAdapter extends RecyclerView.Adapter<WashSummaryAdapter.
                         e.printStackTrace();
                     }
                     Log.e("TAG", responseData);
+
 
                 }
 

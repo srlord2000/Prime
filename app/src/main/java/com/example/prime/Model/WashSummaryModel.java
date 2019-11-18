@@ -3,6 +3,8 @@ package com.example.prime.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class WashSummaryModel {
     @SerializedName("id")
     @Expose
@@ -32,6 +34,8 @@ public class WashSummaryModel {
     @Expose
     private String unitId;
 
+    private ArrayList<WashCountModel> washCountModels;
+
     public WashSummaryModel(String id, String serviceName, String serviceType, String serviceLevel, String price, String tapPulse, String timeAdded, String unitName, String unitId) {
         this.id = id;
         this.serviceName = serviceName;
@@ -42,6 +46,7 @@ public class WashSummaryModel {
         this.timeAdded = timeAdded;
         this.unitName = unitName;
         this.unitId = unitId;
+        this.washCountModels = washCountModels;
     }
 
     public WashSummaryModel() {
@@ -119,5 +124,12 @@ public class WashSummaryModel {
         this.unitId = unitId;
     }
 
+    public ArrayList<WashCountModel> getWashCountModels() {
+        return washCountModels;
+    }
+
+    public void setWashCountModels(ArrayList<WashCountModel> washCountModels) {
+        this.washCountModels = washCountModels;
+    }
 }
 

@@ -63,8 +63,9 @@ public class DryStationCountAdapter extends RecyclerView.Adapter<DryStationCount
         }
 
         void bind(final DryCountModel dryCountModel) {
-            name.setText(dryCountModel.getCount());
-            if (name.getText().toString().equals("")){
+            if (!dryCountModel.getCount().equals("")){
+                name.setText(dryCountModel.getCount());
+            }else {
                 name.setText("0");
             }
 

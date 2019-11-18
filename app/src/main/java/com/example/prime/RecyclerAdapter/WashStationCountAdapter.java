@@ -63,11 +63,11 @@ public class WashStationCountAdapter extends RecyclerView.Adapter<WashStationCou
         }
 
         void bind(final WashCountModel washCountModel) {
-            name.setText(washCountModel.getCount());
-            if (name.getText().toString().equals("")){
+            if (!washCountModel.getCount().equals("")){
+                name.setText(washCountModel.getCount());
+            }else {
                 name.setText("0");
             }
-
         }
     }
 

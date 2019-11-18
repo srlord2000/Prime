@@ -111,7 +111,7 @@ public class DrySummaryAdapter extends RecyclerView.Adapter<DrySummaryAdapter.Mu
             if (name.getText().toString().equals("")){
                 name.setVisibility(View.GONE);
             }
-
+            load();
             running = true;
             MyThread = new Thread() {//create thread
                 @Override
@@ -167,6 +167,8 @@ public class DrySummaryAdapter extends RecyclerView.Adapter<DrySummaryAdapter.Mu
                                             dryCountAdapter = new DryStationCountAdapter(context,dryCountModels);
                                             recyclerView.setLayoutManager(new LinearLayoutManager(context));
                                             recyclerView.setAdapter(dryCountAdapter);
+                                            recyclerView.setItemViewCacheSize(20);
+                                            recyclerView.setHasFixedSize(true);
                                             JSONObject jsonObject1= jsonArray1.getJSONObject(j);
                                             DryCountModel dryCountModel1 = new DryCountModel() ;
                                             try {
@@ -187,10 +189,8 @@ public class DrySummaryAdapter extends RecyclerView.Adapter<DrySummaryAdapter.Mu
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-                                    dryCountAdapter = new DryStationCountAdapter(context,dryCountModels);
-                                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                                    recyclerView.setAdapter(dryCountAdapter);
-                                    recyclerView.setHasFixedSize(true);
+                                    dryCountAdapter.setStations(dryCountModels);
+                                    dryCountAdapter.notifyDataSetChanged();
                                     addd = new ArrayList<>();
                                     for(int i=0;i<dryCountAdapter.getSelected().size();i++)
                                     {

@@ -181,6 +181,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                 washSummaryModels = summaryModel.getWashSummaryModels();
                 recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                 recyclerView.setAdapter(washSummaryAdapter);
+                recyclerView.setItemViewCacheSize(20);
                 recyclerView.setHasFixedSize(true);
                 washSummaryAdapter.setStations(washSummaryModels);
                 washSummaryAdapter.notifyDataSetChanged();
@@ -189,17 +190,21 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                 recyclerView2.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView2.setAdapter(washStationAdapter);
                 washStationModels = summaryModel.getWashStationModels();
+                recyclerView2.setItemViewCacheSize(20);
+                recyclerView2.setHasFixedSize(true);
                 washStationAdapter.setStations(washStationModels);
                 washStationAdapter.notifyDataSetChanged();
-                recyclerView2.setHasFixedSize(true);
+
 
                 washStationTotalAdapter = new WashStationTotalAdapter(context,stationTotalModels);
                 recyclerView5.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView5.setAdapter(washStationTotalAdapter);
                 stationTotalModels = summaryModel.getWashStationModels();
+                recyclerView5.setItemViewCacheSize(20);
+                recyclerView5.setHasFixedSize(true);
                 washStationTotalAdapter.setStations(stationTotalModels);
                 washStationTotalAdapter.notifyDataSetChanged();
-                recyclerView5.setHasFixedSize(true);
+
                 Log.e(TAG, "SORTSs!: "+summaryModel.getWashStationModels().size());
 
                 retrofit2.Call<ResponseBody> call1 = apiInterface.getTotal("ci_session="+id,t,"0",summaryModel.getUnitid(),"Wash");
@@ -258,7 +263,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                             System.out.println("counter: " + i);
                             i++;
                             try {
-                                Thread.sleep(500);
+                                Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 System.out.println("Sleep interrupted");
                             }
@@ -363,24 +368,28 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.MultiVie
                 recyclerView1.setAdapter(drySummaryAdapter);
                 drySummaryModels = summaryModel.getDrySummaryModels();
                 drySummaryAdapter.setStations(drySummaryModels);
-                drySummaryAdapter.notifyDataSetChanged();
                 recyclerView1.setHasFixedSize(true);
+                recyclerView1.setItemViewCacheSize(20);
+                drySummaryAdapter.notifyDataSetChanged();
+
 
                 dryStationAdapter = new DryStationAdapter(context,dryStationModels);
                 recyclerView3.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView3.setAdapter(dryStationAdapter);
                 dryStationModels = summaryModel.getDryStationModels();
                 dryStationAdapter.setStations(dryStationModels);
-                dryStationAdapter.notifyDataSetChanged();
                 recyclerView3.setHasFixedSize(true);
+                recyclerView3.setItemViewCacheSize(20);
+                dryStationAdapter.notifyDataSetChanged();
 
                 dryStationTotalAdapter = new DryStationTotalAdapter(context,stationTotalModels1);
                 recyclerView6.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView6.setAdapter(dryStationTotalAdapter);
                 stationTotalModels1 = summaryModel.getDryStationModels();
                 dryStationTotalAdapter.setStations(stationTotalModels1);
-                dryStationTotalAdapter.notifyDataSetChanged();
                 recyclerView6.setHasFixedSize(true);
+                recyclerView6.setItemViewCacheSize(20);
+                dryStationTotalAdapter.notifyDataSetChanged();
                 Log.e(TAG, "SORTSs!: "+summaryModel.getWashStationModels().size());
 
                 retrofit2.Call<ResponseBody> call1 = apiInterface.getTotal("ci_session="+id,t,"0",summaryModel.getUnitid(),"Dry");
